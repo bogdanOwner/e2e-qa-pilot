@@ -1,0 +1,33 @@
+{
+  "name": "e2e-qa-pilot",
+  "version": "0.1.0",
+  "description": "An AI-driven MCP server and visual Story Kit that accelerates test authoring from specifications, slashes maintenance overhead via self-healing, and enforces human-in-the-loop control.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "e2e-qa-pilot": "bin/cli.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "processes",
+    "templates",
+    "README.md",
+    "mcp.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "playwright",
+    "e2e",
+    "qa",
+    "cursor",
+    "claude-code",
+    "skills"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}
