@@ -4,13 +4,18 @@ description: >-
   Add an end-to-end spec from one case whose steps name a screen, control, or
   visible change, and whose description has no Figma URL. Branches from the
   settings file and opens a pull request to main. Assertions stay on the
-  expected results. Use when review-case passes with no Figma link, or the
-  user asks to automate a case from its steps.
+  expected results. The case is an existing id or pasted test case text.
+  Use when review-case passes with no Figma link, or the user asks to
+  automate a case from its steps.
 ---
 
 # Add end-to-end coverage from case steps
 
-The steps are the contract. Input is one case id, plus `.e2e-qa-pilot/settings.md`. Fetch the case with `fetch_case` from that file.
+The steps are the contract. Input is exactly one of `case_id` or `case_text`, plus `.e2e-qa-pilot/settings.md`. The tool call names the mode. Do not decide which one a string is by reading its contents.
+
+`case_id`: fetch the case with `fetch_case` from that file. If the case tool errors or the case does not exist, stop and report that. Do not invent the case. Do not treat this id as test case text.
+
+`case_text`: the pasted text is the case. Do not call `fetch_case`. Do not call `update_case`. A case tool is not required.
 
 This skill does not call `update_case`. A case that is not ready to assert is [review-case](../review-case/SKILL.md).
 
@@ -18,21 +23,43 @@ This skill checks the expected-result text. It does not run a Figma visual revie
 
 PR body, the word rule, and the screenshot gate: [pr-evidence.md](../shared/pr-evidence.md). Ready checks: [ready-rules.md](../shared/ready-rules.md).
 
-If the settings keys are still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time.
+If a generation key is still empty (`figma`, `read_figma`, `branch_pattern`, `test_command`, `png_dir`, `pr_label_ready`, `pr_label_mismatch`), stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+
+## Title
+
+`case_id` uses the title from `fetch_case`. The spec and pull request title stay `<case-id> <case title>`.
+
+`case_text` chooses a title before a spec, a filename, or a pull request is named:
+
+- Prefer a `Title:` line.
+- If that line is absent, use the first Markdown H1 (`# `, not `##`).
+- If both exist, compare the trimmed texts. A difference in case or surrounding whitespace still uses the `Title:` line. Any other difference asks one question. Do not pick silently.
+- If neither exists, ask for a short title before generating the spec.
+- Do not take a precondition or a step as the title.
+- Do not invent an external id or a case URL.
+
+Display text preserves the original casing and internal wording, with surrounding whitespace removed. Filenames, the pull request title, the spec title, and the duplicate check use that trimmed title. Do not leave leading or trailing whitespace in those names.
 
 ## Gate
 
 Stop before any docs or spec when any of these is true:
 
-- A spec whose title starts with `<case-id>` already exists. Do not add a second spec.
-- The description or a custom field contains a `figma.com` URL and the settings file has `figma: on`. Use [add-from-design](../add-from-design/SKILL.md).
+- `case_id`: a spec whose title starts with `<case-id>` already exists. Do not add a second spec.
+- `case_text`: search existing spec titles in the spec location from settings. Normalize by trimming, lowercasing, collapsing whitespace, and stripping punctuation. An equal normalized title is the existing spec. Do not add another. A normalized title that contains the other, in either direction, is only a likely match. Read that spec. Ask one question only when the read leaves it ambiguous whether it is the same test. Do not block a genuinely different test because its title contains similar words. If the spec location cannot be listed or read, say the duplicate check could not be completed. Do not claim that no duplicate exists.
+- `case_id`: the description or a custom field contains a `figma.com` URL and the settings file has `figma: on`. `case_text`: a `figma.com` URL anywhere in the pasted text and `figma: on`. Use [add-from-design](../add-from-design/SKILL.md).
 - A step has no expected result, uses `correct`, `properly`, or `etc.`, gives one control two names, or contradicts another step. Use [review-case](../review-case/SKILL.md). Do not implement in that turn.
 
 `source-hash` in the description is not a gate. Do not compare it to another case. Do not open a hash-mismatch pull request. The contract is the current steps.
 
 ## Branch
 
-Read `branch_pattern` from the settings file. From fresh `main`:
+Read `branch_pattern` from the settings file. It is the configured branch name, not a template. This package does not substitute placeholders.
+
+If this run has no external case id and the saved value contains `<case-id>`, `{case_id}`, or the words `case id`, ask once for a branch name. Never invent an id.
+
+Run `git check-ref-format --branch` on the final name. If Git accepts the configured value, use it. If Git rejects it, ask once for another name.
+
+From fresh `main`:
 
 ```bash
 git fetch origin
@@ -64,7 +91,7 @@ testInfo.annotations.push({
 });
 ```
 
-4. Thin spec. Title: `<case-id> <case title>`. Import `test` from the fixture named in the settings file.
+4. Thin spec. `case_id` title: `<case-id> <case title>`. `case_text` title: the trimmed title, with no invented id. Import `test` from the fixture named in the settings file.
 
 Prefer `getByRole`, `getByLabel`, `getByPlaceholder`. Wait with `expect(...).toBeVisible()` or `toHaveURL()`.
 
@@ -126,6 +153,6 @@ Do not edit the nightly workflow.
 
 `add_from_steps`
 
-- Inputs: the case id, and the settings file `.e2e-qa-pilot/settings.md`
+- Inputs: exactly one of `case_id` or `case_text`, and the settings file `.e2e-qa-pilot/settings.md`
 - Result: a ready pull request, or a draft pull request whose spec stays red
 - The agent still reads the screen

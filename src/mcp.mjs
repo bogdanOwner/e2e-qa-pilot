@@ -1,11 +1,12 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import readline from 'node:readline';
-import { commandsDir, CATALOG, SERVER_NAME, readPackageVersion } from './kit.mjs';
+import { commandsDir, CATALOG, CASE_INPUT_SCHEMA, SERVER_NAME, readPackageVersion } from './kit.mjs';
 
 // A small stdio MCP server with no dependencies, so every line it runs can be read.
-// Tool names and descriptions come from the catalog in kit.mjs.
-// It never reads a case, never calls a network, and never reads a secret.
+// Tool names, descriptions, and the input schema come from kit.mjs.
+// It never contacts a case tool, never calls a network, and never reads a secret.
+// Case text in a tool call is the text the client sent.
 // It hands the assistant the command file, the shared rules, and the project settings.
 // Stdout is JSON-RPC only. Faults go to stderr.
 
@@ -16,17 +17,7 @@ const TOOLS = Object.fromEntries(
   ]),
 );
 
-const inputSchema = {
-  type: 'object',
-  properties: {
-    case_id: {
-      type: 'string',
-      description: 'The id of the existing case in your case tool (for example a Qase id).',
-    },
-  },
-  required: ['case_id'],
-  additionalProperties: false,
-};
+const INPUT_KEYS = ['case_id', 'case_text'];
 
 function read(file) {
   return fs.readFileSync(file, 'utf8');
@@ -36,7 +27,62 @@ function isRecord(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
-export function buildToolText(toolName, caseId, projectDir) {
+function presentText(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function resolveCaseInput(args) {
+  if (args === undefined || args === null) {
+    return { error: 'Provide case_id or case_text. Ask the human for one of them.' };
+  }
+  if (!isRecord(args)) {
+    return { error: 'Tool arguments must be an object.' };
+  }
+  const unknown = Object.keys(args).filter((key) => !INPUT_KEYS.includes(key));
+  if (unknown.length > 0) {
+    return { error: `Unknown input: ${unknown.join(', ')}.` };
+  }
+  for (const key of INPUT_KEYS) {
+    if (args[key] !== undefined && typeof args[key] !== 'string') {
+      return { error: `${key} must be a string.` };
+    }
+  }
+  const caseId = presentText(args.case_id);
+  const caseText = presentText(args.case_text);
+  if (caseId && caseText) {
+    return { error: 'Provide either case_id or case_text, not both.' };
+  }
+  if (!caseId && !caseText) {
+    return { error: 'Provide case_id or case_text. Ask the human for one of them.' };
+  }
+  if (caseId) return { mode: 'case_id', caseId };
+  return { mode: 'case_text', caseText };
+}
+
+function sourceBlock(source) {
+  if (source.mode === 'case_id') {
+    return [
+      'Input mode: case_id',
+      '',
+      `Case id: ${source.caseId}`,
+      '',
+      'Fetch this id with fetch_case from settings.',
+      'If the case tool errors or the case does not exist, stop and report that.',
+      'Do not invent the case. Do not treat this id as test case text.',
+    ].join('\n');
+  }
+  return [
+    'Input mode: case_text',
+    '',
+    'Case text:',
+    '',
+    source.caseText,
+    '',
+    'This text is the case. Do not call fetch_case or update_case. A case tool is not required.',
+  ].join('\n');
+}
+
+export function buildToolText(toolName, source, projectDir) {
   const tool = TOOLS[toolName];
   const skill = read(path.join(commandsDir, tool.command, 'SKILL.md'));
   const ready = read(path.join(commandsDir, 'shared', 'ready-rules.md'));
@@ -50,7 +96,7 @@ export function buildToolText(toolName, caseId, projectDir) {
   return [
     `# ${SERVER_NAME}: ${toolName}`,
     '',
-    `Case id: ${caseId}`,
+    sourceBlock(source),
     '',
     'You do the work yourself with the tools you already have (your case tool, Playwright, GitHub).',
     'This server fetched nothing. Ask the human when a step is vague, read every screenshot yourself,',
@@ -106,27 +152,27 @@ export function handleMessage(message, projectDir) {
           tools: Object.entries(TOOLS).map(([name, tool]) => ({
             name,
             description: tool.description,
-            inputSchema,
+            inputSchema: CASE_INPUT_SCHEMA,
           })),
         },
       };
     case 'tools/call': {
       const name = params?.name;
-      const caseId = params?.arguments?.case_id;
       if (!TOOLS[name]) {
         return { error: { code: -32602, message: `Unknown tool: ${name}` } };
       }
-      if (typeof caseId !== 'string' || caseId.trim() === '') {
+      const source = resolveCaseInput(params?.arguments);
+      if (source.error) {
         return {
           result: {
             isError: true,
-            content: [{ type: 'text', text: 'case_id is required. Ask the human for the case id.' }],
+            content: [{ type: 'text', text: source.error }],
           },
         };
       }
       return {
         result: {
-          content: [{ type: 'text', text: buildToolText(name, caseId.trim(), projectDir) }],
+          content: [{ type: 'text', text: buildToolText(name, source, projectDir) }],
         },
       };
     }

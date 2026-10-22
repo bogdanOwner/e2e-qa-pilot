@@ -1,12 +1,12 @@
 # Create e2e
 
-Author end-to-end coverage from one existing case. The case id and `.e2e-qa-pilot/settings.md` are the inputs. [review-case](commands/review-case/SKILL.md) is the only router.
+Author end-to-end coverage from one case. A case id or pasted case text, plus `.e2e-qa-pilot/settings.md`, are the inputs. [review-case](commands/review-case/SKILL.md) is the only router. A case tool is required only for a case id.
 
 ```mermaid
 flowchart TD
-  caseNode[Existing case from settings]
+  caseNode[Case id or pasted text]
   review[review-case]
-  questions[Ask once then update that case]
+  questions[Ask once then update when the case has an id]
   designSkill[add-from-design]
   stepsSkill[add-from-steps]
   readyPr[Ready PR one PNG per step]
@@ -26,7 +26,7 @@ flowchart TD
 
 | Command | When |
 |---------|------|
-| [review-case](commands/review-case/SKILL.md) | First. Ready checks, one question per hole, update that same case, then route |
+| [review-case](commands/review-case/SKILL.md) | First. Ready checks, one question per hole, update that same case when it came from an id, then route |
 | [add-from-design](commands/add-from-design/SKILL.md) | The case has a `figma.com` URL and `figma: on` |
 | [add-from-steps](commands/add-from-steps/SKILL.md) | No Figma URL, or `figma: off` |
 

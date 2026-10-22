@@ -201,6 +201,185 @@ test('handleMessage rejects values that are not objects', () => {
   }
 });
 
+function callTool(dir, name, args) {
+  return handleMessage(
+    {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'tools/call',
+      params: { name, arguments: args },
+    },
+    dir,
+  );
+}
+
+function instructionText(outcome) {
+  assert.equal(outcome.result.isError, undefined);
+  return outcome.result.content[0].text;
+}
+
+test('tools/list schema keeps case_id optional for protocol 2025-03-26', () => {
+  // Checks the schema this server publishes. It does not load an MCP SDK.
+  const omitted = handleMessage(
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    os.tmpdir(),
+  );
+  assert.equal(omitted.result.protocolVersion, '2025-03-26');
+  const echoed = handleMessage(
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-03-26' } },
+    os.tmpdir(),
+  );
+  assert.equal(echoed.result.protocolVersion, '2025-03-26');
+
+  const listed = handleMessage({ jsonrpc: '2.0', id: 2, method: 'tools/list' }, os.tmpdir());
+  assert.deepEqual(
+    listed.result.tools.map((tool) => tool.name),
+    ['review_case', 'add_from_steps', 'add_from_design'],
+  );
+  for (const tool of listed.result.tools) {
+    assert.equal(tool.inputSchema.type, 'object');
+    assert.deepEqual(tool.inputSchema.required, []);
+    assert.equal(tool.inputSchema.additionalProperties, false);
+    assert.equal(tool.inputSchema.properties.case_id.type, 'string');
+    assert.equal(tool.inputSchema.properties.case_text.type, 'string');
+  }
+  assert.match(listed.result.tools[0].description, /case_text/);
+  assert.match(listed.result.tools[0].description, /Does not write a spec/);
+});
+
+test('case_id-only call returns fetch instructions and does not run them', () => {
+  const text = instructionText(callTool(tempProject(), 'review_case', { case_id: 'QA-1' }));
+  assert.match(text, /Input mode: case_id/);
+  assert.match(text, /Case id: QA-1/);
+  assert.match(text, /Fetch this id with fetch_case from settings/);
+  assert.match(text, /case does not exist/);
+  assert.match(text, /Do not invent the case/);
+  assert.match(text, /Do not treat this id as test case text/);
+  assert.match(text, /Do not switch this request to `case_text`/);
+  assert.match(text, /Preconditions say who is signed in/);
+  assert.match(text, /add-from-design/);
+  assert.match(text, /add-from-steps/);
+  assert.match(text, /figma: on/);
+});
+
+test('case_text call returns pasted-case instructions without a provider', () => {
+  // Checks instruction text. It does not prove an assistant follows the workflow.
+  const dir = tempProject();
+  const settings = path.join(dir, '.e2e-qa-pilot', 'settings.md');
+  fs.mkdirSync(path.dirname(settings), { recursive: true });
+  const original = 'figma: off\n';
+  fs.writeFileSync(settings, original);
+  const pasted = [
+    'Title: Sign in',
+    '',
+    '# Other title',
+    '',
+    'Preconditions: a user is signed in on the home page.',
+    '1. Open home. Expected: the home page is visible.',
+  ].join('\n');
+
+  const review = instructionText(callTool(dir, 'review_case', { case_text: pasted }));
+  assert.match(review, /Input mode: case_text/);
+  assert.match(review, /Title: Sign in/);
+  assert.match(review, /Do not call fetch_case or update_case/);
+  assert.match(review, /A case tool is not required/);
+  assert.match(review, /Prefer a `Title:` line/);
+  assert.match(review, /first Markdown H1/);
+  assert.match(review, /ask for a short title before generating the spec/);
+  assert.match(review, /trimmed title/);
+  assert.match(review, /Display text preserves the original casing/);
+  assert.match(review, /Preconditions say who is signed in/);
+  assert.match(review, /add-from-design/);
+  assert.match(review, /add-from-steps/);
+  assert.equal(fs.readFileSync(settings, 'utf8'), original);
+
+  const steps = instructionText(callTool(dir, 'add_from_steps', { case_text: pasted }));
+  assert.match(steps, /Normalize by trimming, lowercasing, collapsing whitespace, and stripping punctuation/);
+  assert.match(steps, /only a likely match/);
+  assert.match(steps, /Ask one question only when the read leaves it ambiguous/);
+  assert.match(steps, /similar words/);
+  assert.match(steps, /duplicate check could not be completed/);
+  assert.match(steps, /Do not claim that no duplicate exists/);
+  assert.match(steps, /git check-ref-format --branch/);
+  assert.match(steps, /Never invent an id/);
+  assert.match(steps, /does not substitute placeholders/);
+  assert.match(steps, /starts with `<case-id>`/);
+  assert.match(steps, /assertion_edits/);
+  assert.match(steps, /figma: on/);
+  assert.match(steps, /not, by itself, a confirmed product regression/);
+});
+
+test('add_from_design instructions still require a human stop on MINOR or BLOCKER', () => {
+  const text = instructionText(
+    callTool(tempProject(), 'add_from_design', {
+      case_text: 'Title: Home\n\n1. Open home. Expected: Home is visible.',
+    }),
+  );
+  assert.match(text, /MINOR/);
+  assert.match(text, /BLOCKER/);
+  assert.match(text, /Stop and ask in chat/);
+  assert.match(text, /No pull request until/);
+});
+
+test('missing, conflicting, and unknown inputs return errors and no skill body', () => {
+  const dir = tempProject();
+  const cases = [
+    [{}, /Provide case_id or case_text/],
+    [{ case_id: '  ', case_text: '\n' }, /Provide case_id or case_text/],
+    [{ case_id: 'QA-1', case_text: 'Title: Hi' }, /not both/],
+    [{ case_id: 1 }, /case_id must be a string/],
+    [{ case_text: 'Title: Hi', note: 'extra' }, /Unknown input: note/],
+  ];
+  for (const [args, pattern] of cases) {
+    const outcome = callTool(dir, 'review_case', args);
+    assert.equal(outcome.result.isError, true);
+    assert.match(outcome.result.content[0].text, pattern);
+    assert.doesNotMatch(outcome.result.content[0].text, /Review case steps/);
+  }
+  const blankId = instructionText(callTool(dir, 'review_case', { case_id: '  ', case_text: 'Title: Hi' }));
+  assert.match(blankId, /Input mode: case_text/);
+  const notObject = handleMessage(
+    {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'tools/call',
+      params: { name: 'review_case', arguments: [] },
+    },
+    dir,
+  );
+  assert.equal(notObject.result.isError, true);
+  assert.match(notObject.result.content[0].text, /Tool arguments must be an object/);
+});
+
+test('init template says pasted case text does not need a case tool', () => {
+  const dir = tempProject();
+  runInit([], { cwd: dir, ...quiet });
+  const text = fs.readFileSync(path.join(dir, '.e2e-qa-pilot', 'settings.md'), 'utf8');
+  assert.match(text, /Pasted case text does not use them/);
+  const copied = fs.readFileSync(
+    path.join(dir, '.e2e-qa-pilot', 'processes', 'create-e2e', 'commands', 'review-case', 'SKILL.md'),
+    'utf8',
+  );
+  assert.match(copied, /case_text/);
+  const stub = fs.readFileSync(path.join(dir, '.cursor', 'skills', 'review-case', 'SKILL.md'), 'utf8');
+  assert.match(stub, /commands\/review-case\/SKILL.md/);
+});
+
+test('init and --force leave an old settings file unchanged while case_text still returns instructions', () => {
+  const dir = tempProject();
+  const settings = path.join(dir, '.e2e-qa-pilot', 'settings.md');
+  fs.mkdirSync(path.dirname(settings), { recursive: true });
+  const original = '# Settings\n\nfigma: off\n';
+  fs.writeFileSync(settings, original);
+  runInit([], { cwd: dir, ...quiet });
+  runInit(['--force'], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(settings, 'utf8'), original);
+  const text = instructionText(callTool(dir, 'review_case', { case_text: 'Title: Sign in\n' }));
+  assert.match(text, /Input mode: case_text/);
+  assert.match(text, /Do not call fetch_case/);
+  assert.equal(fs.readFileSync(settings, 'utf8'), original);
+});
+
 test('mcp rejects a non-object message and keeps serving', async () => {
   const dir = tempProject();
   const { lines, stderr } = await mcpSession(

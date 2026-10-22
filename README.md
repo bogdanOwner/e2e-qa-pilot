@@ -6,7 +6,7 @@ An AI-driven MCP server and visual Story Kit that accelerates test authoring fro
 ![Playwright](https://img.shields.io/badge/tests-Playwright-45ba4b.svg)
 ![MCP](https://img.shields.io/badge/works%20with-Cursor%20%7C%20Claude%20Code-black.svg)
 
-You already have a manual test case in Qase, Jira, or another case tool. You already use Cursor or Claude Code. e2e-qa-pilot turns that case into a Playwright spec and a pull request, and it stops to ask you when the case is vague.
+You have a manual test case: an id in the case tool you configure, such as Qase, or the full case text pasted into chat. You already use Cursor or Claude Code. e2e-qa-pilot turns that case into a Playwright spec and a pull request, and it stops to ask you when the case is vague.
 
 ## Quick start
 
@@ -25,6 +25,8 @@ Restart Cursor or Claude Code, then ask in the chat:
 ```text
 Review case QA-123, then implement it with e2e-qa-pilot.
 ```
+
+Or paste the full case and ask to review it. No case tool is required for pasted text.
 
 `init` works on the folder you are in. It looks for `.cursor/` and `.claude/`, sets up the one it finds, and sets up both when both folders are present or when neither is. To choose, pass `--integration cursor`, `--integration claude`, or `--integration all`.
 
@@ -46,13 +48,13 @@ Nothing here is hidden. The skills are Markdown. Copy [processes/create-e2e/comm
 
 ## How it works
 
-You keep your own case tool and its MCP server (for example Qase). e2e-qa-pilot adds three tools that tell the assistant exactly how to do the job. The server fetches nothing and holds no token. The assistant uses your case tool, Playwright, and GitHub.
+You keep your own case tool and its MCP server when you pass a case id (for example Qase). Pasted case text does not need one. e2e-qa-pilot adds three tools that tell the assistant exactly how to do the job. The server fetches nothing and holds no token. The assistant uses your case tool, Playwright, and GitHub.
 
 ```mermaid
 flowchart TD
-  caseNode[Existing case from settings]
+  caseNode[Case id or pasted text]
   review[review-case]
-  questions[Ask once then update that case]
+  questions[Ask once then update when the case has an id]
   designSkill[add-from-design]
   stepsSkill[add-from-steps]
   readyPr[Ready PR one PNG per step]
@@ -70,7 +72,7 @@ flowchart TD
 
 | Tool | What it hands the assistant |
 |------|-----------------------------|
-| `review_case` | Check the case, ask one question per hole, update that same case, then route |
+| `review_case` | Check the case from a case id or pasted text, ask one question per hole, update that same case when it came from an id, then route |
 | `add_from_steps` | No Figma link. The steps are the oracle. Write the spec and open a pull request |
 | `add_from_design` | A `figma.com` link and `figma: on`. Compare each milestone with its frame |
 
@@ -100,11 +102,11 @@ These are independent entry points, not phases.
 
 ## Settings
 
-The first `review-case` run reads `.e2e-qa-pilot/settings.md`. If a key is empty, the assistant asks once in chat and writes your answers into that file. Do not paste a secret into the chat. Put how to fetch and update a case in the settings file, and keep tokens in your own MCP configuration.
+The first `review-case` run reads `.e2e-qa-pilot/settings.md`. If a key this input needs is empty, the assistant asks once in chat and writes your answers into that file. A case id needs `case_tool`, `fetch_case`, and `update_case`. Pasted case text does not. Do not paste a secret into the chat. Put how to fetch and update a case in the settings file, and keep tokens in your own MCP configuration.
 
 | Key | Meaning |
 |-----|---------|
-| `case_tool`, `fetch_case`, `update_case` | Where cases live and how to read and update one |
+| `case_tool`, `fetch_case`, `update_case` | Where cases live and how to read and update one. Used only for a case id |
 | `figma`, `read_figma` | `on` or `off`, and how to read a frame |
 | `branch_pattern`, `test_command`, `png_dir` | How to name the branch, run the spec, and where PNGs go |
 | `pr_label_ready`, `pr_label_mismatch` | Labels for a ready and a draft-mismatch pull request |
@@ -112,12 +114,12 @@ The first `review-case` run reads `.e2e-qa-pilot/settings.md`. If a key is empty
 ## Scope
 
 - Playwright only. The commands describe Playwright specs, runs, and screenshots. Selenium is not supported.
-- Any case tool that your assistant can read and update through its own MCP server. Qase is the worked example.
+- Any case tool that your assistant can read and update through its own MCP server, or no case tool when you paste the case. Qase is the worked example. This server does not implement a case-tool client.
 - A person decides. The assistant asks when a step is vague, reads every screenshot, and stops on a visual difference before it opens a pull request.
 
 ## Trust
 
-This tool is MIT licensed and small on purpose. The MCP server is [src/mcp.mjs](src/mcp.mjs) with shared constants in [src/kit.mjs](src/kit.mjs), and it has no dependencies. It reads no network, no token, and no case. `init` is [src/init.mjs](src/init.mjs) and uses those same constants. Secrets stay in your own MCP configuration and CI secrets. They are never written to a commit, a report, or a pull request.
+This tool is MIT licensed and small on purpose. The MCP server is [src/mcp.mjs](src/mcp.mjs) with shared constants in [src/kit.mjs](src/kit.mjs), and it has no dependencies. It reads no network and no token, and it does not contact a case tool. Case text in a tool call is the text the client sent. `init` is [src/init.mjs](src/init.mjs) and uses those same constants. Secrets stay in your own MCP configuration and CI secrets. They are never written to a commit, a report, or a pull request.
 
 ## Contributing
 

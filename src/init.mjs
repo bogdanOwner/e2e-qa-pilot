@@ -256,7 +256,7 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log } = {}) {
   log(`
 Next:
   1. Restart ${labels.join(' or ')} so it picks up the skills and the MCP server.
-  2. Connect your own case tool (for example Qase) in your editor's MCP settings.
-  3. Ask in chat: "Review case <id>."
-     The first run asks once for the keys in .e2e-qa-pilot/settings.md.`);
+  2. To review an existing case, connect your case tool (for example Qase) in your editor's MCP settings. To review pasted case text, no case tool is required.
+  3. Ask in chat: "Review case <id>." or paste the full case and ask to review it.
+     The first run asks once for the keys in .e2e-qa-pilot/settings.md that this input needs.`);
 }

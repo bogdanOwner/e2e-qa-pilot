@@ -2,6 +2,8 @@
 
 Templates for [review-case](../review-case/SKILL.md).
 
+These checks apply to the resolved case, whether it was fetched by id or supplied as text.
+
 All of these hold:
 
 - Preconditions say who is signed in and where they start.

@@ -4,6 +4,8 @@ PR template and evidence names for [add-from-steps](../add-from-steps/SKILL.md).
 
 This command checks the expected-result text. It does not use the Figma visual review.
 
+A failed assertion is a mismatch. It is not, by itself, a confirmed product regression.
+
 ## Word rule
 
 Assert every expected-result sentence, including a multi-bullet result (toast text, modal closed, preview entry, chart dot). Copy the case wording into the assertion message, including awkward grammar.
@@ -48,7 +50,10 @@ Screenshot links in the body are head-branch blob and raw URLs. A relative path 
 
 Do not edit the nightly workflow.
 
-Title: `<case-id> <case title>`
+Title:
+
+- `case_id`: `<case-id> <case title>`
+- `case_text`: the trimmed title. Trim surrounding whitespace. Keep the original casing and internal wording. Do not invent an id. The spec `test()` title and filenames use that trimmed string. Do not leave leading or trailing whitespace in those names. The duplicate check starts from that trimmed title. Display text in the case heading preserves the original casing and internal wording.
 
 Base: `main`.
 
@@ -58,7 +63,14 @@ Under the table, one heading and one raw image per step that has a PNG. A step w
 
 Omit Attempts and Not verified.
 
-When a step passes only because of a small wording difference, add the QA action block. Omit it when every quoted string already matches the screen. The agent does not edit the case.
+When a step passes only because of a small wording difference, add the QA action block. Omit it when every quoted string already matches the screen. The agent does not edit the case. In `case_text` mode, omit the case link. Record the case sentence and the screen sentence. Do not create a case.
+
+## Case heading
+
+- `case_id`: `- Automation case: [<case-id>](<case-url>)`
+- `case_text`: `- Case: <display title>`. No URL. Do not invent an id. The heading shows the original casing and internal wording, with surrounding whitespace removed.
+
+The worked example below is `case_id` mode.
 
 On a mismatch, the steps table has rows only through the failed step. Verdict for that row is `mismatch`. Actual result is what the screen showed. The image uses the same blob and raw URLs. The spec stays red. The pull request is a draft.
 

@@ -7,6 +7,9 @@
 ## Goal
 
 <!--
+case_tool, fetch_case, and update_case are only for a case id.
+Pasted case text does not use them. Leave them empty if you have no case tool.
+
 Keys, case tool with Figma on:
 
 case_tool:
