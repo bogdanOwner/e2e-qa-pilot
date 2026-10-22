@@ -147,7 +147,7 @@ Never silently ship a `MINOR` or `BLOCKER` without a human answer. No pull reque
 
 After that answer, the pull request body follows [pr-evidence.md](../shared/pr-evidence.md). Read `pr_label_ready` and `pr_label_mismatch` from the settings file.
 
-## Future tool
+## Tool contract
 
 `add_from_design`
 

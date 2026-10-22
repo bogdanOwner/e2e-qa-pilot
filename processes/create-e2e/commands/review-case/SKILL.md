@@ -113,7 +113,7 @@ Do not delete the case.
 
 Then `fetch_case` the same id. The stored preconditions and steps match the diff you showed. A mismatch stops. Do not write again with a guessed fix.
 
-## Future tool
+## Tool contract
 
 `review_case`
 

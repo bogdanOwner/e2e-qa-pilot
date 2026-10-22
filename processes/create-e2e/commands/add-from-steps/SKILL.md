@@ -149,7 +149,7 @@ Screenshot links in the body are head-branch blob and raw URLs. The path is `png
 
 Do not edit the nightly workflow.
 
-## Future tool
+## Tool contract
 
 `add_from_steps`
 

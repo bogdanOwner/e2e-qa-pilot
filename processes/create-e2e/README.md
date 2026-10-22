@@ -32,4 +32,4 @@ flowchart TD
 
 Shared rules: [ready-rules.md](commands/shared/ready-rules.md) and [pr-evidence.md](commands/shared/pr-evidence.md).
 
-Install with `npx e2e-qa-pilot init` in your project. What to ask and the three tool results are in `mcp.md` in the e2e-qa-pilot repository.
+Install with `npx e2e-qa-pilot init` in your project, once the package is published to npm. What to ask, the input contract, and the three tool results are in `mcp.md` in the e2e-qa-pilot package and repository.

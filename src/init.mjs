@@ -99,7 +99,7 @@ description: >-
 
 Read and follow \`.e2e-qa-pilot/processes/create-e2e/commands/${command}/SKILL.md\` in this project.
 
-If the \`${SERVER_NAME}\` MCP server is connected, its \`${tool}\` tool returns the same instructions.
+If the \`${SERVER_NAME}\` MCP server is connected, its \`${tool}\` tool returns the instructions bundled with the installed package. They match this project's copy only when both come from the same package version.
 
 ${MARKER_LINE}
 `;

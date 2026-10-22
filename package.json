@@ -1,9 +1,17 @@
 {
   "name": "e2e-qa-pilot",
   "version": "0.1.0",
-  "description": "An AI-driven MCP server and visual Story Kit that accelerates test authoring from specifications, slashes maintenance overhead via self-healing, and enforces human-in-the-loop control.",
+  "description": "An MCP server and set of Markdown commands that guide your AI assistant from a manual test case to a reviewed Playwright spec and a pull request, with a human deciding when the case or the screen is unclear.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bogdanOwner/e2e-qa-pilot.git"
+  },
+  "homepage": "https://github.com/bogdanOwner/e2e-qa-pilot#readme",
+  "bugs": {
+    "url": "https://github.com/bogdanOwner/e2e-qa-pilot/issues"
+  },
   "bin": {
     "e2e-qa-pilot": "bin/cli.mjs"
   },
