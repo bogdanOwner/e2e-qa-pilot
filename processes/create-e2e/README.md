@@ -9,17 +9,19 @@ flowchart TD
   questions[Ask once then update when the case has an id]
   designSkill[add-from-design]
   stepsSkill[add-from-steps]
-  readyPr[Ready PR one PNG per step]
+  readyPr[Ready pull request]
   stopPr[Draft mismatch PR spec stays red]
   askHuman[Stop and ask]
   caseNode --> review
-  review -->|expected result missing or vague| questions
+  review -->|case not ready| questions
   questions --> review
-  review -->|case has a Figma URL| designSkill
-  review -->|no Figma URL| stepsSkill
+  review -->|"figma.com URL and figma: on"| designSkill
+  review -->|"no figma.com URL, or figma: off"| stepsSkill
   stepsSkill -->|every expected result visible| readyPr
   stepsSkill -->|screen shows a different result| stopPr
-  designSkill -->|visual mismatch| askHuman
+  designSkill -->|every milestone MATCH| readyPr
+  designSkill -->|MINOR or BLOCKER| askHuman
+  askHuman -->|gap accepted| readyPr
 ```
 
 `figma: off` in the settings file ignores a Figma URL and sends the case to [add-from-steps](commands/add-from-steps/SKILL.md).

@@ -79,9 +79,37 @@ Run `init` again at any time. It leaves existing files alone.
 
 ## How it works
 
-The MCP server returns instructions as text. It does not run the workflow, run tests, call a case tool, Figma, or GitHub, or write to your project. Your assistant follows the instructions with the tools you have connected. Tool contracts, example prompts, and routing are in [mcp.md](mcp.md). The process diagram is in [Create e2e](processes/create-e2e/README.md).
+You keep your own case tool and its MCP server (for example Qase). e2e-qa-pilot adds three tools that tell the assistant exactly how to do the job. The server fetches nothing and holds no token. The assistant uses your case tool, Playwright, and GitHub.
 
-The output of a run is a Playwright spec that asserts every expected result, one PNG per proved step, and a pull request. If an expected result is missing or vague, the assistant asks you first. It is told never to invent one.
+```mermaid
+flowchart TD
+  caseNode[Case id or pasted text]
+  review[review-case]
+  questions[Ask once then update when the case has an id]
+  designSkill[add-from-design]
+  stepsSkill[add-from-steps]
+  readyPr[Ready pull request]
+  stopPr[Draft mismatch PR spec stays red]
+  askHuman[Stop and ask]
+  caseNode --> review
+  review -->|case not ready| questions
+  questions --> review
+  review -->|"figma.com URL and figma: on"| designSkill
+  review -->|"no figma.com URL, or figma: off"| stepsSkill
+  stepsSkill -->|every expected result visible| readyPr
+  stepsSkill -->|screen shows a different result| stopPr
+  designSkill -->|every milestone MATCH| readyPr
+  designSkill -->|MINOR or BLOCKER| askHuman
+  askHuman -->|gap accepted| readyPr
+```
+
+| Tool | What it hands the assistant |
+|------|-----------------------------|
+| `review_case` | Check the case from a case id or pasted text, ask one question per hole, update that same case when it came from an id, then route |
+| `add_from_steps` | No `figma.com` URL, or `figma: off`. The steps are the oracle. Write the spec and open a pull request |
+| `add_from_design` | A `figma.com` link and `figma: on`. Compare each milestone with its frame |
+
+The output of a run is a Playwright spec that asserts every expected result, one PNG per proved step, and a pull request. If an expected result is missing or vague, the assistant asks you first. It is told never to invent one. Tool contracts and example prompts are in [mcp.md](mcp.md). The same diagram is in [Create e2e](processes/create-e2e/README.md).
 
 ## Settings
 
