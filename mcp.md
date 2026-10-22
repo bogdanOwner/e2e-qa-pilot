@@ -49,8 +49,6 @@ Restart the editor. The server reads `.e2e-qa-pilot/settings.md` from the folder
 
 The entry is not pinned to a version. `npx -y` uses the package version that npm resolves, or has cached, when the server starts. The command files that `init` copied into your project were taken from the version that ran `init`. The two can differ, as described in [Without MCP](#without-mcp).
 
-Before the first npm release, the `npx` entry cannot resolve the package. Publishing is a separate release step. Until then, point the entry at a local checkout, with the same arguments the entry uses: `"command": "node", "args": ["/path/to/e2e-qa-pilot/bin/cli.mjs", "mcp"]`.
-
 Also connect your own case tool (for example Qase) when you review a case id. e2e-qa-pilot does not replace it, and pasted case text does not need it.
 
 ## Ask in plain words

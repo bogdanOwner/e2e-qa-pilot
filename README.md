@@ -8,9 +8,6 @@ An MCP server and set of Markdown commands that guide your AI assistant from a m
 
 You have a manual test case: an id in the case tool you configure, such as Qase, or the full case text pasted into chat. You already use Cursor or Claude Code. e2e-qa-pilot gives your assistant the instructions to turn that case into a Playwright spec and a pull request, and to stop and ask you when the case is vague.
 
-<!-- Remove this note after the first npm release. -->
-> **Release status.** Version 0.1.0 has not been published to npm yet, and publishing is a separate release step. The `npm` and `npx` commands below work only after that release. Before then, the skills can be copied by hand (see [mcp.md](mcp.md#without-mcp)), and the MCP entry can point at a local checkout with `node /path/to/e2e-qa-pilot/bin/cli.mjs mcp`.
-
 ## What is implemented today
 
 - **Create e2e (implemented).** Three tools, `review_case`, `add_from_steps`, and `add_from_design`, hand your assistant instructions for turning one case into a Playwright spec and a pull request. While writing the spec, the assistant may adjust locators or waits in that spec. A failed expected result is reported as a mismatch: a draft pull request, with the spec left red. It is not classified as a product regression.
@@ -18,7 +15,7 @@ You have a manual test case: an id in the case tool you configure, such as Qase,
 
 ## Prerequisites
 
-- Node 18 or later.
+- Node 22 or later.
 - A project where Playwright is already set up. The commands never install browsers.
 - Git with `main` as the base branch. The commands branch from `main` and target it.
 - An assistant that can read and edit your repository, run your test command, and open pull requests.

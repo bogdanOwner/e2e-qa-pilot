@@ -143,11 +143,10 @@ function mcpSession(dir, messages, expectedLines, { stderrIncludes } = {}) {
     const line = typeof message === 'string' ? message : JSON.stringify(message);
     child.stdin.write(`${line}\n`);
   }
-  return new Promise((resolve, reject) => {
-    let poll;
+  let poll;
+  const result = new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
       clearInterval(poll);
-      child.kill();
       reject(new Error(`timed out waiting for ${expectedLines} MCP responses, got ${lines.length}`));
     }, 2000);
     poll = setInterval(() => {
@@ -155,17 +154,37 @@ function mcpSession(dir, messages, expectedLines, { stderrIncludes } = {}) {
       if (lines.length >= expectedLines && stderrReady) {
         clearInterval(poll);
         clearTimeout(timeout);
-        child.kill();
         resolve({ lines, stderr });
       }
     }, 20);
   });
+  return { child, result };
 }
 
-test('mcp lists three tools and returns instructions', async () => {
+async function stopChild(child) {
+  if (!child || child.exitCode !== null || child.signalCode !== null) return;
+  child.kill();
+  await new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      child.kill('SIGKILL');
+      resolve();
+    }, 1000);
+    child.once('exit', () => {
+      clearTimeout(timer);
+      resolve();
+    });
+  });
+}
+
+test('mcp lists three tools and returns instructions', async (t) => {
   const dir = tempProject();
+  let child;
+  t.after(async () => {
+    await stopChild(child);
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
   runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
-  const { lines } = await mcpSession(
+  const session = mcpSession(
     dir,
     [
       { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-03-26' } },
@@ -181,6 +200,8 @@ test('mcp lists three tools and returns instructions', async () => {
     ],
     4,
   );
+  child = session.child;
+  const { lines } = await session.result;
 
   const byId = Object.fromEntries(lines.map((line) => [line.id, line]));
   assert.equal(byId[1].result.serverInfo.name, 'e2e-qa-pilot');
@@ -380,9 +401,14 @@ test('init and --force leave an old settings file unchanged while case_text stil
   assert.equal(fs.readFileSync(settings, 'utf8'), original);
 });
 
-test('mcp rejects a non-object message and keeps serving', async () => {
+test('mcp rejects a non-object message and keeps serving', async (t) => {
   const dir = tempProject();
-  const { lines, stderr } = await mcpSession(
+  let child;
+  t.after(async () => {
+    await stopChild(child);
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+  const session = mcpSession(
     dir,
     [
       null,
@@ -391,6 +417,8 @@ test('mcp rejects a non-object message and keeps serving', async () => {
     2,
     { stderrIncludes: 'Parse error' },
   );
+  child = session.child;
+  const { lines, stderr } = await session.result;
   assert.equal(lines[0].id, null);
   assert.equal(lines[0].error.code, -32700);
   assert.match(stderr, /Parse error/);
