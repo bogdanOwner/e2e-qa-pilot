@@ -24,15 +24,21 @@ Ready checks, the question shape, and the mood-diary example: [ready-rules.md](.
 
 Read `.e2e-qa-pilot/settings.md`. The keys live in the template comment.
 
-Generation keys, both modes: `figma`, `read_figma`, `branch_pattern`, `test_command`, `png_dir`, `pr_label_ready`, `pr_label_mismatch`.
+Generation keys, both modes: `figma`, `read_figma`, `branch_pattern`, `test_command`, `png_dir`, `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, `pr_label_mismatch`.
 
 Provider keys, `case_id` mode only: `case_tool`, `fetch_case`, `update_case`.
 
-If a required key for this mode has no value, ask once in chat for every empty key in that set. Write the answers into the file, then continue:
+`read_figma` is required even when `figma` is `off`.
+
+If a required key for this mode has no value, ask once in chat for every empty key in that set, except `pr_mode` and the label keys. Those have defaults below. Write the answers into the file, then continue:
 
 - Context: `figma`, `read_figma`, and in `case_id` mode also `case_tool`, `fetch_case`, `update_case`
 - Requirements: `branch_pattern`, `test_command`, `png_dir`
-- Goal: `pr_label_ready`, `pr_label_mismatch`
+- Goal: `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, `pr_label_mismatch`
+
+`pr_mode`: a missing or empty value means `create_pr_for_review`. Do not ask. The other legal value is `ask_before_pr`. Any other value: ask once, then write the answer.
+
+Label keys: a missing or empty `pr_label_ready` is `e2e:ready`. A missing or empty `pr_label_minor_text_diff` is `e2e:minor-text-diff`. A missing or empty `pr_label_mismatch` is `e2e:mismatch`. Write those defaults. Do not ask. A value that is already set stays as it is.
 
 `case_text` mode does not ask for `case_tool`, `fetch_case`, or `update_case`, and does not write placeholder values for them.
 

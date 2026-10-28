@@ -182,6 +182,7 @@ test('packed tarball installs offline and serves init and mcp', async (t) => {
   }
   for (const file of packedPaths) {
     assert.ok(!file.startsWith('test/'), `tarball contains ${file}`);
+    assert.ok(!file.startsWith('examples/'), `tarball contains ${file}`);
   }
 
   const tarball = path.join(stage, packed.filename);

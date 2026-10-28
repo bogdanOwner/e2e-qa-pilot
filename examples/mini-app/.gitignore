@@ -1,0 +1,8 @@
+node_modules/
+test-results/
+playwright-report/
+artifacts/
+.cursor/
+.claude/
+.mcp.json
+.e2e-qa-pilot/processes/

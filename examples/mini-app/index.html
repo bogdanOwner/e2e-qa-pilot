@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Personal Space</title>
+  </head>
+  <body>
+    <main>
+      <h1>Personal Space</h1>
+      <section aria-label="Mood Diary">
+        <h2>Mood Diary</h2>
+        <button type="button" id="awesome">Awesome</button>
+        <ul id="preview" aria-label="Mood Diary preview"></ul>
+        <p id="chart">Chart</p>
+      </section>
+      <dialog id="modal" aria-label="Create Diary Entry">
+        <h2>Create Diary Entry</h2>
+        <p id="mood">Mood: Awesome</p>
+        <label>
+          Thoughts
+          <textarea id="thoughts"></textarea>
+        </label>
+        <button type="button" id="save">Save</button>
+      </dialog>
+      <p id="toast" role="status" hidden></p>
+    </main>
+    <script>
+      const modal = document.getElementById('modal');
+      document.getElementById('awesome').addEventListener('click', () => {
+        modal.showModal();
+      });
+      document.getElementById('save').addEventListener('click', () => {
+        const text = document.getElementById('thoughts').value;
+        const toast = document.getElementById('toast');
+        toast.hidden = false;
+        toast.textContent = 'Your Diary entry successfully created!';
+        const item = document.createElement('li');
+        item.textContent = text;
+        document.getElementById('preview').append(item);
+        const dot = document.createElement('span');
+        dot.setAttribute('aria-label', 'chart dot');
+        dot.textContent = '●';
+        document.getElementById('chart').append(dot);
+        modal.close();
+      });
+    </script>
+  </body>
+</html>

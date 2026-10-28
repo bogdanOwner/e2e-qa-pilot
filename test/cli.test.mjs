@@ -24,7 +24,12 @@ test('init defaults to the current folder and installs both editors', () => {
       assert.ok(fs.existsSync(path.join(dir, editor, 'skills', name, 'SKILL.md')));
     }
   }
-  assert.ok(fs.existsSync(path.join(dir, '.e2e-qa-pilot', 'settings.md')));
+  const settings = fs.readFileSync(path.join(dir, '.e2e-qa-pilot', 'settings.md'), 'utf8');
+  const active = settings.replace(/<!--[\s\S]*?-->/g, '');
+  assert.match(active, /^pr_mode: create_pr_for_review$/m);
+  assert.match(active, /^pr_label_ready: e2e:ready$/m);
+  assert.match(active, /^pr_label_minor_text_diff: e2e:minor-text-diff$/m);
+  assert.match(active, /^pr_label_mismatch: e2e:mismatch$/m);
   assert.ok(fs.existsSync(path.join(dir, '.cursor', 'mcp.json')));
   assert.ok(fs.existsSync(path.join(dir, '.mcp.json')));
 });
@@ -328,9 +333,40 @@ test('case_text call returns pasted-case instructions without a provider', () =>
   assert.match(steps, /assertion_edits/);
   assert.match(steps, /figma: on/);
   assert.match(steps, /not, by itself, a confirmed product regression/);
+  // The assertions below read instruction text returned by the server.
+  // They do not prove that Cursor or Claude Code follows it, and they do not
+  // validate the e2e assistant workflow.
+  assert.doesNotMatch(steps, /sameVisibleMessage/);
+  assert.match(steps, /A missing or empty `pr_mode` means `create_pr_for_review`/);
+  assert.match(steps, /Never auto-merge/);
+  assert.match(
+    steps,
+    /`ask_before_pr` stops before creating a pull request when a functional mismatch, an unresolved difference, or a failed final-screenshot gate remains/,
+  );
+  assert.match(steps, /A narrow minor text difference does not trigger this stop/);
+  assert.match(steps, /explicitly authorizes it/);
+  assert.match(steps, /preserve the failing assertion/);
+  assert.match(steps, /Do not put the quoted case sentence in an assertion/);
+  assert.match(steps, /remaining words match in the same order/);
+  assert.match(steps, /When the remaining words do not match in the same order/);
+  assert.match(steps, /Your diary entry has successfully created/);
+  assert.match(steps, /Your Diary entry successfully created!/);
+  assert.match(steps, /e2e:minor-text-diff/);
+  assert.match(steps, /Functional checks in the same step stay `pass` when they pass/);
+  assert.match(steps, /was not a passing assertion/);
+  assert.match(steps, /The spec stays red/);
+  assert.match(steps, /does not, by itself, prove that a functional assertion failed/);
+  assert.match(
+    steps,
+    /selects `e2e:mismatch`, unless the only issue in the run is the narrow text difference/,
+  );
+  assert.match(
+    steps,
+    /Functional assertions passed, the expected behavior matches, and required screenshot evidence meets the acceptance criteria/,
+  );
 });
 
-test('add_from_design instructions still require a human stop on MINOR or BLOCKER', () => {
+test('add_from_design instructions follow pr_mode for MINOR and BLOCKER', () => {
   const text = instructionText(
     callTool(tempProject(), 'add_from_design', {
       case_text: 'Title: Home\n\n1. Open home. Expected: Home is visible.',
@@ -339,7 +375,11 @@ test('add_from_design instructions still require a human stop on MINOR or BLOCKE
   assert.match(text, /MINOR/);
   assert.match(text, /BLOCKER/);
   assert.match(text, /Stop and ask in chat/);
-  assert.match(text, /No pull request until/);
+  assert.match(text, /create_pr_for_review/);
+  assert.match(text, /ask_before_pr/);
+  assert.match(text, /explicitly authorizes it/);
+  assert.match(text, /A narrow minor text difference does not trigger this stop/);
+  assert.doesNotMatch(text, /No pull request until/);
 });
 
 test('missing, conflicting, and unknown inputs return errors and no skill body', () => {

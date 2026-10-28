@@ -124,23 +124,25 @@ The assistant may run the next command by calling its MCP tool or by reading the
 ### add_from_steps
 
 - Spec: [processes/create-e2e/commands/add-from-steps/SKILL.md](processes/create-e2e/commands/add-from-steps/SKILL.md)
-- Result: a ready pull request, or a draft pull request whose spec stays red
-- The assistant still reads the screen
+- Result: one label, `e2e:ready`, `e2e:minor-text-diff`, or a draft `e2e:mismatch`, unless `ask_before_pr` is still waiting for an answer or for explicit authorization
+- The assistant still reads the screen. A narrow minor text difference does not stop the run. `pr_mode` is read from settings by the assistant. The server does not parse it.
 
 ### add_from_design
 
 - Spec: [processes/create-e2e/commands/add-from-design/SKILL.md](processes/create-e2e/commands/add-from-design/SKILL.md)
 - Needs a Figma URL in the case and `figma: on`
-- Result: each milestone is `MATCH`, or the assistant stopped for a human answer on a `MINOR` or `BLOCKER` against the Figma frame
-- The assistant still reads the screen and asks. No pull request until that answer
+- Result: one label, `e2e:ready`, `e2e:minor-text-diff`, or a draft `e2e:mismatch`, unless `ask_before_pr` is still waiting for an answer or for explicit authorization
+- The assistant still reads the screen. A narrow minor text difference does not stop the run. `ask_before_pr` stops for a functional mismatch, an unresolved difference, or a failed final-screenshot gate.
 
 ## What stays in the assistant
 
 These are not server work, and the server cannot enforce them.
 
 - Ask when an expected result is missing, vague, or uses two names for one control.
-- Read the screenshot. One PNG must show that step's control. A repeat of an earlier screen does not count. A missing image is not a failed assertion. The last step always keeps a PNG.
-- On a Figma `MINOR` or `BLOCKER`, stop and ask if the difference is expected. No pull request until you answer.
+- Read the screenshot. One PNG must show that step's control. A repeat of an earlier screen does not count. An omitted earlier image is not, by itself, a failed assertion. The required end-state screenshot must show the expected end state. A screenshot finding does not, by itself, prove that a functional assertion failed.
+- Follow `pr_mode`. `create_pr_for_review` is the default and does not auto-merge. `ask_before_pr` stops before a pull request for a functional mismatch, an unresolved difference, or a failed final-screenshot gate, and creates that pull request only after explicit authorization when the discrepancy remains. A narrow minor text difference does not trigger that stop.
+
+The server reads `.e2e-qa-pilot/settings.md` and returns it verbatim. It does not parse `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, or `pr_label_mismatch`, and it does not choose a pull request label. The command files tell the assistant what those keys mean. A missing `pr_mode` means `create_pr_for_review`.
 
 ## Without MCP
 

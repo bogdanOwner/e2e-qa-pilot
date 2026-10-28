@@ -19,11 +19,11 @@ The steps are the contract. Input is exactly one of `case_id` or `case_text`, pl
 
 This skill does not call `update_case`. A case that is not ready to assert is [review-case](../review-case/SKILL.md).
 
-This skill checks the expected-result text. It does not run a Figma visual review and it does not stop to ask whether a visual difference is acceptable.
+This skill checks the expected-result text. It does not run a Figma visual review. A narrow minor text difference does not stop the run. `ask_before_pr` stops for a functional mismatch, an unresolved difference, or a failed final-screenshot gate, as [pr-evidence.md](../shared/pr-evidence.md) describes.
 
 PR body, the word rule, and the screenshot gate: [pr-evidence.md](../shared/pr-evidence.md). Ready checks: [ready-rules.md](../shared/ready-rules.md).
 
-If a generation key is still empty (`figma`, `read_figma`, `branch_pattern`, `test_command`, `png_dir`, `pr_label_ready`, `pr_label_mismatch`), stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+If `figma`, `read_figma`, `branch_pattern`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
 
 ## Title
 
@@ -101,13 +101,21 @@ After a green run, copy a PNG into `png_dir` only when it passes the Screenshot 
 
 ## Assertions
 
-Follow the word rule in [pr-evidence.md](../shared/pr-evidence.md).
+Follow the word rule in [pr-evidence.md](../shared/pr-evidence.md). The same rule is repeated here.
 
-Assert every expected-result sentence, including a multi-bullet result (toast text, modal closed, preview entry, chart dot). Copy the case wording into the assertion message, including awkward grammar.
+The spec asserts functional outcomes: the control is present, the modal closes, the preview updates, the chart dot appears, and the other visible behavior in the expected result. Copy that behavior from the case into the assertion, including awkward grammar.
 
-Quoted copy is the same message when, after lowercasing and stripping punctuation, the words match once filler words `a`, `the`, `has`, and `been` are ignored. Record the on-screen sentence. Do not change the case. Do not add the mismatch label for that difference. Use `sameVisibleMessage`. Example: case **"Your diary entry has successfully created"** and screen **Your Diary entry successfully created!** are the same message.
+Do not put the quoted case sentence in an assertion when, after lowercasing, stripping punctuation, and dropping the filler words `a`, `the`, `has`, and `been`, the remaining words match in the same order. Record the case sentence and the screen sentence in the steps table and in the pull request comments. The verdict for that quoted sentence is not `pass`. Example: case **"Your diary entry has successfully created"** and screen **Your Diary entry successfully created!**
 
-A different message (another verb, a missing screen, a missing control) is a mismatch. Leave the assertion. The spec stays red.
+That difference is not an exact-text pass. Functional checks in the same step stay `pass` when they pass. State that the original exact sentence was not a passing assertion.
+
+When the remaining words do not match in the same order, the text difference is unresolved. Assert the case sentence and leave that assertion failing. The spec stays red. Do not treat it as a minor text difference.
+
+Do not rewrite the expected sentence. Do not change an assertion so the exact case sentence appears to pass. `assertion_edits` stays 0. Comparing with this rule is not an assertion edit. A green run bought by editing the expected sentence is a failed skill run. Revert it and open the mismatch pull request.
+
+When this minor difference is the only issue, and required screenshot evidence meets the acceptance criteria, the pull request label is `pr_label_minor_text_diff` from the settings file. The default is `e2e:minor-text-diff`. It is not `e2e:ready`.
+
+A different message (another verb, a missing screen, a missing control) is a functional mismatch. Leave the functional assertion. The spec stays red. A failed functional assertion is a mismatch. It is not, by itself, a confirmed product regression.
 
 Take the step PNG of the control that proves the step (modal, open picker, toast) while that result is still on screen. A toast that auto-dismisses is captured while it is visible.
 
@@ -121,8 +129,9 @@ Look at the PNG before it is copied into `png_dir` or linked in the pull request
 - A picture that matches an earlier step does not prove this step.
 - One retry only: capture the proving control (`locator.screenshot` or a clip of that control), not the same full viewport.
 - If the second image still does not show the step, omit the file. The table row stays. The Screenshot cell is `—`. No image heading for that step.
-- The last step always keeps its PNG. That shot is the end state.
-- A missing image is not a failed assertion. Do not change the expected result to match a useless screenshot.
+- An omitted earlier image is not, by itself, a failed assertion.
+- The required end-state screenshot must show the expected end state. A narrow wording difference on that image does not, by itself, mean the screenshot missed the expected end state. If the image does not show the expected end state, do not publish it as passing evidence. That screenshot finding does not, by itself, prove that a functional assertion failed. Report the findings separately. Either finding blocks `e2e:ready`. A required end-state screenshot that misses the expected end state selects `e2e:mismatch`, unless the only issue in the run is the narrow text difference.
+- Do not change the expected result to match a useless screenshot.
 
 `assertion_edits` stays 0. Rewriting the expected sentence so the spec goes green is an assertion edit. Comparing with the word rule above is not. A green run bought by editing the expected sentence is a failed skill run. Revert it and open the mismatch pull request.
 
@@ -133,19 +142,22 @@ Read `test_command` from the settings file. Run that command for this spec with 
 The five-run ceiling is for the whole spec, not five per step. Each command is one run. Retries off disables the runner's automatic repeat of the same failure. Stop early when the expected result passes.
 
 - Locator or timing: the control named by the action is not on screen yet. Change the locator or the wait. Run again.
-- Same message: the on-screen sentence matches the case under the word rule in Assertions. Record the screen sentence and continue the later sentences of that step.
+- Narrow text difference: the on-screen sentence matches the case under the word rule in Assertions. Record the screen sentence. Do not mark the exact sentence `pass`. Continue the later sentences of that step.
 - Behavior: a found control's text or state is a different result. Stop on that run. Do not spend the remaining attempts searching for a different string. Leave the assertion. Do not treat later steps as passed.
 
 ## Pull request
 
-One PR to `main`. Evidence rules and the body template are in [pr-evidence.md](../shared/pr-evidence.md).
+One PR to `main`. Never auto-merge. Evidence rules and the body template are in [pr-evidence.md](../shared/pr-evidence.md).
+
+Read `pr_mode`. A missing value means `create_pr_for_review`. `ask_before_pr` stops before a pull request for a functional mismatch, an unresolved difference, or a failed final-screenshot gate. Stop and ask in chat. A narrow minor text difference does not trigger that stop. If the discrepancy remains, create the pull request only after the user explicitly authorizes it. When the expected behavior has not changed, preserve the failing assertion.
 
 | Outcome | Label | PR |
 |---------|--------|----|
-| Every expected result is functionally visible, including a same-message wording difference. Each published PNG passes the Screenshot gate, and the last step has a PNG. `assertion_edits` is 0 | `pr_label_ready` from the settings file | Ready |
-| The screen shows a different result | `pr_label_mismatch` from the settings file | Draft. The spec stays red |
+| Functional assertions passed, the expected behavior matches, and required screenshot evidence meets the acceptance criteria. `assertion_edits` is 0 | `pr_label_ready` from the settings file, default `e2e:ready` | Open for review. Not a draft |
+| Functional behavior matches, required screenshots meet the acceptance criteria, and the only difference is the narrow text rule | `pr_label_minor_text_diff` from the settings file, default `e2e:minor-text-diff` | Open for review. Not a draft. Not `e2e:ready` |
+| A functional or unresolved mismatch, or required screenshot evidence does not show the expected end state | `pr_label_mismatch` from the settings file, default `e2e:mismatch` | Draft. A failed assertion stays red |
 
-Screenshot links in the body are head-branch blob and raw URLs. The path is `png_dir` from the settings file. A relative path does not open the file. Link text stays `step-01`. A step whose image failed the Screenshot gate has `—` in the Screenshot cell and no image block. When a step passes only because of a small wording difference, the body includes the QA action block and `## Visible copy` records the on-screen sentence. The agent does not edit the case. That difference is not an assertion edit. Steps that never ran have no PNG. Do not commit `test-results/` or the HTML report folder. Do not use `test.fixme`. A red pull-request check is the expected CI result on a mismatch.
+Screenshot links in the body are head-branch blob and raw URLs. The path is `png_dir` from the settings file. A relative path does not open the file. Link text stays `step-01`. A step whose image failed the Screenshot gate has `—` in the Screenshot cell and no image block. Assertion findings and screenshot findings are separate. A screenshot failure does not, by itself, prove that a functional assertion failed. When the only issue is the narrow text rule, the body records both sentences and states that the exact sentence was not a passing assertion. The agent does not edit the case. That difference is not an assertion edit. Steps that never ran have no PNG. Do not commit `test-results/` or the HTML report folder. Do not use `test.fixme`. A red pull-request check is the expected CI result on a mismatch. If GitHub access is missing, report that and do not claim a pull request exists.
 
 Do not edit the nightly workflow.
 
@@ -154,5 +166,5 @@ Do not edit the nightly workflow.
 `add_from_steps`
 
 - Inputs: exactly one of `case_id` or `case_text`, and the settings file `.e2e-qa-pilot/settings.md`
-- Result: a ready pull request, or a draft pull request whose spec stays red
-- The agent still reads the screen
+- Result: one label, `e2e:ready`, `e2e:minor-text-diff`, or a draft `e2e:mismatch`, unless `ask_before_pr` is still waiting for an answer or for explicit authorization
+- The agent still reads the screen. A narrow minor text difference does not stop the run.

@@ -4,27 +4,32 @@ Author end-to-end coverage from one case. A case id or pasted case text, plus `.
 
 ```mermaid
 flowchart TD
-  caseNode[Case id or pasted text]
-  review[review-case]
-  questions[Ask once then update when the case has an id]
-  designSkill[add-from-design]
-  stepsSkill[add-from-steps]
-  readyPr[Ready pull request]
-  stopPr[Draft mismatch PR spec stays red]
-  askHuman[Stop and ask]
-  caseNode --> review
-  review -->|case not ready| questions
-  questions --> review
-  review -->|"figma.com URL and figma: on"| designSkill
-  review -->|"no figma.com URL, or figma: off"| stepsSkill
-  stepsSkill -->|every expected result visible| readyPr
-  stepsSkill -->|screen shows a different result| stopPr
-  designSkill -->|every milestone MATCH| readyPr
-  designSkill -->|MINOR or BLOCKER| askHuman
-  askHuman -->|gap accepted| readyPr
+  reviewNode[review-case]
+  implNode[implementation command]
+  readyNode[Behavior matches and evidence is adequate]
+  minorNode[Minor text difference only]
+  assertNode[Functional or unresolved assertion]
+  shotNode[Required screenshot evidence fails]
+  modeNode{pr_mode}
+  readyPr["PR labeled e2e:ready"]
+  minorPr["PR labeled e2e:minor-text-diff"]
+  draftPr["Draft PR labeled e2e:mismatch"]
+  askNode[Ask then continue only if authorized]
+  reviewNode -->|case not ready| askClarify[Ask and do not invent]
+  reviewNode -->|case ready same turn| implNode
+  implNode --> readyNode
+  implNode --> minorNode
+  implNode --> assertNode
+  implNode --> shotNode
+  readyNode --> readyPr
+  minorNode --> minorPr
+  assertNode --> modeNode
+  shotNode --> modeNode
+  modeNode -->|create_pr_for_review| draftPr
+  modeNode -->|ask_before_pr| askNode
 ```
 
-`figma: off` in the settings file ignores a Figma URL and sends the case to [add-from-steps](commands/add-from-steps/SKILL.md).
+`figma: off` in the settings file ignores a Figma URL and sends the case to [add-from-steps](commands/add-from-steps/SKILL.md). A missing `pr_mode` means `create_pr_for_review`. The server does not parse or enforce it. Apply one label: `e2e:ready`, `e2e:minor-text-diff`, or draft `e2e:mismatch`. Nothing is auto-merged. Assertion findings and screenshot findings stay separate.
 
 | Command | When |
 |---------|------|

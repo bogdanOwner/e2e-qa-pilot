@@ -3,8 +3,9 @@ name: add-from-design
 description: >-
   Add or extend end-to-end tests from a case that has a Figma URL. The case
   is an existing id or pasted test case text. Docs first. Compare each
-  milestone to the case, the page contract, and the Figma frame. Stop and
-  ask in chat before a pull request.
+  milestone to the case, the page contract, and the Figma frame. Follow
+  pr_mode for a functional mismatch, an unresolved difference, or a failed
+  final screenshot. A narrow minor text difference does not stop the run.
 ---
 
 # Add end-to-end coverage from Figma
@@ -19,7 +20,7 @@ Input is exactly one of `case_id` or `case_text`, plus `.e2e-qa-pilot/settings.m
 
 Read `read_figma`, `png_dir`, `branch_pattern`, and `test_command` from that file.
 
-If a generation key is still empty (`figma`, `read_figma`, `branch_pattern`, `test_command`, `png_dir`, `pr_label_ready`, `pr_label_mismatch`), stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+If `figma`, `read_figma`, `branch_pattern`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
 
 **Docs first, code second.** Do not add a spec until the feature has an overview, Gherkin, and page contracts.
 
@@ -121,36 +122,41 @@ For **each** attachment:
 
 Record per milestone:
 
-- `MATCH` — no action
-- `MINOR` — copy, spacing, or icon drift → proceed to Phase D
-- `BLOCKER` — wrong screen, missing step, broken flow, or `01-final-screen` does not cover the case → proceed to Phase D; do not open a pull request until resolved
+- `MATCH` — behavior matches and required screenshot evidence shows the expected end state. No text difference: `pr_label_ready` (default `e2e:ready`).
+- `MINOR` — copy, spacing, or icon drift. A sole difference that meets the narrow text rule in [pr-evidence.md](../shared/pr-evidence.md) is `pr_label_minor_text_diff` (default `e2e:minor-text-diff`) and does not stop the run. Any other difference is unresolved and follows `pr_mode`.
+- `BLOCKER` — wrong screen, missing step, broken flow, or `01-final-screen` does not cover the case. This is a functional finding or a screenshot finding. Report them separately. A screenshot that misses the end state does not, by itself, prove that a functional assertion failed. Follow `pr_mode`.
 
 ## Phase D — Clarify unexpected diffs
 
-**Stop and ask in chat** when Phase C finds any `MINOR` or `BLOCKER` diff. Do not assume drift is acceptable.
+Read `pr_mode`. A missing value means `create_pr_for_review`. The pull request labels and the narrow text rule are in [pr-evidence.md](../shared/pr-evidence.md).
 
-For **each** diff, present:
+A sole narrow text difference does not stop the run. Document the case sentence and the screen sentence. Do not treat the exact sentence as a passed assertion. Do not rewrite the expected text. Apply `pr_label_minor_text_diff`.
+
+`create_pr_for_review` opens the pull request for the label in that file. Never auto-merge. A functional or unresolved difference, or a final screenshot that misses the expected end state, is a draft pull request labeled `pr_label_mismatch` (default `e2e:mismatch`). It is not, by itself, a confirmed product regression.
+
+`ask_before_pr` stops before creating a pull request when a functional mismatch, an unresolved difference, or a failed final-screenshot gate remains. Stop and ask in chat. Do not assume drift is acceptable.
+
+For **each** such diff, present:
 
 1. **Milestone** — attachment name (for example `02-personal-space`)
 2. **Case step** — expected action and result from the case
 3. **Figma / page contract** — what the design and the docs say should appear
 4. **Actual screenshot** — describe the real diff (missing element, wrong copy, extra modal, wrong tab state)
-5. **Question** — *Is this difference expected?*
+5. **Finding** — say whether this is a functional assertion finding, a screenshot evidence finding, or both. Do not treat a screenshot finding as proof that the functional assertion failed.
+6. **Question** — *How should this difference be resolved?*
 
-| User answer | Agent action |
-|-------------|--------------|
-| **Expected** (case or Figma outdated, known deploy gap) | Document in `## Known visual gaps` in the feature `overview.md`, and add **Visual parity notes** in the pull request |
-| **Not expected** | Fix the test, update the page contract, or flag a product bug — then run Phase C again |
-| **Unclear** | Ask one follow-up; do not proceed to a pull request |
+After the user responds, continue from the clarified requirements. If the user changes the expected behavior, later assertions follow that clarification and the pull request quotes the change. If the discrepancy remains, create the pull request only after the user explicitly authorizes it. When the expected behavior has not changed, preserve the failing assertion. If the answer is still unclear, ask one follow-up and do not open a pull request.
 
-Never silently ship a `MINOR` or `BLOCKER` without a human answer. No pull request until every milestone is `MATCH` or the human has accepted the gap.
+When the user accepts the difference as a known visual gap, record it under `## Known visual gaps` in the feature `overview.md` and add visual parity notes in the pull request. That record does not rewrite an expected result and is not an assertion edit. If the functional assertions passed and the required end-state screenshot shows the expected end state, apply `pr_label_ready`. If a functional assertion is still failing, preserve it and apply `pr_label_mismatch` under the `pr_mode` rules above.
 
-After that answer, the pull request body follows [pr-evidence.md](../shared/pr-evidence.md). Read `pr_label_ready` and `pr_label_mismatch` from the settings file.
+"Fix the test" means a locator or a wait. It does not mean rewriting an expected result.
+
+Do not apply a label while `ask_before_pr` is still waiting for an answer or for explicit authorization. Otherwise apply exactly one of `pr_label_ready`, `pr_label_minor_text_diff`, or `pr_label_mismatch` from the settings file. The defaults are `e2e:ready`, `e2e:minor-text-diff`, and `e2e:mismatch`. Full `MATCH`, with the end state shown and no text difference, uses `pr_label_ready`. If GitHub access is missing, report that and do not claim a pull request exists.
 
 ## Tool contract
 
 `add_from_design`
 
 - Inputs: exactly one of `case_id` or `case_text`, and the settings file `.e2e-qa-pilot/settings.md`
-- Result: each milestone is `MATCH`, or the agent stopped for a human answer on a `MINOR` or `BLOCKER` against the Figma frame
-- The agent still reads the screen and asks. No pull request until that answer
+- Result: one label, `e2e:ready`, `e2e:minor-text-diff`, or a draft `e2e:mismatch`, unless `ask_before_pr` is still waiting for an answer or for explicit authorization
+- The agent still reads the screen. A narrow minor text difference does not stop the run. `ask_before_pr` stops for a functional mismatch, an unresolved difference, or a failed final-screenshot gate.

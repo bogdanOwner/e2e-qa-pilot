@@ -49,7 +49,7 @@ export const CATALOG = [
     command: 'add-from-design',
     tool: 'add_from_design',
     description:
-      'Write the Playwright spec for a reviewed case supplied as case_id or case_text that has a figma.com URL and figma: on. Compares each milestone with its frame and stops for a human on MINOR or BLOCKER. Returns the instructions to follow.',
+      'Write the Playwright spec for a reviewed case supplied as case_id or case_text that has a figma.com URL and figma: on. Compares each milestone with its frame. A narrow minor text difference is documented as e2e:minor-text-diff. Other differences follow pr_mode and can be a draft e2e:mismatch. Returns the instructions to follow.',
   },
 ];
 
