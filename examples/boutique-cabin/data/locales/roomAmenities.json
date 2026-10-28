@@ -1,0 +1,499 @@
+{
+  "concepts": {
+    "entire-chalet": {
+      "en": "Entire chalet",
+      "ro": "Întreaga cabană",
+      "de": "Gesamte Chalet"
+    },
+    "mountain-view": {
+      "en": "Mountain view",
+      "ro": "Vedere la munte",
+      "de": "Bergblick"
+    },
+    "landmark-view": {
+      "en": "Landmark view",
+      "ro": "Vedere spre reper",
+      "de": "Blick auf Sehenswürdigkeit"
+    },
+    "city-view": {
+      "en": "City view",
+      "ro": "Vedere spre oraș",
+      "de": "Stadtblick"
+    },
+    "kitchenette": {
+      "en": "Kitchenette",
+      "ro": "Kitchenette",
+      "de": "Kochnische"
+    },
+    "private-bathroom": {
+      "en": "Private bathroom",
+      "ro": "Baie privată",
+      "de": "Eigenes Badezimmer"
+    },
+    "balcony": {
+      "en": "Balcony",
+      "ro": "Balcon",
+      "de": "Balkon"
+    },
+    "terrace": {
+      "en": "Terrace",
+      "ro": "Terasă",
+      "de": "Terrasse"
+    },
+    "air-conditioning": {
+      "en": "Air conditioning",
+      "ro": "Aer condiționat",
+      "de": "Klimaanlage"
+    },
+    "fireplace": {
+      "en": "Fireplace",
+      "ro": "Șemineu",
+      "de": "Kamin"
+    },
+    "barbecue": {
+      "en": "Barbecue",
+      "ro": "Grătar",
+      "de": "Grill"
+    },
+    "flat-screen-tv": {
+      "en": "Flat-screen TV",
+      "ro": "TV cu ecran plat",
+      "de": "Flachbildfernseher"
+    },
+    "soundproofing": {
+      "en": "Soundproofing",
+      "ro": "Izolare fonică",
+      "de": "Schalldämmung"
+    },
+    "private-entrance": {
+      "en": "Private entrance",
+      "ro": "Intrare privată",
+      "de": "Privater Eingang"
+    },
+    "streaming": {
+      "en": "Streaming services",
+      "ro": "Servicii de streaming",
+      "de": "Streaming-Dienste"
+    },
+    "coffee-machine": {
+      "en": "Coffee machine",
+      "ro": "Aparat de cafea",
+      "de": "Kaffeemaschine"
+    },
+    "electric-kettle": {
+      "en": "Electric kettle",
+      "ro": "Fierbător electric",
+      "de": "Wasserkocher"
+    },
+    "refrigerator": {
+      "en": "Refrigerator",
+      "ro": "Frigider",
+      "de": "Kühlschrank"
+    },
+    "stovetop": {
+      "en": "Stovetop",
+      "ro": "Plită",
+      "de": "Kochfeld"
+    },
+    "kitchenware": {
+      "en": "Kitchenware",
+      "ro": "Ustensile de bucătărie",
+      "de": "Küchenutensilien"
+    },
+    "dining-table": {
+      "en": "Dining table",
+      "ro": "Masă de dining",
+      "de": "Esstisch"
+    },
+    "outdoor-dining": {
+      "en": "Outdoor dining area",
+      "ro": "Zonă de dining în aer liber",
+      "de": "Essbereich im Freien"
+    },
+    "hairdryer": {
+      "en": "Hairdryer",
+      "ro": "Uscător de păr",
+      "de": "Haartrockner"
+    },
+    "extra-long-beds": {
+      "en": "Extra-long beds",
+      "ro": "Paturi extra lungi",
+      "de": "Extralange Betten"
+    },
+    "hardwood-floors": {
+      "en": "Hardwood floors",
+      "ro": "Pardoseală din lemn",
+      "de": "Holzboden"
+    },
+    "sofa": {
+      "en": "Sofa",
+      "ro": "Canapea",
+      "de": "Sofa"
+    },
+    "sofa-bed": {
+      "en": "Sofa bed",
+      "ro": "Canapea extensibilă",
+      "de": "Schlafsofa"
+    },
+    "seating-area": {
+      "en": "Seating area",
+      "ro": "Zonă de relaxare",
+      "de": "Sitzbereich"
+    },
+    "board-games": {
+      "en": "Board games & puzzles",
+      "ro": "Jocuri de societate și puzzle-uri",
+      "de": "Brettspiele & Puzzles"
+    },
+    "socket-bed": {
+      "en": "Socket near the bed",
+      "ro": "Priză lângă pat",
+      "de": "Steckdose am Bett"
+    },
+    "clothes-rack": {
+      "en": "Clothes rack",
+      "ro": "Suport pentru haine",
+      "de": "Kleiderständer"
+    },
+    "fold-up-bed": {
+      "en": "Fold-up bed",
+      "ro": "Pat pliabil",
+      "de": "Klappbett"
+    },
+    "free-toiletries": {
+      "en": "Free toiletries",
+      "ro": "Articole de toaletă gratuite",
+      "de": "Kostenlose Pflegeprodukte"
+    },
+    "extra-towels": {
+      "en": "Extra towels available",
+      "ro": "Prosoape suplimentare disponibile",
+      "de": "Zusätzliche Handtücher verfügbar"
+    },
+    "towels": {
+      "en": "Towels",
+      "ro": "Prosoape",
+      "de": "Handtücher"
+    },
+    "linen": {
+      "en": "Linen",
+      "ro": "Lenjerie de pat",
+      "de": "Bettwäsche"
+    },
+    "slippers": {
+      "en": "Slippers",
+      "ro": "Papuci de casă",
+      "de": "Hausschuhe"
+    },
+    "toilet": {
+      "en": "Toilet",
+      "ro": "Toaletă",
+      "de": "Toilette"
+    },
+    "toilet-paper": {
+      "en": "Toilet paper",
+      "ro": "Hârtie igienică",
+      "de": "Toilettenpapier"
+    },
+    "heating": {
+      "en": "Heating",
+      "ro": "Încălzire",
+      "de": "Heizung"
+    },
+    "fan": {
+      "en": "Fan",
+      "ro": "Ventilator",
+      "de": "Ventilator"
+    },
+    "ground-floor": {
+      "en": "Ground-floor unit",
+      "ro": "Unitate la parter",
+      "de": "Erdgeschosseinheit"
+    },
+    "stairs-only": {
+      "en": "Upper floors (stairs only)",
+      "ro": "Etaje superioare (doar scări)",
+      "de": "Obere Etagen (nur Treppen)"
+    },
+    "wheelchair": {
+      "en": "Wheelchair accessible",
+      "ro": "Accesibil cu scaunul cu rotile",
+      "de": "Rollstuhlgerecht"
+    },
+    "outdoor-furniture": {
+      "en": "Outdoor furniture",
+      "ro": "Mobilier de exterior",
+      "de": "Gartenmöbel"
+    },
+    "hot-tub": {
+      "en": "Hot tub",
+      "ro": "Cadă cu hidromasaj",
+      "de": "Whirlpool"
+    },
+    "wifi": {
+      "en": "Wi-Fi",
+      "ro": "Wi-Fi",
+      "de": "WLAN"
+    },
+    "parking": {
+      "en": "Parking",
+      "ro": "Parcare",
+      "de": "Parkplatz"
+    },
+    "cable-tv": {
+      "en": "Cable & satellite TV",
+      "ro": "TV prin cablu și satelit",
+      "de": "Kabel- & Satelliten-TV"
+    },
+    "private-garden": {
+      "en": "Private garden",
+      "ro": "Grădină privată",
+      "de": "Privater Garten"
+    },
+    "dining-area": {
+      "en": "Dining area",
+      "ro": "Zonă de dining",
+      "de": "Essbereich"
+    },
+    "minibar": {
+      "en": "Minibar",
+      "ro": "Minibar",
+      "de": "Minibar"
+    },
+    "shower": {
+      "en": "Shower",
+      "ro": "Duș",
+      "de": "Dusche"
+    },
+    "bath": {
+      "en": "Bath",
+      "ro": "Cadă",
+      "de": "Badewanne"
+    },
+    "safe": {
+      "en": "Safe",
+      "ro": "Seif",
+      "de": "Safe"
+    },
+    "telephone": {
+      "en": "Telephone",
+      "ro": "Telefon",
+      "de": "Telefon"
+    },
+    "bathrobe": {
+      "en": "Bathrobe",
+      "ro": "Halat de baie",
+      "de": "Bademantel"
+    },
+    "spa-bath": {
+      "en": "Spa bath",
+      "ro": "Cadă spa",
+      "de": "Spa-Bad"
+    },
+    "radio": {
+      "en": "Radio",
+      "ro": "Radio",
+      "de": "Radio"
+    },
+    "desk": {
+      "en": "Desk",
+      "ro": "Birou",
+      "de": "Schreibtisch"
+    },
+    "ironing": {
+      "en": "Ironing facilities",
+      "ro": "Facilități de călcat",
+      "de": "Bügelmöglichkeiten"
+    },
+    "microwave": {
+      "en": "Microwave",
+      "ro": "Cuptor cu microunde",
+      "de": "Mikrowelle"
+    },
+    "dishwasher": {
+      "en": "Dishwasher",
+      "ro": "Mașină de spălat vase",
+      "de": "Geschirrspüler"
+    },
+    "washing-machine": {
+      "en": "Washing machine",
+      "ro": "Mașină de spălat rufe",
+      "de": "Waschmaschine"
+    },
+    "patio": {
+      "en": "Patio",
+      "ro": "Patios",
+      "de": "Innenhof"
+    },
+    "dressing-room": {
+      "en": "Dressing room",
+      "ro": "Dressing",
+      "de": "Ankleidezimmer"
+    },
+    "guest-toilet": {
+      "en": "Guest toilet",
+      "ro": "Toaletă pentru oaspeți",
+      "de": "Gästetoilette"
+    },
+    "kitchen": {
+      "en": "Kitchen",
+      "ro": "Bucătărie",
+      "de": "Küche"
+    },
+    "carpeted-floor": {
+      "en": "Carpeted floor",
+      "ro": "Pardoseală cu mochetă",
+      "de": "Teppichboden"
+    },
+    "interconnecting-rooms": {
+      "en": "Interconnecting rooms",
+      "ro": "Camere comunicante",
+      "de": "Verbindungszimmer"
+    },
+    "laptop-safe": {
+      "en": "Laptop safe",
+      "ro": "Seif pentru laptop",
+      "de": "Laptop-Safe"
+    },
+    "tiled-floor": {
+      "en": "Tiled / marble floor",
+      "ro": "Pardoseală din gresie / marmură",
+      "de": "Fliesen- / Marmorboden"
+    },
+    "view": {
+      "en": "View",
+      "ro": "Priveliște",
+      "de": "Aussicht"
+    },
+    "wake-up-service": {
+      "en": "Wake-up service",
+      "ro": "Serviciu de trezire",
+      "de": "Weckdienst"
+    },
+    "alarm-clock": {
+      "en": "Alarm clock",
+      "ro": "Ceas cu alarmă",
+      "de": "Wecker"
+    },
+    "mosquito-net": {
+      "en": "Mosquito net",
+      "ro": "Plasă anti-insecte",
+      "de": "Moskitonetz"
+    },
+    "sauna": {
+      "en": "Sauna",
+      "ro": "Saună",
+      "de": "Sauna"
+    },
+    "private-pool": {
+      "en": "Private pool",
+      "ro": "Piscină privată",
+      "de": "Privater Pool"
+    },
+    "dryer": {
+      "en": "Tumble dryer",
+      "ro": "Uscător de rufe",
+      "de": "Wäschetrockner"
+    },
+    "wardrobe": {
+      "en": "Wardrobe",
+      "ro": "Dulap",
+      "de": "Kleiderschrank"
+    },
+    "oven": {
+      "en": "Oven",
+      "ro": "Cuptor",
+      "de": "Backofen"
+    },
+    "toaster": {
+      "en": "Toaster",
+      "ro": "Prăjitor de pâine",
+      "de": "Toaster"
+    },
+    "bidet": {
+      "en": "Bidet",
+      "ro": "Bideu",
+      "de": "Bidet"
+    },
+    "game-console": {
+      "en": "Game console",
+      "ro": "Consolă de jocuri",
+      "de": "Spielkonsole"
+    },
+    "sea-view": {
+      "en": "Sea view",
+      "ro": "Vedere la mare",
+      "de": "Meerblick"
+    },
+    "lake-view": {
+      "en": "Lake view",
+      "ro": "Vedere la lac",
+      "de": "Seeblick"
+    },
+    "garden-view": {
+      "en": "Garden view",
+      "ro": "Vedere spre grădină",
+      "de": "Gartenblick"
+    },
+    "pool-view": {
+      "en": "Pool view",
+      "ro": "Vedere spre piscină",
+      "de": "Poolblick"
+    },
+    "river-view": {
+      "en": "River view",
+      "ro": "Vedere spre râu",
+      "de": "Flussblick"
+    },
+    "allergy-free": {
+      "en": "Allergy-free",
+      "ro": "Fără alergeni",
+      "de": "Allergikerfreundlich"
+    },
+    "high-chair": {
+      "en": "Children's high chair",
+      "ro": "Scaun înalt pentru copii",
+      "de": "Kinderhochstuhl"
+    },
+    "lift-access": {
+      "en": "Accessible by lift",
+      "ro": "Accesibil cu liftul",
+      "de": "Mit Aufzug erreichbar"
+    },
+    "crib": {
+      "en": "Children's crib",
+      "ro": "Pătuț pentru copii",
+      "de": "Kinderbett"
+    },
+    "portable-wifi": {
+      "en": "Portable Wi-Fi",
+      "ro": "Wi-Fi portabil",
+      "de": "Tragbares WLAN"
+    },
+    "reading-light": {
+      "en": "Reading light",
+      "ro": "Lumină de citit",
+      "de": "Leselampe"
+    },
+    "window": {
+      "en": "Window",
+      "ro": "Fereastră",
+      "de": "Fenster"
+    },
+    "mobile-home": {
+      "en": "Mobile home",
+      "ro": "Casa mobilă",
+      "de": "Mobilheim"
+    },
+    "entire-unit": {
+      "en": "Entire unit",
+      "ro": "Întreaga unitate",
+      "de": "Gesamte Einheit"
+    },
+    "bath-shower": {
+      "en": "Bath or shower",
+      "ro": "Cadă sau duș",
+      "de": "Badewanne oder Dusche"
+    }
+  }
+}

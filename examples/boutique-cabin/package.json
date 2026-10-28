@@ -1,0 +1,15 @@
+{
+  "name": "boutique-cabin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "playwright test",
+    "test:mismatch": "playwright test -c playwright.mismatch.config.mjs",
+    "test:live": "node run-playwright.mjs -c playwright.live.config.mjs",
+    "build:html": "node build-html.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
+  }
+}

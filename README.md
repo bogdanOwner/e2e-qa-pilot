@@ -75,17 +75,15 @@ Nothing is auto-merged.
 
 ## Quick start
 
-Local setup, before an assistant is involved, is the example app in a clone of this repository. The published npm package does not include `examples/mini-app`. From a git clone:
+The worked example is a small site in a clone of this repository. The published npm package does not include `examples/boutique-cabin`. Start the page, then send one chat line that names a case file. The four lines cover a success, a wording difference, a mismatch that stops before a pull request, and a case with no expected result.
 
 ```bash
-cd examples/mini-app
+cd examples/boutique-cabin
 npm install
-npx playwright install chromium
-npm test
-npm run test:mismatch
+npm start
 ```
 
-`npm test` runs the passing flow. `npm run test:mismatch` is expected to fail on an exact string. That local failure is not a pull request. The steps are also in `examples/mini-app/README.md`.
+That serves the page at `http://127.0.0.1:4173`. Install Chromium once before an assistant run (`npx playwright install chromium`). The workflow commands will not do this. The four one-line reviews are in `examples/boutique-cabin/README.md`.
 
 In your own project:
 
@@ -104,12 +102,12 @@ Restart Cursor or Claude Code, then ask in the chat. A pasted case needs no case
 ```text
 Review this case with e2e-qa-pilot and implement it if it is ready:
 
-Title: Create a mood diary entry
-Preconditions: the user is signed in and on the Personal Space page.
-1. Click the Awesome mood emoji.
-   Expected: the Create Diary Entry modal opens with Awesome preselected.
-2. Enter the thoughts text and click Save.
-   Expected: a success toast appears, the modal closes, and the new entry shows in the Mood Diary preview.
+Title: Book Chalet 4 at Cabana 365
+Preconditions: the guest is on the Cabana 365 page.
+1. Set check-in to 4 Aug 2026 and check-out to 5 Aug 2026, then click Search.
+   Expected: Chalet 4 is listed at 497 RON.
+2. Select the 497 RON rate, enter the guest details, and click Confirm Booking.
+   Expected: the confirmation says "Your request was successfully sent." and a booking reference is shown.
 ```
 
 Pasted text needs no case tool, but the first run still asks once for the settings that generating a spec needs, such as `test_command` and `png_dir` (see [Settings](#settings)). `pr_mode` and the label keys have defaults, so an empty value is not a question. If the case is ready, `review_case` carries on into the matching command in the same turn, and that can end in a pull request when GitHub access exists. The instructions do not define a review-only mode. Details are in [mcp.md](mcp.md#review_case).
@@ -160,7 +158,7 @@ The command files list `read_figma` among the required keys even when `figma: of
 
 The server requires exactly one of `case_id` or `case_text`. Pasted text needs no case tool. A case id needs `case_tool`, `fetch_case`, `update_case`, and an external case-tool MCP. Generating a spec needs `figma`, `read_figma`, `branch_pattern`, `test_command`, and `png_dir`. `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, and `pr_label_mismatch` have defaults, so a missing value is not a question.
 
-Reference conventions in the commands, which another project may adapt, include `overview.md`, Gherkin under `specs/`, page contracts under `pages/`, page objects, flows, and a Playwright fixture. There is no settings key for those paths. A project does not have to copy that layout for the server to start. `examples/mini-app` uses it so the reference workflow can be read in one place. That directory is in this git repository and is not part of the published package. Figma helpers such as `attachMilestoneScreenshot` are not in the example and are not provided by this package.
+Reference conventions in the commands, which another project may adapt, include `overview.md`, Gherkin under `specs/`, page contracts under `pages/`, page objects, flows, and a Playwright fixture. There is no settings key for those paths. A project does not have to copy that layout for the server to start. `examples/boutique-cabin` uses it so the reference workflow can be read in one place. That directory is in this git repository and is not part of the published package. Figma helpers such as `attachMilestoneScreenshot` are not in the example and are not provided by this package.
 
 ## Scope
 

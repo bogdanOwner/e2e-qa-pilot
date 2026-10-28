@@ -1,0 +1,1070 @@
+{
+  "hotelName": "Cabana 365",
+  "tagline": "Your comfort is our priority",
+  "hostName": "Host",
+  "hostTitle": "Property Manager",
+  "aboutText": "Welcome to <strong>{{hotelName}}</strong> — a welcoming stay where comfort, location, and thoughtful hospitality come together for every guest.",
+  "phone": "+40723441446",
+  "whatsapp": "+40723441446",
+  "email": "uniktime2018@gmail.com",
+  "address": "Strada Principală 14, 507132 Drumul Carului",
+  "googleMapsUrl": "https://www.google.com/maps/place/Cabana+365/@45.4761054,25.3010101,16z/data=!4m9!3m8!1s0x40b339589a5ca4a1:0xd945aebe6f752dca!5m2!4m1!1i2!8m2!3d45.4761261!4d25.2996572!16s%2Fg%2F11q4bwhn56?entry=tts&g_ep=EgoyMDI2MDYyNC4wIPu8ASoASAFQAw%3D%3D&skid=c710b6af-def6-4a56-87b6-976997ecfa12&hl=en",
+  "googleMapsEmbed": "https://maps.google.com/maps?q=45.4761261,25.2996572&output=embed",
+  "bookingUrl": "https://www.booking.com/hotel/ro/cabana-365.en-gb.html",
+  "priceFrom": "497 RON",
+  "checkInTime": "14:00",
+  "checkOutTime": "11:00",
+  "workingHours": [],
+  "amenities": [
+    {
+      "iconName": "wifi",
+      "name": "Free WiFi",
+      "description": "High-speed wireless internet throughout the property."
+    },
+    {
+      "iconName": "bed",
+      "name": "Comfortable Rooms",
+      "description": "Clean, well-appointed rooms designed for a restful stay."
+    },
+    {
+      "iconName": "parking",
+      "name": "Parking",
+      "description": "Convenient on-site or nearby parking for guests."
+    },
+    {
+      "iconName": "breakfast",
+      "name": "Breakfast",
+      "description": "Start your day with a fresh breakfast option."
+    },
+    {
+      "iconName": "pool",
+      "name": "Pool & Wellness",
+      "description": "Relax and unwind in our pool or wellness area."
+    },
+    {
+      "iconName": "location",
+      "name": "Great Location",
+      "description": "Easy access to local attractions, dining, and transport."
+    }
+  ],
+  "gallery": [
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGej30z9gTdNbnS8ZC-fHCTwtRqTkRGkwkHjhiVW-D1p8eEZ5E7FC20WP6fRB71RYm3nyG4qnse_hPAzhL-vcxBiP9Y-jF2t6jFtHFpUqLcxYbULY0wyOibHlVJp1IbDWHf0jMJNg=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHKIhJzpM7s-NtEgP40dTZOiJhHVzur10jMIMf3qTdVx_OI45GSyObEkNuyEGxNLIgkmrMc8mCsVCSBCG0WbGlxvLIUGJkwypHV2eOR5W936OsbJ1nYfRY4VPkKpxvnh9oxNMM=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGd1fXK--5-7qHUEq3xmlfRY63_dO0kE_Vl3aNlOBf1HGXxEU1DOC2ACYjRH1Nsn_m2XQo6mxZ-hS8IKpe1GraGpfmlk4IkVPyqG09S_jKxMSF6dHmSW9QL8q7RL_88NWZWNsGuL9QWcyNp=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGWnaW3XXiUzuPtxGS-F2EmV88oyw2GfSpy_ex7ujwXxSkNbPAWqboVLWwbj30auvYPzArfny6UPR5c-YMrVjQps6cS_-lB5C6AOD-kfRWSj5GDAk0To2I8zFJi5Xwwvt2j9vI04Pso9U-F=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHPYQIWaXSiRpFYt7-QnXgVTVkcpH7ShQJowUSzf0r0e3tCvWdyS2ZG4QsUzNTF5KjoQYnhQaa_qHy7NJQQt-GDXBSZ7Uckgeuv9L3hZDUy4jALY-NmMk3wOZvcFcht6kZRR3rRXf60ZGU=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHgZn0LJUNJGAyTFvz8KX7nypMcbI9SCNuzGGKbsbbfqSpoc8KrFqis_yzTXlnt6eTPYu7H6DoZwI8hT8zFsL0-Yw2oAF4EidyHQgxb83L_NAog6o46Rx-log8it_BIQLG2K_0GIw=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGY2eJ8991X1SaTGsjnwBvYt0RIh9zX31viIxW1ikmvgxWGoISDHj5SqtKRkyhenzcgDcmi6ujS6G20GuYJcQbELIc45wWbF-lM_0ham2jg37GwNTqyclgdJFp2uZsJNpiAP6It4A=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFIoe6SQzV9KK4FKpTQHYvVa1w5mzl8Uvxn4tyxzltViXZ8C0JZSfKWoRVcT9JTx0cVK7zCxZtnxAXlI438EayftZDNW3e0RTPmQsXp-_chOFX5IEGlhUs0bojs092I9vUsDDTiNKP3Muw=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF5Q75u3SPks0G0TvEBZ2jTMB5HSdcRZ6586OKfKUS14Rfl_flG2vnd-NM6gpVCCVURjxvQAdw7OLV1pxpSWnTnRik6aHxjE5Tgjvr3LGTj2DGp-BfVd-Kz85Gn48EyDxWkr4Gk=s1600-k-no",
+    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFP9sPjKtmfhzDPK_BLjj39nUOX9fpS6fXZCjQ1UZeLR7KuFR8hG480_i34dpfJGHBPDqDFz9K_uUbxbHiZapcklodfhOvOmIUY9QEasrM84XSEdeXxUjhLNEiUYTMEKSYgAKLXhqa1zOs=s1600-k-no"
+  ],
+  "socialLinks": {
+    "facebook": "https://www.facebook.com/p/Cabana-365-100078758683871/",
+    "instagram": "",
+    "google": "https://www.google.com/maps/place/Cabana+365/@45.4761054,25.3010101,16z/data=!4m9!3m8!1s0x40b339589a5ca4a1:0xd945aebe6f752dca!5m2!4m1!1i2!8m2!3d45.4761261!4d25.2996572!16s%2Fg%2F11q4bwhn56?entry=tts&g_ep=EgoyMDI2MDYyNC4wIPu8ASoASAFQAw%3D%3D&skid=c710b6af-def6-4a56-87b6-976997ecfa12&hl=en"
+  },
+  "stats": [
+    {
+      "value": "4.8",
+      "label": "Google Rating"
+    },
+    {
+      "value": "48",
+      "label": "Google Reviews"
+    }
+  ],
+  "activeTemplate": "boutique-cabin",
+  "defaultLocale": "ro",
+  "availableLocales": [
+    "ro",
+    "en"
+  ],
+  "isDemoMode": true,
+  "isLive": false,
+  "showCookieBanner": false,
+  "agencyWhatsapp": "+40774346050",
+  "agencyEmail": "webfirmen@gmail.com",
+  "agencyName": "",
+  "popup": {
+    "enabled": false,
+    "triggerScrollPercent": 70,
+    "delayAfterTriggerMs": 600,
+    "reopenAfterMinutes": 10
+  },
+  "activateButton": {
+    "enabled": false
+  },
+  "heroLocales": {
+    "en": {
+      "boutique_hero_title": "Cabana 365",
+      "boutique_hero_direct_line": "Best price when booking direct",
+      "boutique_hero_whatsapp": "WhatsApp"
+    },
+    "ro": {
+      "boutique_hero_title": "Cabana 365",
+      "boutique_hero_direct_line": "Cel mai bun preț la rezervare directă",
+      "boutique_hero_whatsapp": "WhatsApp"
+    }
+  },
+  "booking": {
+    "bookingUrl": "https://www.booking.com/hotel/ro/cabana-365.en-gb.html",
+    "scrapeCheckin": "2026-07-04",
+    "scrapeCheckout": "2026-07-05",
+    "scrapedAt": "2026-07-03 16:57",
+    "overallScore": "9.6",
+    "reviewCount": "907",
+    "scoreLabel": "Exceptional",
+    "categoryScores": {
+      "cleanliness": "9.7",
+      "comfort": "9.7",
+      "location": "9.8",
+      "staff": "9.6",
+      "value": "9.4",
+      "facilities": "9.6",
+      "wifi": "9.4"
+    },
+    "rooms": [
+      {
+        "id": "chalet-4",
+        "name": "Chalet 4",
+        "sizeM2": 70,
+        "maxGuests": 3,
+        "beds": [
+          {
+            "area": "Bedroom",
+            "beds": "1 extra-large double bed"
+          },
+          {
+            "area": "Living room",
+            "beds": "1 sofa bed"
+          }
+        ],
+        "amenities": [
+          "Entire chalet",
+          "Private kitchenette",
+          "Ensuite bathroom",
+          "Balcony",
+          "Mountain view",
+          "Landmark view",
+          "Air conditioning",
+          "Flat-screen TV",
+          "Soundproofing",
+          "Barbecue",
+          "Terrace",
+          "Coffee machine"
+        ],
+        "description": "Guests will have a special experience as the chalet offers a fireplace. Featuring a private entrance, this air-conditioned chalet consists of 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the kitchenette. The chalet also offers a barbecue. Boasting a terrace with mountain views, this chalet also provides soundproof walls and a flat-screen TV with streaming services. The unit offers 2 beds.",
+        "photos": [
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624054587.jpg?k=737bea953d268587bb563f65b88b05358b8e0897f43d03d19b9a93cdd4837d7c&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622941466.jpg?k=de07ac454eeff1687f9dec945acd186927eb89a514a20220c345fd163be248eb&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620760400.jpg?k=560c4386d4dc537a7a24f190772ddcb176773b101d68fe3cdd60eeaaea0fe044&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620177037.jpg?k=3cd69b2863a01edb46f3b17d013836183a01c7235cb541901d5def3897cec3e2&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620177004.jpg?k=1b44c9952f0abaa108d5894139af153f0cdd09a08139d8164a8e9c32d40683fa&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176781.jpg?k=9733c1a996c15a3a09663351b419426d3137ac3e880c1a47863d9838634845b8&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176702.jpg?k=c7c0499d6aa2163a3836aba6c59c7fd40679485debdb6ae63683b5ba2908a857&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176524.jpg?k=abc116161953ad076a3ca2328f0613d3a5bc1a3cddd816cedccadb04ee66d2f4&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176426.jpg?k=419db6313ed9c0709dbce84469b7bad13130d9ea9f9d5d82e19871e4d0715176&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176263.jpg?k=cd8b457598bd18618db9349f89b91c17c96fe56b1d75f56a34d5acd4261a4de4&o="
+        ],
+        "rates": [
+          {
+            "id": "chalet-4-0",
+            "price": 497,
+            "originalPrice": 585,
+            "currency": "RON",
+            "discount": "15% off",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "chalet-4-1",
+            "price": 553,
+            "originalPrice": 650,
+            "currency": "RON",
+            "discount": "15% off",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "chalet-4-2",
+            "price": 585,
+            "originalPrice": 585,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 1,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          }
+        ],
+        "unavailable": false,
+        "unavailableMessage": "Not available for selected dates"
+      },
+      {
+        "id": "chalet-2",
+        "name": "Chalet 2",
+        "sizeM2": 70,
+        "maxGuests": 3,
+        "beds": [
+          {
+            "area": "Bedroom",
+            "beds": "1 extra-large double bed"
+          },
+          {
+            "area": "Living room",
+            "beds": "1 sofa bed"
+          }
+        ],
+        "amenities": [
+          "Entire chalet",
+          "Private kitchenette",
+          "Ensuite bathroom",
+          "Balcony",
+          "Mountain view",
+          "Landmark view",
+          "Air conditioning",
+          "Flat-screen TV",
+          "Soundproofing",
+          "Barbecue",
+          "Terrace",
+          "Coffee machine"
+        ],
+        "description": "This chalet offers a fireplace. Featuring a private entrance, this air-conditioned chalet comprises 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the kitchenette. The chalet also provides guests with a barbecue. Boasting a terrace with mountain views, this chalet also provides soundproof walls and a flat-screen TV with streaming services. The unit offers 2 beds.",
+        "photos": [
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724582596.jpg?k=2503bfd4660c5c9441c47543c04066788c94b41a90db26f817ac49bb30b1970c&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624052126.jpg?k=d6538fdf7bdb585cf3e5d06b4fad4f4ed2538b7c8e1d807d1232f3cc0d7c883d&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624052007.jpg?k=68fd1fe6c5c0e0856c7aa5bbb910f682ad8d4f591a03e078a092c095e24efbe8&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624050020.jpg?k=94baf96f55141c396905cff12daf431c75e1922e114a8d0e3b14324d9a7038fe&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049865.jpg?k=3ff82c064cd14ea70933000dc3245294cb1aba99843cc2b47a14ea9168337df3&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049633.jpg?k=680413f64aaddbb60b710a4ab706cf2eb213885c7ebb33804f0df406ae89664e&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049461.jpg?k=b8c111e86ddfe16424c55d1ab5c262f09e7460330600e2d0d9917c1f9e3df97f&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049331.jpg?k=005fd7de47001cb116a6df667f67022e2cbcb5336017eaf535668558a7ebc9d9&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049170.jpg?k=b2ffe4dc7ef3181c0552dc305a5742769651cb7d852069e3f4f6639a975994bd&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049048.jpg?k=dc1b651a01419518680924a9af7c6003dd1b191abc9a747d1321b3a8d33e87ff&o="
+        ],
+        "rates": [
+          {
+            "id": "chalet-2-0",
+            "price": 585,
+            "originalPrice": 585,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "chalet-2-1",
+            "price": 650,
+            "originalPrice": 650,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          }
+        ],
+        "unavailable": false,
+        "unavailableMessage": "Not available for selected dates"
+      },
+      {
+        "id": "chalet-5",
+        "name": "Chalet 5",
+        "sizeM2": 70,
+        "maxGuests": 3,
+        "beds": [
+          {
+            "area": "Bedroom",
+            "beds": "1 extra-large double bed"
+          },
+          {
+            "area": "Living room",
+            "beds": "1 sofa bed"
+          }
+        ],
+        "amenities": [
+          "Entire chalet",
+          "Private kitchenette",
+          "Private bathroom",
+          "Balcony",
+          "Mountain view",
+          "Landmark view",
+          "City view",
+          "Air conditioning",
+          "Flat-screen TV",
+          "Soundproofing",
+          "Barbecue",
+          "Terrace",
+          "Coffee machine"
+        ],
+        "description": "This chalet's special feature is the fireplace. Featuring a private entrance, this air-conditioned chalet comprises 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the well-fitted kitchenette. The chalet also provides guests with a barbecue. Boasting a terrace with mountain views, this chalet also provides soundproof walls and a flat-screen TV with streaming services. The unit offers 2 beds.",
+        "photos": [
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743052.jpg?k=66ddcff55237ffb401218ed8d2f3250c346b2135ee3a066582b82deac8f8c9cc&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/342453217.jpg?k=ef766973eb00c7072e3e41a6288fcbcdf418dbcf9a487389798761e91105c1cc&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743064.jpg?k=fe3442b255af44872ffee0d7e251650f97ff4669cdbda39bd7bf21c68a3b0302&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743061.jpg?k=6133c3a4394448ecb5287b89e0ec2dc37718aca448d8927e2c2847e6da46d8c3&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743053.jpg?k=833425eba55991e07b1aacb39f1cf75ae0886be04467af1297c62c241dbc641f&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743143.jpg?k=b4d6dd19ab1a5489f90a4051e54603ab0d7f880d1034d129609a0fd7b74f6996&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394748919.jpg?k=2a1f64150e8e04a6214411a4e3bb54a639e40acb98fe3dcfa27f8c3e86065d7e&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743181.jpg?k=b311cd50bb7ff5d82cf74cb2e68d73940d692ef57e1cd6b3e4a8d08061d774a0&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394748979.jpg?k=ec6e390e1fcb649e8586fe97c2aad27eb43219a57fff2cee5acc182a954dee4f&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743006.jpg?k=36c101e8accf64290b70aa1c9da753263b4a0d413c0f0928d708d4664db7e2f0&o="
+        ],
+        "rates": [
+          {
+            "id": "chalet-5-0",
+            "price": 585,
+            "originalPrice": 585,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "chalet-5-1",
+            "price": 650,
+            "originalPrice": 650,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "chalet-5-2",
+            "price": 612,
+            "originalPrice": 612,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 1,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          }
+        ],
+        "unavailable": false,
+        "unavailableMessage": "Not available for selected dates"
+      },
+      {
+        "id": "mobile-home",
+        "name": "Mobile Home",
+        "sizeM2": 15,
+        "maxGuests": 2,
+        "beds": [
+          {
+            "area": "Bedroom",
+            "beds": "1 large double bed"
+          }
+        ],
+        "amenities": [
+          "Mobile home",
+          "Private kitchenette",
+          "Ensuite bathroom",
+          "Balcony",
+          "Mountain view",
+          "Air conditioning",
+          "Soundproofing",
+          "Barbecue",
+          "Terrace",
+          "Coffee machine"
+        ],
+        "description": "This mobile home offers a fireplace. Featuring a private entrance, this air-conditioned mobile home comprises 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a refrigerator, kitchenware and a tea and coffee maker in the kitchenette. The mobile home also provides guests with a barbecue. Boasting a terrace with mountain views, this mobile home also provides soundproof walls and a TV with streaming services. The unit offers 1 bed.",
+        "photos": [
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724582596.jpg?k=2503bfd4660c5c9441c47543c04066788c94b41a90db26f817ac49bb30b1970c&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724583586.jpg?k=38afd3f7b6c1ed0634762c742581fa98be303a9d891d1c3aa00c096d7f40d807&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724583347.jpg?k=5a6bd6040699a3e344b73fff30d34f38893b4acb0fa4dab2e29cefdb80c84450&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724583079.jpg?k=ae382cf9a32d8096b6128ddb2d8759be98bf169acd02b554ae9b56432620721b&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724582807.jpg?k=182249f9d6eb6f300403036045a9cebdf332c669a6aa22b8128a18eb3db11a4f&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724582718.jpg?k=3d03c107f4d60483c1fcc590a6d5eb5ea1d583c2d12bbc739544a589012a8c13&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/530095710.jpg?k=3a01acb6b676f22777f9ab5f00811b2d03e921da72df17b98bbb36abd07440f7&o="
+        ],
+        "rates": [
+          {
+            "id": "mobile-home-0",
+            "price": 585,
+            "originalPrice": 585,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "mobile-home-1",
+            "price": 650,
+            "originalPrice": 650,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          }
+        ],
+        "unavailable": false,
+        "unavailableMessage": "Not available for selected dates"
+      },
+      {
+        "id": "tent",
+        "name": "Tent",
+        "sizeM2": 36,
+        "maxGuests": 2,
+        "beds": [
+          {
+            "area": "Bedroom",
+            "beds": "1 extra-large double bed"
+          }
+        ],
+        "amenities": [
+          "Private kitchenette",
+          "Private bathroom",
+          "Balcony",
+          "Mountain view",
+          "Landmark view",
+          "Air conditioning",
+          "Flat-screen TV",
+          "Soundproofing",
+          "Barbecue",
+          "Terrace",
+          "Coffee machine"
+        ],
+        "description": "this tent. Guests will find a refrigerator, kitchenware and a tea and coffee maker in the kitchenette. The tent also includes a barbecue. This air-conditioned tent is comprised of a flat-screen TV with streaming services, a private bathroom as well as a terrace with mountain views. The unit has 1 bed.",
+        "photos": [
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/648001414.jpg?k=9cbbad2182621a78bc44f5e803cbeb0f4b8614a4d93d398943b13dfec1e6b6c4&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646930051.jpg?k=b7d6f77918fb56e07c24262189c7f15139bc839ba47d34a1ea603cca19baa9f9&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646897289.jpg?k=1a1eeccb6d4d66fc3db56f2bc52a7d632f3c4734af83413f431d08a239a4902e&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646897164.jpg?k=42c64999117596570d4bc9333eba92fd15428de1e962467a5a36b4ab8b018191&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646897056.jpg?k=446d8b1bdeaa4c0805f98a156f70207a98b68e586b105712c7fbd4ea4967eacf&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896837.jpg?k=93083d43fe46196df50f8538b4c06f47189c18d8e0adadb21036097c0aab6852&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896675.jpg?k=5bd52bdad09720f2d23e48e8743fc9c283681f230cf603675971a685d44b0a4d&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896549.jpg?k=b2145d23ab6cb6f9c51dbf71847f01c35509489b2e1114117e325245ab9d58c4&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896375.jpg?k=8dbd7e130bd7f4661ff24e9c1c553b22c813418c49bbba3ca9a9ccf26321a35b&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896275.jpg?k=b0582881058cde6bc2bc4a04602e63e98859f22eeb24cce6c8c29fb7107be72b&o="
+        ],
+        "rates": [
+          {
+            "id": "tent-0",
+            "price": 585,
+            "originalPrice": 585,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Non-refundable",
+            "rate": {
+              "inclusions": [],
+              "cancellation": "non_refundable",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "tent-1",
+            "price": 650,
+            "originalPrice": 650,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Non-refundable",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "non_refundable",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          }
+        ],
+        "unavailable": false,
+        "unavailableMessage": "Not available for selected dates"
+      },
+      {
+        "id": "chalet-3",
+        "name": "Chalet 3",
+        "sizeM2": 70,
+        "maxGuests": 5,
+        "beds": [
+          {
+            "area": "Bedroom",
+            "beds": "2 large double beds"
+          },
+          {
+            "area": "Living room",
+            "beds": "1 sofa bed"
+          }
+        ],
+        "amenities": [
+          "Entire chalet",
+          "Private kitchenette",
+          "Private bathroom",
+          "Balcony",
+          "Mountain view",
+          "Landmark view",
+          "City view",
+          "Air conditioning",
+          "Flat-screen TV",
+          "Soundproofing",
+          "Barbecue",
+          "Terrace",
+          "Coffee machine"
+        ],
+        "description": "This chalet's standout feature is the fireplace. Boasting a private entrance, this air-conditioned chalet includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the fully equipped kitchenette. The chalet also features a barbecue. Featuring a terrace with mountain views, this chalet also offers soundproof walls and a flat-screen TV with streaming services. The unit has 3 beds.",
+        "photos": [
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746048.jpg?k=4f9f46925a86739e5819f0fb20e0e54be31d82982e67b90847f034d43ff69791&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746101.jpg?k=3cca0c9acfa9abdb4c2a8759abcf19886b191edcc76e2b9b341ca6ff3b1348ae&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743071.jpg?k=2bf682378e2913ebce00a227148a5e65fe019288249c47b50e3b780abc65eb77&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746043.jpg?k=b19be5e131c2d548b7a1332999a1b95672b2016375fa904c199a795f4d2b20bc&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746044.jpg?k=2b42023f19e98f73c8196088c87daf34386b660d899918e10177f52f6ef0c3aa&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746059.jpg?k=df45371d9fa77f1b144f8256adde1d8275202762ec88255a7b62a97ea90703fc&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743040.jpg?k=3d59433dd91347f9a32e5cc886f06be9d49103c6d822b38f7b8348a067cb8c75&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743056.jpg?k=a261dcf866a2d3efbcb589dd8d3ef585f9eb18ae5128837276f91e3759c652ff&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743092.jpg?k=99a1f2cb81d3945aa0dc63340a2e35e0f9d0fb9fd815f1b8ec50a177ae559e8d&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743095.jpg?k=deab35a3613c21e1408ea2ca253783a5d7195970e12d6060098bfe265bba03cb&o="
+        ],
+        "rates": [
+          {
+            "id": "chalet-3-0",
+            "price": 612,
+            "originalPrice": 612,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Non-refundable",
+            "rate": {
+              "inclusions": [],
+              "cancellation": "non_refundable",
+              "reschedule": "flexible",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "chalet-3-1",
+            "price": 680,
+            "originalPrice": 680,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          }
+        ],
+        "unavailable": false,
+        "unavailableMessage": "Not available for selected dates"
+      },
+      {
+        "id": "chalet-6",
+        "name": "Chalet 6",
+        "sizeM2": 70,
+        "maxGuests": 2,
+        "beds": [
+          {
+            "area": "Bedroom",
+            "beds": "1 extra-large double bed"
+          }
+        ],
+        "amenities": [
+          "Entire chalet",
+          "Private kitchenette",
+          "Private bathroom",
+          "Balcony",
+          "Mountain view",
+          "Landmark view",
+          "City view",
+          "Air conditioning",
+          "Flat-screen TV",
+          "Soundproofing",
+          "Barbecue",
+          "Terrace",
+          "Coffee machine"
+        ],
+        "description": "the standout feature of this chalet. Boasting a private entrance, this air-conditioned chalet features a kitchenette, 1 bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the well-equipped kitchenette. The chalet also comes with a barbecue. Featuring a terrace with mountain views, this chalet also features soundproof walls and a flat-screen TV with streaming services. The unit has 1 bed.",
+        "photos": [
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743070.jpg?k=d58c2864cdad8b406a1e882f9972385880d59be32b3f0671db1e76a0abe5a2f1&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743057.jpg?k=b05cb0d2e8572617041ae76b437ed67dc54332328170f74b60f86c2de735d53f&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394742978.jpg?k=0ab25c76546a6cd5f9f4bff419c779b8d3bb5ea0425542fcb14da7eee163fa52&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394747980.jpg?k=5eda542c8925fb55db3e018b956404a8e08c43e232b0cf25edf6b23b0d47f815&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/342453155.jpg?k=43a866b3487c27956579e83ac1e9fe37d289a4dd32ea7a5eafc4cbaa3bb44224&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394742980.jpg?k=7c195ae4c3879d4db29e91046a8c83e6721eaa283c6261c6470d9cced68a9220&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394748001.jpg?k=815ddbd29e7b2f2f6d76cacacd43a11ccc3303cc16250e065e1db29e781cd19d&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743075.jpg?k=13113d1329d7df6c374b1bc0f93813b4b4f91b0ba7d25502b7a9e180fc28f25b&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/342453016.jpg?k=18e88fbfc8ca4ea6d9c53961a4f858698a6cd70cb57e58f00ce6c78dc94d31ae&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394747978.jpg?k=d72cce6bff7861df976314cb98feaeb65e58567d216bf69b74b80da90c987d8f&o="
+        ],
+        "rates": [
+          {
+            "id": "chalet-6-0",
+            "price": 612,
+            "originalPrice": 612,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Non-refundable",
+            "rate": {
+              "inclusions": [],
+              "cancellation": "non_refundable",
+              "reschedule": "flexible",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "chalet-6-1",
+            "price": 680,
+            "originalPrice": 680,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 2,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          },
+          {
+            "id": "chalet-6-2",
+            "price": 646,
+            "originalPrice": 646,
+            "currency": "RON",
+            "discount": "",
+            "priceNotes": "Free cancellation",
+            "rate": {
+              "inclusions": [
+                "roundtrip airport transfer",
+                "1 parking spot",
+                "high-speed internet"
+              ],
+              "cancellation": "free",
+              "reschedule": "",
+              "breakfast": "paid",
+              "breakfastLabel": "Exceptional breakfast",
+              "breakfastPrice": 135,
+              "breakfastCurrency": "RON",
+              "guests": 1,
+              "payment": "online"
+            },
+            "availability": {
+              "status": "available",
+              "message": ""
+            }
+          }
+        ],
+        "unavailable": false,
+        "unavailableMessage": "Not available for selected dates"
+      },
+      {
+        "id": "chalet-1",
+        "name": "Chalet 1",
+        "sizeM2": 70,
+        "maxGuests": 3,
+        "beds": [
+          {
+            "area": "Bedroom",
+            "beds": "1 extra-large double bed"
+          },
+          {
+            "area": "Living room",
+            "beds": "1 sofa bed"
+          }
+        ],
+        "amenities": [
+          "Refrigerator",
+          "Coffee machine",
+          "Kitchenware",
+          "Electric kettle",
+          "Stovetop",
+          "Dining table",
+          "Free toiletries",
+          "Toilet",
+          "Bath or shower",
+          "Towels",
+          "Slippers",
+          "Hairdryer",
+          "Toilet paper",
+          "Landmark view",
+          "Air conditioning",
+          "Flat-screen TV",
+          "Soundproofing",
+          "Barbecue",
+          "Terrace",
+          "Balcony",
+          "Streaming service (like",
+          "Netflix)",
+          "Sofa",
+          "Fireplace",
+          "Hardwood or parquet floors",
+          "Linen",
+          "Socket near the bed",
+          "Seating",
+          "Area",
+          "Private entrance TV",
+          "Satellite channels",
+          "Tea/",
+          "Coffee maker",
+          "Heating",
+          "Kitchenette",
+          "Fan",
+          "Extra long beds (> 2 metres)",
+          "Outdoor furniture",
+          "Outdoor dining area",
+          "Cable channels",
+          "Mountain view",
+          "Streaming service (like Netflix)",
+          "Seating Area",
+          "Private entrance",
+          "TV",
+          "Tea/Coffee maker",
+          "Dining area",
+          "Entire unit located on ground floor",
+          "Clothes rack",
+          "Fold-up bed",
+          "Board games/puzzles",
+          "Sofa bed",
+          "Single-room air conditioning for guest accommodation",
+          "Private kitchenette",
+          "Private bathroom"
+        ],
+        "description": "This chalet offers a fireplace. Featuring a private entrance, this air-conditioned chalet comprises 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the fully equipped kitchenette. The chalet also provides guests with a barbecue. Boasting a terrace with mountain views, this chalet also provides soundproof walls and a flat-screen TV with streaming services. The unit offers 2 beds.",
+        "photos": [
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/630053756.jpg?k=b8aa092be79817114a3f09fe69f45d942792e8db93a6852987fedd406b06010c&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/630053496.jpg?k=5fc0655501033d77f8fae53287a936ee135a3e380088ba8be67eff8f00c65e5a&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624097200.jpg?k=c96d2f7951125e85b60d249536db0222099506a209072c3896003df7e3f62466&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624097087.jpg?k=0f60dc48ad23d3c72d84112f20e69abd3b51f56c338ff55717e40a5db2482c46&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624096770.jpg?k=a72d1b9b43864345434f43e7c4700ecbb54ed57fb674cf8c27280ae18254e539&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624096470.jpg?k=e7f8893dbbef84101361e59b7f2b281890a5b310ccd8196d3fb3f8972c084b3b&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622951154.jpg?k=fe379eb4040ad1dff8d8cb6521fff693e8534778b7422d11698045e6c0fb948d&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622951101.jpg?k=1f065f26dda942bda7a122e3c9a90e5e5120140165e785056d564748f11e5197&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622948456.jpg?k=967dbff2dd7543815a3489cceebeb17eb5c39c90adbed0f798cfc46763c24141&o=",
+          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622948243.jpg?k=e3a3a8dd9a7ed35f663a66421ec595d59626f8b5ddbee23cf55359793f60890f&o="
+        ],
+        "rates": [],
+        "unavailable": true,
+        "unavailableMessage": "Not available for selected dates"
+      }
+    ]
+  },
+  "about": {
+    "description": "Essential Facilities: CABANA 365 in Braşov offers a sun terrace, garden, and free WiFi in public areas. Private check-in and check-out services ensure a smooth arrival and departure.\n\nComfortable Accommodations: Rooms feature air-conditioning, balconies, and kitchenettes. Additional amenities include private bathrooms, fireplaces, and mountain views. Family rooms and ground-floor units cater to all guests.\n\nDining Options: A continental breakfast with local specialities, warm dishes, and cheese is served daily. The on-site coffee shop and barbecue facilities provide additional dining options.\n\nNearby Attractions: Located 14 km from Cheile Gradistei Adventure Park and 4.7 km from Moieciu, CABANA 365 offers easy access to local landmarks. Sibiu International Airport is 149 km away.",
+    "couplesScore": 9.8,
+    "topFacilities": [
+      {
+        "icon": "local_parking",
+        "label": "Free parking",
+        "labelRo": "Parcare gratuită"
+      },
+      {
+        "icon": "wifi",
+        "label": "Fast free WiFi (59 Mbps)",
+        "labelRo": "WiFi rapid gratuit (59 Mbps)"
+      },
+      {
+        "icon": "family_restroom",
+        "label": "Family rooms",
+        "labelRo": "Camere de familie"
+      },
+      {
+        "icon": "airport_shuttle",
+        "label": "Airport shuttle",
+        "labelRo": "Transfer de la și/sau la aeroport"
+      },
+      {
+        "icon": "smoke_free",
+        "label": "Non-smoking rooms",
+        "labelRo": "Camere pentru nefumători"
+      },
+      {
+        "icon": "outdoor_grill",
+        "label": "BBQ facilities",
+        "labelRo": "Grătar"
+      },
+      {
+        "icon": "room_service",
+        "label": "Room service",
+        "labelRo": "Room service"
+      },
+      {
+        "icon": "park",
+        "label": "Garden",
+        "labelRo": "Grădină"
+      },
+      {
+        "icon": "coffee_maker",
+        "label": "Tea/coffee maker in all rooms",
+        "labelRo": "Aparat de preparare a ceaiului/cafelei în toate camerele"
+      },
+      {
+        "icon": "restaurant",
+        "label": "Exceptional breakfast",
+        "labelRo": "Mic dejun excepţional"
+      },
+      {
+        "icon": "local_parking",
+        "label": "Free private parking available on-site",
+        "labelRo": "Parcare privată gratuită disponibilă la locație"
+      }
+    ],
+    "descriptionI18n": {
+      "ro": "CABANA 365 se află în Brașov, la 7,9 km de Castelul Bran, și include vedere la munte, WiFi gratuit și parcare privată gratuită.\n\nFiecare unitate oferă oaspeților o terasă, o chicinetă complet utilată, cu un frigider, un șemineu, o zonă de relaxare cu o canapea extensibilă, un televizor cu ecran plat și o baie proprie cu duș și articole de toaletă gratuite. Unele unități includ o zonă de luat masa și/sau un balcon.\n\nOaspeții cazați la acest camping au la dispoziție un mic dejun continental.\n\nLa CABANA 365 există un grătar, precum și o grădină.\n\nCABANA 365 se află la 22 km de Dino Parc și la 38 km de Piaţa Sfatului. Aeroportul Internaţional Sibiu se află la 149 km."
+    }
+  },
+  "testimonials": [
+    {
+      "name": "Patricia",
+      "country": "Romania",
+      "text": "locatie foarte frumoasa, am gasit toate cele necesare la cazare",
+      "rating": 5
+    },
+    {
+      "name": "Elspeth",
+      "country": "United Kingdom",
+      "text": "The location of this cabin was fantastic for us. We hired a car and were easily able to drive around the area. The setting is stunning and we loved...",
+      "rating": 5
+    },
+    {
+      "name": "Ana-maria",
+      "country": "Romania",
+      "text": "The view is amazing, clean house, confortable bed, great location.",
+      "rating": 5
+    }
+  ],
+  "testimonialsI18n": {
+    "ro": [
+      {
+        "name": "Alexandru",
+        "country": "România",
+        "text": "„Locatia este superba. Cabana este îngrijită, curata, mirosea foarte bine. Este perfecta pentru deconectarea de la agitatia orașului.",
+        "rating": 5
+      },
+      {
+        "name": "Giliola",
+        "country": "România",
+        "text": "„- amenajarea cabanei - curatenia - dotarile cabanei - pozitionarea - grătarul si tot ce trebuie pentru acesta",
+        "rating": 5
+      },
+      {
+        "name": "Dragomir",
+        "country": "România",
+        "text": "„Totul a fost excepțional!Chear îți încarci bateriile.👍",
+        "rating": 5
+      }
+    ]
+  }
+}
