@@ -206,6 +206,7 @@ function prepareHtml(html) {
     /<script\b[^>]*\bsrc=["']https:\/\/challenges\.cloudflare\.com\/turnstile[^"']*["'][^>]*>\s*<\/script>/gi,
     '',
   );
+  page = page.replace(/<div\b[^>]*\bcf-turnstile\b[^>]*>\s*<\/div>/gi, '');
   page = page.replaceAll('navigator.sendBeacon', 'Function.prototype');
   page = page.replace(
     /(\ssrc=["'])(https:\/\/(?:cf\.bstatic\.com|lh3\.googleusercontent\.com)[^"']*)(["'])/gi,

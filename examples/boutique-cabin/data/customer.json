@@ -1,16 +1,16 @@
 {
-  "hotelName": "Cabana 365",
+  "hotelName": "Cabana",
   "tagline": "Your comfort is our priority",
   "hostName": "Host",
   "hostTitle": "Property Manager",
   "aboutText": "Welcome to <strong>{{hotelName}}</strong> — a welcoming stay where comfort, location, and thoughtful hospitality come together for every guest.",
-  "phone": "+40723441446",
-  "whatsapp": "+40723441446",
-  "email": "uniktime2018@gmail.com",
+  "phone": "+33 4 50 00 00 00",
+  "whatsapp": "+33 4 50 00 00 00",
+  "email": "stay@example.com",
   "address": "18 Chemin des Glaciers, 74310 Les Houches, France",
   "googleMapsUrl": "https://www.google.com/maps?q=45.8904,6.7984&hl=en",
   "googleMapsEmbed": "https://maps.google.com/maps?q=45.8904,6.7984&output=embed",
-  "bookingUrl": "https://www.booking.com/hotel/ro/cabana-365.en-gb.html",
+  "bookingUrl": "",
   "priceFrom": "497 EUR",
   "checkInTime": "14:00",
   "checkOutTime": "11:00",
@@ -48,29 +48,34 @@
     }
   ],
   "gallery": [
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624054587.jpg?k=737bea953d268587bb563f65b88b05358b8e0897f43d03d19b9a93cdd4837d7c&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622941466.jpg?k=de07ac454eeff1687f9dec945acd186927eb89a514a20220c345fd163be248eb&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620760400.jpg?k=560c4386d4dc537a7a24f190772ddcb176773b101d68fe3cdd60eeaaea0fe044&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620177037.jpg?k=3cd69b2863a01edb46f3b17d013836183a01c7235cb541901d5def3897cec3e2&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620177004.jpg?k=1b44c9952f0abaa108d5894139af153f0cdd09a08139d8164a8e9c32d40683fa&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176781.jpg?k=9733c1a996c15a3a09663351b419426d3137ac3e880c1a47863d9838634845b8&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176702.jpg?k=c7c0499d6aa2163a3836aba6c59c7fd40679485debdb6ae63683b5ba2908a857&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176524.jpg?k=abc116161953ad076a3ca2328f0613d3a5bc1a3cddd816cedccadb04ee66d2f4&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176426.jpg?k=419db6313ed9c0709dbce84469b7bad13130d9ea9f9d5d82e19871e4d0715176&o=",
-    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176263.jpg?k=cd8b457598bd18618db9349f89b91c17c96fe56b1d75f56a34d5acd4261a4de4&o="
+    "/gallery/exterior_01.jpg",
+    "/gallery/exterior_05.jpg",
+    "/gallery/exterior_03.jpg",
+    "/gallery/exterior_04.jpg",
+    "/gallery/exterior_08.jpg",
+    "/gallery/exterior_02.jpg",
+    "/gallery/interior_03.jpg",
+    "/gallery/interior_02.jpg",
+    "/gallery/interior_04.jpg",
+    "/gallery/interior_01.jpg",
+    "/gallery/interior_05.jpg",
+    "/gallery/exterior_06.jpg",
+    "/gallery/exterior_09.jpg",
+    "/gallery/interior_06.jpg",
+    "/gallery/exterior_07.jpg"
   ],
   "socialLinks": {
-    "facebook": "https://www.facebook.com/p/Cabana-365-100078758683871/",
+    "facebook": "",
     "instagram": "",
     "google": "https://www.google.com/maps?q=45.8904,6.7984&hl=en"
   },
   "stats": [
     {
-      "value": "4.8",
+      "value": "4.6",
       "label": "Google Rating"
     },
     {
-      "value": "48",
+      "value": "24",
       "label": "Google Reviews"
     }
   ],
@@ -83,8 +88,8 @@
   "isDemoMode": false,
   "isLive": false,
   "showCookieBanner": false,
-  "agencyWhatsapp": "+40774346050",
-  "agencyEmail": "webfirmen@gmail.com",
+  "agencyWhatsapp": "",
+  "agencyEmail": "",
   "agencyName": "",
   "popup": {
     "enabled": false,
@@ -97,32 +102,32 @@
   },
   "heroLocales": {
     "en": {
-      "boutique_hero_title": "Cabana 365",
+      "boutique_hero_title": "Cabana",
       "boutique_hero_direct_line": "Best price when booking direct",
       "boutique_hero_whatsapp": "WhatsApp"
     },
     "ro": {
-      "boutique_hero_title": "Cabana 365",
+      "boutique_hero_title": "Cabana",
       "boutique_hero_direct_line": "Cel mai bun preț la rezervare directă",
       "boutique_hero_whatsapp": "WhatsApp"
     }
   },
   "booking": {
-    "bookingUrl": "https://www.booking.com/hotel/ro/cabana-365.en-gb.html",
+    "bookingUrl": "",
     "scrapeCheckin": "2026-07-04",
     "scrapeCheckout": "2026-07-05",
     "scrapedAt": "2026-07-03 16:57",
-    "overallScore": "9.6",
-    "reviewCount": "907",
-    "scoreLabel": "Exceptional",
+    "overallScore": "9.2",
+    "reviewCount": "24",
+    "scoreLabel": "Wonderful",
     "categoryScores": {
-      "cleanliness": "9.7",
-      "comfort": "9.7",
-      "location": "9.8",
-      "staff": "9.6",
-      "value": "9.4",
-      "facilities": "9.6",
-      "wifi": "9.4"
+      "cleanliness": "9.2",
+      "comfort": "9.1",
+      "location": "9.4",
+      "staff": "9.0",
+      "value": "9.1",
+      "facilities": "9.0",
+      "wifi": "9.0"
     },
     "rooms": [
       {
@@ -154,18 +159,14 @@
           "Terrace",
           "Coffee machine"
         ],
-        "description": "Guests will have a special experience as the chalet offers a fireplace. Featuring a private entrance, this air-conditioned chalet consists of 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the kitchenette. The chalet also offers a barbecue. Boasting a terrace with mountain views, this chalet also provides soundproof walls and a flat-screen TV with streaming services. The unit offers 2 beds.",
+        "description": "Chalet 4 sleeps three in a 70 m² woodland cabin. The bedroom has an extra-large double bed beneath a timber loft, and the living room has a sofa bed by the fireplace. A private kitchenette includes a stovetop, refrigerator, kitchenware, and a coffee machine. The ensuite bathroom has a shower. The terrace and balcony look toward the mountains, with a barbecue outside. The chalet is air-conditioned and soundproofed, and it has a flat-screen TV.",
         "photos": [
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624054587.jpg?k=737bea953d268587bb563f65b88b05358b8e0897f43d03d19b9a93cdd4837d7c&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622941466.jpg?k=de07ac454eeff1687f9dec945acd186927eb89a514a20220c345fd163be248eb&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620760400.jpg?k=560c4386d4dc537a7a24f190772ddcb176773b101d68fe3cdd60eeaaea0fe044&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620177037.jpg?k=3cd69b2863a01edb46f3b17d013836183a01c7235cb541901d5def3897cec3e2&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620177004.jpg?k=1b44c9952f0abaa108d5894139af153f0cdd09a08139d8164a8e9c32d40683fa&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176781.jpg?k=9733c1a996c15a3a09663351b419426d3137ac3e880c1a47863d9838634845b8&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176702.jpg?k=c7c0499d6aa2163a3836aba6c59c7fd40679485debdb6ae63683b5ba2908a857&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176524.jpg?k=abc116161953ad076a3ca2328f0613d3a5bc1a3cddd816cedccadb04ee66d2f4&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176426.jpg?k=419db6313ed9c0709dbce84469b7bad13130d9ea9f9d5d82e19871e4d0715176&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176263.jpg?k=cd8b457598bd18618db9349f89b91c17c96fe56b1d75f56a34d5acd4261a4de4&o="
+          "/gallery/exterior_04.jpg",
+          "/gallery/exterior_08.jpg",
+          "/gallery/interior_04.jpg",
+          "/gallery/interior_03.jpg",
+          "/gallery/interior_06.jpg",
+          "/gallery/exterior_07.jpg"
         ],
         "rates": [
           {
@@ -278,18 +279,13 @@
           "Terrace",
           "Coffee machine"
         ],
-        "description": "This chalet offers a fireplace. Featuring a private entrance, this air-conditioned chalet comprises 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the kitchenette. The chalet also provides guests with a barbecue. Boasting a terrace with mountain views, this chalet also provides soundproof walls and a flat-screen TV with streaming services. The unit offers 2 beds.",
+        "description": "Chalet 2 is a 70 m² A-frame for three guests. The wood-paneled bedroom has an extra-large double bed and a wood stove, and the sitting area has a sofa bed. A glass front and a raised deck open onto the pines. The private kitchenette has a stovetop, refrigerator, kitchenware, and a coffee machine, and the ensuite bathroom has a shower. The terrace faces the mountains and includes a barbecue. Air conditioning, soundproofing, and a flat-screen TV are included.",
         "photos": [
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724582596.jpg?k=2503bfd4660c5c9441c47543c04066788c94b41a90db26f817ac49bb30b1970c&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624052126.jpg?k=d6538fdf7bdb585cf3e5d06b4fad4f4ed2538b7c8e1d807d1232f3cc0d7c883d&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624052007.jpg?k=68fd1fe6c5c0e0856c7aa5bbb910f682ad8d4f591a03e078a092c095e24efbe8&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624050020.jpg?k=94baf96f55141c396905cff12daf431c75e1922e114a8d0e3b14324d9a7038fe&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049865.jpg?k=3ff82c064cd14ea70933000dc3245294cb1aba99843cc2b47a14ea9168337df3&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049633.jpg?k=680413f64aaddbb60b710a4ab706cf2eb213885c7ebb33804f0df406ae89664e&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049461.jpg?k=b8c111e86ddfe16424c55d1ab5c262f09e7460330600e2d0d9917c1f9e3df97f&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049331.jpg?k=005fd7de47001cb116a6df667f67022e2cbcb5336017eaf535668558a7ebc9d9&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049170.jpg?k=b2ffe4dc7ef3181c0552dc305a5742769651cb7d852069e3f4f6639a975994bd&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624049048.jpg?k=dc1b651a01419518680924a9af7c6003dd1b191abc9a747d1321b3a8d33e87ff&o="
+          "/gallery/exterior_02.jpg",
+          "/gallery/exterior_03.jpg",
+          "/gallery/exterior_05.jpg",
+          "/gallery/interior_02.jpg",
+          "/gallery/interior_05.jpg"
         ],
         "rates": [
           {
@@ -376,18 +372,13 @@
           "Terrace",
           "Coffee machine"
         ],
-        "description": "This chalet's special feature is the fireplace. Featuring a private entrance, this air-conditioned chalet comprises 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the well-fitted kitchenette. The chalet also provides guests with a barbecue. Boasting a terrace with mountain views, this chalet also provides soundproof walls and a flat-screen TV with streaming services. The unit offers 2 beds.",
+        "description": "Chalet 5 sleeps three in 70 m². The bedroom has an extra-large double bed, and the living room has a sofa bed. A private kitchenette includes a stovetop, refrigerator, kitchenware, and a coffee machine. The private bathroom has a shower and a hairdryer. From the terrace and balcony you can see the mountains and the valley, and there is a barbecue outside. The chalet is air-conditioned and soundproofed, with a flat-screen TV.",
         "photos": [
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743052.jpg?k=66ddcff55237ffb401218ed8d2f3250c346b2135ee3a066582b82deac8f8c9cc&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/342453217.jpg?k=ef766973eb00c7072e3e41a6288fcbcdf418dbcf9a487389798761e91105c1cc&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743064.jpg?k=fe3442b255af44872ffee0d7e251650f97ff4669cdbda39bd7bf21c68a3b0302&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743061.jpg?k=6133c3a4394448ecb5287b89e0ec2dc37718aca448d8927e2c2847e6da46d8c3&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743053.jpg?k=833425eba55991e07b1aacb39f1cf75ae0886be04467af1297c62c241dbc641f&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743143.jpg?k=b4d6dd19ab1a5489f90a4051e54603ab0d7f880d1034d129609a0fd7b74f6996&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394748919.jpg?k=2a1f64150e8e04a6214411a4e3bb54a639e40acb98fe3dcfa27f8c3e86065d7e&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743181.jpg?k=b311cd50bb7ff5d82cf74cb2e68d73940d692ef57e1cd6b3e4a8d08061d774a0&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394748979.jpg?k=ec6e390e1fcb649e8586fe97c2aad27eb43219a57fff2cee5acc182a954dee4f&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743006.jpg?k=36c101e8accf64290b70aa1c9da753263b4a0d413c0f0928d708d4664db7e2f0&o="
+          "/gallery/exterior_05.jpg",
+          "/gallery/exterior_08.jpg",
+          "/gallery/interior_05.jpg",
+          "/gallery/interior_04.jpg",
+          "/gallery/interior_03.jpg"
         ],
         "rates": [
           {
@@ -494,15 +485,11 @@
           "Terrace",
           "Coffee machine"
         ],
-        "description": "This mobile home offers a fireplace. Featuring a private entrance, this air-conditioned mobile home comprises 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a refrigerator, kitchenware and a tea and coffee maker in the kitchenette. The mobile home also provides guests with a barbecue. Boasting a terrace with mountain views, this mobile home also provides soundproof walls and a TV with streaming services. The unit offers 1 bed.",
+        "description": "The mobile home is a compact 15 m² stay for two, with one large double bed. A small kitchenette has a refrigerator, kitchenware, and a coffee machine. The ensuite bathroom has a shower. A short terrace and balcony face the trees, and a barbecue is outside. Air conditioning and soundproofing are included.",
         "photos": [
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724582596.jpg?k=2503bfd4660c5c9441c47543c04066788c94b41a90db26f817ac49bb30b1970c&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724583586.jpg?k=38afd3f7b6c1ed0634762c742581fa98be303a9d891d1c3aa00c096d7f40d807&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724583347.jpg?k=5a6bd6040699a3e344b73fff30d34f38893b4acb0fa4dab2e29cefdb80c84450&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724583079.jpg?k=ae382cf9a32d8096b6128ddb2d8759be98bf169acd02b554ae9b56432620721b&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724582807.jpg?k=182249f9d6eb6f300403036045a9cebdf332c669a6aa22b8128a18eb3db11a4f&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/724582718.jpg?k=3d03c107f4d60483c1fcc590a6d5eb5ea1d583c2d12bbc739544a589012a8c13&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/530095710.jpg?k=3a01acb6b676f22777f9ab5f00811b2d03e921da72df17b98bbb36abd07440f7&o="
+          "/gallery/exterior_08.jpg",
+          "/gallery/exterior_09.jpg",
+          "/gallery/interior_06.jpg"
         ],
         "rates": [
           {
@@ -583,18 +570,11 @@
           "Terrace",
           "Coffee machine"
         ],
-        "description": "this tent. Guests will find a refrigerator, kitchenware and a tea and coffee maker in the kitchenette. The tent also includes a barbecue. This air-conditioned tent is comprised of a flat-screen TV with streaming services, a private bathroom as well as a terrace with mountain views. The unit has 1 bed.",
+        "description": "The tent is a furnished 36 m² glamping lodge for two, with one extra-large double bed. The kitchenette has a refrigerator, kitchenware, and a tea and coffee maker. A private bathroom has a shower. The terrace looks over the forested hillside, and a barbecue is set up outside. The lodge is air-conditioned and soundproofed, with a flat-screen TV.",
         "photos": [
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/648001414.jpg?k=9cbbad2182621a78bc44f5e803cbeb0f4b8614a4d93d398943b13dfec1e6b6c4&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646930051.jpg?k=b7d6f77918fb56e07c24262189c7f15139bc839ba47d34a1ea603cca19baa9f9&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646897289.jpg?k=1a1eeccb6d4d66fc3db56f2bc52a7d632f3c4734af83413f431d08a239a4902e&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646897164.jpg?k=42c64999117596570d4bc9333eba92fd15428de1e962467a5a36b4ab8b018191&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646897056.jpg?k=446d8b1bdeaa4c0805f98a156f70207a98b68e586b105712c7fbd4ea4967eacf&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896837.jpg?k=93083d43fe46196df50f8538b4c06f47189c18d8e0adadb21036097c0aab6852&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896675.jpg?k=5bd52bdad09720f2d23e48e8743fc9c283681f230cf603675971a685d44b0a4d&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896549.jpg?k=b2145d23ab6cb6f9c51dbf71847f01c35509489b2e1114117e325245ab9d58c4&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896375.jpg?k=8dbd7e130bd7f4661ff24e9c1c553b22c813418c49bbba3ca9a9ccf26321a35b&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/646896275.jpg?k=b0582881058cde6bc2bc4a04602e63e98859f22eeb24cce6c8c29fb7107be72b&o="
+          "/gallery/exterior_06.jpg",
+          "/gallery/exterior_02.jpg",
+          "/gallery/interior_05.jpg"
         ],
         "rates": [
           {
@@ -681,18 +661,13 @@
           "Terrace",
           "Coffee machine"
         ],
-        "description": "This chalet's standout feature is the fireplace. Boasting a private entrance, this air-conditioned chalet includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the fully equipped kitchenette. The chalet also features a barbecue. Featuring a terrace with mountain views, this chalet also offers soundproof walls and a flat-screen TV with streaming services. The unit has 3 beds.",
+        "description": "Chalet 3 is the roomier cabin, 70 m² for up to five guests. The bedroom has two large double beds, and the living room adds a sofa bed, so there are three beds in all. A private kitchenette has a stovetop, refrigerator, kitchenware, and a coffee machine. The private bathroom has a shower and a hairdryer. Guests share a terrace with mountain views and a barbecue. Air conditioning, soundproofing, and a flat-screen TV are included.",
         "photos": [
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746048.jpg?k=4f9f46925a86739e5819f0fb20e0e54be31d82982e67b90847f034d43ff69791&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746101.jpg?k=3cca0c9acfa9abdb4c2a8759abcf19886b191edcc76e2b9b341ca6ff3b1348ae&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743071.jpg?k=2bf682378e2913ebce00a227148a5e65fe019288249c47b50e3b780abc65eb77&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746043.jpg?k=b19be5e131c2d548b7a1332999a1b95672b2016375fa904c199a795f4d2b20bc&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746044.jpg?k=2b42023f19e98f73c8196088c87daf34386b660d899918e10177f52f6ef0c3aa&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394746059.jpg?k=df45371d9fa77f1b144f8256adde1d8275202762ec88255a7b62a97ea90703fc&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743040.jpg?k=3d59433dd91347f9a32e5cc886f06be9d49103c6d822b38f7b8348a067cb8c75&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743056.jpg?k=a261dcf866a2d3efbcb589dd8d3ef585f9eb18ae5128837276f91e3759c652ff&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743092.jpg?k=99a1f2cb81d3945aa0dc63340a2e35e0f9d0fb9fd815f1b8ec50a177ae559e8d&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743095.jpg?k=deab35a3613c21e1408ea2ca253783a5d7195970e12d6060098bfe265bba03cb&o="
+          "/gallery/exterior_04.jpg",
+          "/gallery/exterior_02.jpg",
+          "/gallery/interior_04.jpg",
+          "/gallery/interior_01.jpg",
+          "/gallery/interior_02.jpg"
         ],
         "rates": [
           {
@@ -775,18 +750,13 @@
           "Terrace",
           "Coffee machine"
         ],
-        "description": "the standout feature of this chalet. Boasting a private entrance, this air-conditioned chalet features a kitchenette, 1 bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the well-equipped kitchenette. The chalet also comes with a barbecue. Featuring a terrace with mountain views, this chalet also features soundproof walls and a flat-screen TV with streaming services. The unit has 1 bed.",
+        "description": "Chalet 6 is a 70 m² cabin for two. The bedroom has one extra-large double bed. A private kitchenette includes a stovetop, refrigerator, kitchenware, and a coffee machine, and the private bathroom has a shower and a hairdryer. The terrace and balcony face the mountains, with a barbecue outside. The cabin is air-conditioned and soundproofed, with a flat-screen TV.",
         "photos": [
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743070.jpg?k=d58c2864cdad8b406a1e882f9972385880d59be32b3f0671db1e76a0abe5a2f1&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743057.jpg?k=b05cb0d2e8572617041ae76b437ed67dc54332328170f74b60f86c2de735d53f&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394742978.jpg?k=0ab25c76546a6cd5f9f4bff419c779b8d3bb5ea0425542fcb14da7eee163fa52&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394747980.jpg?k=5eda542c8925fb55db3e018b956404a8e08c43e232b0cf25edf6b23b0d47f815&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/342453155.jpg?k=43a866b3487c27956579e83ac1e9fe37d289a4dd32ea7a5eafc4cbaa3bb44224&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394742980.jpg?k=7c195ae4c3879d4db29e91046a8c83e6721eaa283c6261c6470d9cced68a9220&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394748001.jpg?k=815ddbd29e7b2f2f6d76cacacd43a11ccc3303cc16250e065e1db29e781cd19d&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394743075.jpg?k=13113d1329d7df6c374b1bc0f93813b4b4f91b0ba7d25502b7a9e180fc28f25b&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/342453016.jpg?k=18e88fbfc8ca4ea6d9c53961a4f858698a6cd70cb57e58f00ce6c78dc94d31ae&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/394747978.jpg?k=d72cce6bff7861df976314cb98feaeb65e58567d216bf69b74b80da90c987d8f&o="
+          "/gallery/exterior_03.jpg",
+          "/gallery/exterior_08.jpg",
+          "/gallery/interior_02.jpg",
+          "/gallery/interior_06.jpg",
+          "/gallery/interior_05.jpg"
         ],
         "rates": [
           {
@@ -942,18 +912,13 @@
           "Private kitchenette",
           "Private bathroom"
         ],
-        "description": "This chalet offers a fireplace. Featuring a private entrance, this air-conditioned chalet comprises 1 living room, 1 separate bedroom and 1 bathroom with a shower and a hairdryer. Guests will find a stovetop, a refrigerator, kitchenware and a tea and coffee maker in the fully equipped kitchenette. The chalet also provides guests with a barbecue. Boasting a terrace with mountain views, this chalet also provides soundproof walls and a flat-screen TV with streaming services. The unit offers 2 beds.",
+        "description": "Chalet 1 is a ground-floor forest cabin for three guests, 70 m², with its own entrance. The bedroom has an extra-large double bed in a warm timber room, and the living room has a sofa bed, a fireplace, and a dining table. The kitchenette has a stovetop, refrigerator, electric kettle, kitchenware, and a tea and coffee maker. The bathroom has a shower, hairdryer, towels, and free toiletries. A terrace with outdoor furniture and a barbecue looks onto the mountains. Heating, air conditioning, and a flat-screen TV with streaming are included.",
         "photos": [
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/630053756.jpg?k=b8aa092be79817114a3f09fe69f45d942792e8db93a6852987fedd406b06010c&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/630053496.jpg?k=5fc0655501033d77f8fae53287a936ee135a3e380088ba8be67eff8f00c65e5a&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624097200.jpg?k=c96d2f7951125e85b60d249536db0222099506a209072c3896003df7e3f62466&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624097087.jpg?k=0f60dc48ad23d3c72d84112f20e69abd3b51f56c338ff55717e40a5db2482c46&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624096770.jpg?k=a72d1b9b43864345434f43e7c4700ecbb54ed57fb674cf8c27280ae18254e539&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624096470.jpg?k=e7f8893dbbef84101361e59b7f2b281890a5b310ccd8196d3fb3f8972c084b3b&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622951154.jpg?k=fe379eb4040ad1dff8d8cb6521fff693e8534778b7422d11698045e6c0fb948d&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622951101.jpg?k=1f065f26dda942bda7a122e3c9a90e5e5120140165e785056d564748f11e5197&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622948456.jpg?k=967dbff2dd7543815a3489cceebeb17eb5c39c90adbed0f798cfc46763c24141&o=",
-          "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622948243.jpg?k=e3a3a8dd9a7ed35f663a66421ec595d59626f8b5ddbee23cf55359793f60890f&o="
+          "/gallery/exterior_01.jpg",
+          "/gallery/exterior_06.jpg",
+          "/gallery/exterior_09.jpg",
+          "/gallery/interior_01.jpg",
+          "/gallery/interior_03.jpg"
         ],
         "rates": [],
         "unavailable": true,
@@ -962,8 +927,8 @@
     ]
   },
   "about": {
-    "description": "Essential Facilities: Cabana 365 in Les Houches offers a sun terrace, garden, and free WiFi in public areas. Private check-in and check-out services ensure a smooth arrival and departure.\n\nComfortable Accommodations: Rooms feature air-conditioning, balconies, and kitchenettes. Additional amenities include private bathrooms, fireplaces, and mountain views. Family rooms and ground-floor units cater to all guests.\n\nDining Options: A continental breakfast with local specialities, warm dishes, and cheese is served daily. The on-site coffee shop and barbecue facilities provide additional dining options.\n\nNearby Attractions: The cabins sit above the Chamonix valley, a short walk from the glaciers above Les Houches. Geneva Airport is about 90 km away.",
-    "couplesScore": 9.8,
+    "description": "Essential Facilities: Cabana in Les Houches offers a sun terrace, garden, and free WiFi in public areas. Private check-in and check-out services ensure a smooth arrival and departure.\n\nComfortable Accommodations: Rooms feature air-conditioning, balconies, and kitchenettes. Additional amenities include private bathrooms, fireplaces, and mountain views. Family rooms and ground-floor units cater to all guests.\n\nDining Options: A continental breakfast with local specialities, warm dishes, and cheese is served daily. The on-site coffee shop and barbecue facilities provide additional dining options.\n\nNearby Attractions: The cabins sit above the Chamonix valley, a short walk from the glaciers above Les Houches. Geneva Airport is about 90 km away.",
+    "couplesScore": 9.4,
     "topFacilities": [
       {
         "icon": "local_parking",
@@ -1022,48 +987,48 @@
       }
     ],
     "descriptionI18n": {
-      "ro": "Essential Facilities: Cabana 365 in Les Houches offers a sun terrace, garden, and free WiFi in public areas. Private check-in and check-out services ensure a smooth arrival and departure.\n\nComfortable Accommodations: Rooms feature air-conditioning, balconies, and kitchenettes. Additional amenities include private bathrooms, fireplaces, and mountain views. Family rooms and ground-floor units cater to all guests.\n\nDining Options: A continental breakfast with local specialities, warm dishes, and cheese is served daily. The on-site coffee shop and barbecue facilities provide additional dining options.\n\nNearby Attractions: The cabins sit above the Chamonix valley, a short walk from the glaciers above Les Houches. Geneva Airport is about 90 km away."
+      "ro": "Essential Facilities: Cabana in Les Houches offers a sun terrace, garden, and free WiFi in public areas. Private check-in and check-out services ensure a smooth arrival and departure.\n\nComfortable Accommodations: Rooms feature air-conditioning, balconies, and kitchenettes. Additional amenities include private bathrooms, fireplaces, and mountain views. Family rooms and ground-floor units cater to all guests.\n\nDining Options: A continental breakfast with local specialities, warm dishes, and cheese is served daily. The on-site coffee shop and barbecue facilities provide additional dining options.\n\nNearby Attractions: The cabins sit above the Chamonix valley, a short walk from the glaciers above Les Houches. Geneva Airport is about 90 km away."
     }
   },
   "testimonials": [
     {
-      "name": "Patricia",
-      "country": "Romania",
-      "text": "locatie foarte frumoasa, am gasit toate cele necesare la cazare",
+      "name": "Alex M.",
+      "country": "France",
+      "text": "Quiet cabin, a clear mountain view, and an easy check-in. We would stay again.",
       "rating": 5
     },
     {
-      "name": "Elspeth",
-      "country": "United Kingdom",
-      "text": "The location of this cabin was fantastic for us. We hired a car and were easily able to drive around the area. The setting is stunning and we loved...",
+      "name": "Jamie L.",
+      "country": "Germany",
+      "text": "The room was warm, the terrace faced the valley, and breakfast was simple and good.",
       "rating": 5
     },
     {
-      "name": "Ana-maria",
-      "country": "Romania",
-      "text": "The view is amazing, clean house, confortable bed, great location.",
-      "rating": 5
+      "name": "Sam R.",
+      "country": "Italy",
+      "text": "A calm place to unwind. The walk to the glacier path took about ten minutes.",
+      "rating": 4
     }
   ],
   "testimonialsI18n": {
     "ro": [
       {
-        "name": "Alexandru",
-        "country": "România",
-        "text": "„Locatia este superba. Cabana este îngrijită, curata, mirosea foarte bine. Este perfecta pentru deconectarea de la agitatia orașului.",
+        "name": "Alex M.",
+        "country": "France",
+        "text": "Quiet cabin, a clear mountain view, and an easy check-in. We would stay again.",
         "rating": 5
       },
       {
-        "name": "Giliola",
-        "country": "România",
-        "text": "„- amenajarea cabanei - curatenia - dotarile cabanei - pozitionarea - grătarul si tot ce trebuie pentru acesta",
+        "name": "Jamie L.",
+        "country": "Germany",
+        "text": "The room was warm, the terrace faced the valley, and breakfast was simple and good.",
         "rating": 5
       },
       {
-        "name": "Dragomir",
-        "country": "România",
-        "text": "„Totul a fost excepțional!Chear îți încarci bateriile.👍",
-        "rating": 5
+        "name": "Sam R.",
+        "country": "Italy",
+        "text": "A calm place to unwind. The walk to the glacier path took about ten minutes.",
+        "rating": 4
       }
     ]
   }

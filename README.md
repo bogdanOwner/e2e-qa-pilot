@@ -102,8 +102,8 @@ Restart Cursor or Claude Code, then ask in the chat. A pasted case needs no case
 ```text
 Review this case with e2e-qa-pilot and implement it if it is ready:
 
-Title: Book Chalet 4 at Cabana 365
-Preconditions: the guest is on the Cabana 365 page.
+Title: Book Chalet 4 at Cabana
+Preconditions: the guest is on the Cabana page.
 1. Set check-in to 4 Aug 2026 and check-out to 5 Aug 2026, then click Search.
    Expected: Chalet 4 is listed at 497 EUR.
 2. Press Increase quantity on the 497 EUR rate, click Reserve Now, enter the guest details, and click Confirm Booking.

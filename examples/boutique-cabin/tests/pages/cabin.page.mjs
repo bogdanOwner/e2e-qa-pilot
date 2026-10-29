@@ -9,7 +9,6 @@ export class CabinPage {
     this.firstName = page.getByLabel('First Name');
     this.lastName = page.getByLabel('Last Name');
     this.email = page.getByLabel('Email Address');
-    this.phone = page.getByLabel('Phone Number');
     this.terms = page.getByRole('checkbox', { name: /I agree to the Terms of Service and Privacy Policy/ });
     this.confirm = page.getByRole('button', { name: 'Confirm Booking', exact: true });
     this.resultTitle = page.locator('#confirm-success-title');
@@ -20,7 +19,7 @@ export class CabinPage {
 
   async open({ timeout = false } = {}) {
     await this.page.goto(timeout ? '/?demo=timeout' : '/');
-    await this.page.getByRole('heading', { name: 'Cabana 365', level: 1 }).waitFor();
+    await this.page.getByRole('heading', { name: 'Cabana', level: 1 }).waitFor();
   }
 
   async showDate(iso) {
@@ -51,7 +50,6 @@ export class CabinPage {
     await this.firstName.fill('Ana');
     await this.lastName.fill('Pop');
     await this.email.fill('ana.pop@example.com');
-    await this.phone.fill('723441446');
     await this.terms.check();
   }
 }

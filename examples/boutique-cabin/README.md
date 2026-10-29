@@ -1,4 +1,4 @@
-# Cabana 365
+# Cabana
 
 A small site that shows how e2e-qa-pilot works. Start the page, then send one line in chat. The assistant reads the case file. Each line has a different result.
 

@@ -1,10 +1,10 @@
 # Book Chalet 4
 
 ```gherkin
-Feature: Cabana 365 booking
+Feature: Cabana booking
 
   Scenario: Reserve Chalet 4 for one night
-    Given the guest is on the Cabana 365 page
+    Given the guest is on the Cabana page
     When the guest searches 4 Aug 2026 to 5 Aug 2026
     Then Chalet 4 is listed at 497 EUR
     When the guest increases the quantity for that rate and clicks Reserve Now
