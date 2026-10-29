@@ -8,7 +8,6 @@ import { CabinPage } from './tests/pages/cabin.page.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const htmlDir = path.join(root, 'html');
-const css = fs.readFileSync(path.join(root, 'styles.css'), 'utf8');
 
 function freePort() {
   return new Promise((resolve, reject) => {
@@ -22,12 +21,11 @@ function freePort() {
 }
 
 function startServer(port) {
-  const child = spawn(process.execPath, ['server.mjs'], {
+  return spawn(process.execPath, ['server.mjs'], {
     cwd: root,
     env: { ...process.env, PORT: String(port) },
     stdio: 'inherit',
   });
-  return child;
 }
 
 async function waitForServer(url, child) {
@@ -55,7 +53,22 @@ function stopServer(child) {
   });
 }
 
+function stylesheetText() {
+  const styles = [];
+  const walk = (dir) => {
+    if (!fs.existsSync(dir)) return;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const file = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(file);
+      else if (entry.name.endsWith('.css')) styles.push(fs.readFileSync(file, 'utf8'));
+    }
+  };
+  walk(path.join(root, '_astro'));
+  return styles.join('\n');
+}
+
 async function snapshot(page) {
+  const css = stylesheetText();
   const html = await page.evaluate((styles) => {
     for (const field of document.querySelectorAll('input, textarea, select')) {
       if (field instanceof HTMLInputElement && (field.type === 'checkbox' || field.type === 'radio')) {
@@ -72,7 +85,12 @@ async function snapshot(page) {
       }
       field.setAttribute('value', field.value);
     }
+    for (const el of document.querySelectorAll('body *')) {
+      if (getComputedStyle(el).display === 'none') el.setAttribute('data-stored-hidden', '1');
+    }
     const copy = document.documentElement.cloneNode(true);
+    document.querySelectorAll('[data-stored-hidden]').forEach((node) => node.removeAttribute('data-stored-hidden'));
+    copy.querySelectorAll('[data-stored-hidden]').forEach((node) => node.remove());
     copy.querySelectorAll('script').forEach((node) => node.remove());
     copy.querySelectorAll('link[rel="stylesheet"]').forEach((node) => node.remove());
     const style = document.createElement('style');
@@ -89,32 +107,6 @@ async function writePage(page, name) {
   fs.writeFileSync(path.join(htmlDir, name), html);
 }
 
-async function search(cabin) {
-  await cabin.checkIn.fill('2026-08-04');
-  await cabin.checkOut.fill('2026-08-05');
-  await cabin.search.click();
-  await expect(cabin.chalet4).toContainText('497 RON');
-  await expect(cabin.chalet4).toContainText('15% off');
-  await expect(cabin.chalet4).toContainText('Free cancellation');
-  await expect(cabin.unavailable).toBeVisible();
-}
-
-async function selectChalet(cabin) {
-  await cabin.chaletRate.click();
-  await expect(cabin.selection).toContainText('Chalet 4');
-  await expect(cabin.selection).toContainText('4 Aug 2026 – 5 Aug 2026');
-  await expect(cabin.selection).toContainText('497 RON');
-}
-
-async function sendBooking(cabin) {
-  await cabin.firstName.fill('Ana');
-  await cabin.lastName.fill('Pop');
-  await cabin.email.fill('ana.pop@example.com');
-  await cabin.phone.fill('+40723441446');
-  await cabin.terms.check();
-  await cabin.confirm.click();
-}
-
 const port = await freePort();
 const baseURL = `http://127.0.0.1:${port}`;
 const child = startServer(port);
@@ -124,7 +116,7 @@ try {
   await waitForServer(baseURL, child);
   fs.mkdirSync(htmlDir, { recursive: true });
   browser = await chromium.launch();
-  const context = await browser.newContext({ baseURL, locale: 'en-GB' });
+  const context = await browser.newContext({ baseURL, locale: 'en-GB', viewport: { width: 1280, height: 900 } });
   await context.route('**/*', (route) => {
     const type = route.request().resourceType();
     if (type === 'image' || type === 'font') return route.abort();
@@ -134,20 +126,37 @@ try {
   const cabin = new CabinPage(page);
 
   await cabin.open();
-  await search(cabin);
+  await cabin.searchStay();
+  await expect(cabin.chalet4).toContainText('497 EUR');
+  await expect(cabin.chalet4).toContainText('15% off');
+  await expect(cabin.chalet4).toContainText('Free cancellation');
+  await expect(cabin.unavailable).toBeVisible();
   await writePage(page, 'availability.html');
-  await selectChalet(cabin);
+
+  await cabin.chaletRate.click();
+  await expect(cabin.selection).toContainText('Chalet 4');
+  await expect(cabin.selection).toContainText('497 EUR');
   await writePage(page, 'selection.html');
-  await sendBooking(cabin);
+
+  await cabin.reserve.click();
+  await page.waitForURL(/\/booking(\?|$)/);
+  await cabin.fillGuest();
+  await cabin.confirm.click();
   await expect(cabin.resultTitle).toHaveText('Your request was successfully sent.', { timeout: 20_000 });
   await expect(cabin.reference).toBeVisible();
   await writePage(page, 'sent.html');
 
   await cabin.open({ timeout: true });
-  await search(cabin);
-  await selectChalet(cabin);
-  await sendBooking(cabin);
-  await expect(cabin.resultTitle).toHaveText('Something went wrong. Please try again.', { timeout: 20_000 });
+  await cabin.searchStay();
+  await cabin.chaletRate.click();
+  await cabin.reserve.click();
+  await page.waitForURL(/\/booking\?/);
+  await expect(page).toHaveURL(/demo=timeout/);
+  await cabin.fillGuest();
+  await cabin.confirm.click();
+  await expect(cabin.error).toHaveText('Something went wrong. Please try again.', { timeout: 20_000 });
+  await expect(cabin.resultTitle).toBeHidden();
+  await expect(cabin.reference).toHaveCount(0);
   await writePage(page, 'timeout.html');
 } finally {
   await browser?.close();

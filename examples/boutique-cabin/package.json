@@ -7,7 +7,8 @@
     "test": "playwright test",
     "test:mismatch": "playwright test -c playwright.mismatch.config.mjs",
     "test:live": "node run-playwright.mjs -c playwright.live.config.mjs",
-    "build:html": "node build-html.mjs"
+    "build:html": "node build-html.mjs",
+    "build:site": "node scripts/build-from-template.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1"

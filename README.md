@@ -105,8 +105,8 @@ Review this case with e2e-qa-pilot and implement it if it is ready:
 Title: Book Chalet 4 at Cabana 365
 Preconditions: the guest is on the Cabana 365 page.
 1. Set check-in to 4 Aug 2026 and check-out to 5 Aug 2026, then click Search.
-   Expected: Chalet 4 is listed at 497 RON.
-2. Select the 497 RON rate, enter the guest details, and click Confirm Booking.
+   Expected: Chalet 4 is listed at 497 EUR.
+2. Press Increase quantity on the 497 EUR rate, click Reserve Now, enter the guest details, and click Confirm Booking.
    Expected: the confirmation says "Your request was successfully sent." and a booking reference is shown.
 ```
 

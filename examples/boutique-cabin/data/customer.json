@@ -7,11 +7,11 @@
   "phone": "+40723441446",
   "whatsapp": "+40723441446",
   "email": "uniktime2018@gmail.com",
-  "address": "Strada Principală 14, 507132 Drumul Carului",
-  "googleMapsUrl": "https://www.google.com/maps/place/Cabana+365/@45.4761054,25.3010101,16z/data=!4m9!3m8!1s0x40b339589a5ca4a1:0xd945aebe6f752dca!5m2!4m1!1i2!8m2!3d45.4761261!4d25.2996572!16s%2Fg%2F11q4bwhn56?entry=tts&g_ep=EgoyMDI2MDYyNC4wIPu8ASoASAFQAw%3D%3D&skid=c710b6af-def6-4a56-87b6-976997ecfa12&hl=en",
-  "googleMapsEmbed": "https://maps.google.com/maps?q=45.4761261,25.2996572&output=embed",
+  "address": "18 Chemin des Glaciers, 74310 Les Houches, France",
+  "googleMapsUrl": "https://www.google.com/maps?q=45.8904,6.7984&hl=en",
+  "googleMapsEmbed": "https://maps.google.com/maps?q=45.8904,6.7984&output=embed",
   "bookingUrl": "https://www.booking.com/hotel/ro/cabana-365.en-gb.html",
-  "priceFrom": "497 RON",
+  "priceFrom": "497 EUR",
   "checkInTime": "14:00",
   "checkOutTime": "11:00",
   "workingHours": [],
@@ -48,21 +48,21 @@
     }
   ],
   "gallery": [
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGej30z9gTdNbnS8ZC-fHCTwtRqTkRGkwkHjhiVW-D1p8eEZ5E7FC20WP6fRB71RYm3nyG4qnse_hPAzhL-vcxBiP9Y-jF2t6jFtHFpUqLcxYbULY0wyOibHlVJp1IbDWHf0jMJNg=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHKIhJzpM7s-NtEgP40dTZOiJhHVzur10jMIMf3qTdVx_OI45GSyObEkNuyEGxNLIgkmrMc8mCsVCSBCG0WbGlxvLIUGJkwypHV2eOR5W936OsbJ1nYfRY4VPkKpxvnh9oxNMM=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGd1fXK--5-7qHUEq3xmlfRY63_dO0kE_Vl3aNlOBf1HGXxEU1DOC2ACYjRH1Nsn_m2XQo6mxZ-hS8IKpe1GraGpfmlk4IkVPyqG09S_jKxMSF6dHmSW9QL8q7RL_88NWZWNsGuL9QWcyNp=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGWnaW3XXiUzuPtxGS-F2EmV88oyw2GfSpy_ex7ujwXxSkNbPAWqboVLWwbj30auvYPzArfny6UPR5c-YMrVjQps6cS_-lB5C6AOD-kfRWSj5GDAk0To2I8zFJi5Xwwvt2j9vI04Pso9U-F=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHPYQIWaXSiRpFYt7-QnXgVTVkcpH7ShQJowUSzf0r0e3tCvWdyS2ZG4QsUzNTF5KjoQYnhQaa_qHy7NJQQt-GDXBSZ7Uckgeuv9L3hZDUy4jALY-NmMk3wOZvcFcht6kZRR3rRXf60ZGU=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHgZn0LJUNJGAyTFvz8KX7nypMcbI9SCNuzGGKbsbbfqSpoc8KrFqis_yzTXlnt6eTPYu7H6DoZwI8hT8zFsL0-Yw2oAF4EidyHQgxb83L_NAog6o46Rx-log8it_BIQLG2K_0GIw=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGY2eJ8991X1SaTGsjnwBvYt0RIh9zX31viIxW1ikmvgxWGoISDHj5SqtKRkyhenzcgDcmi6ujS6G20GuYJcQbELIc45wWbF-lM_0ham2jg37GwNTqyclgdJFp2uZsJNpiAP6It4A=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFIoe6SQzV9KK4FKpTQHYvVa1w5mzl8Uvxn4tyxzltViXZ8C0JZSfKWoRVcT9JTx0cVK7zCxZtnxAXlI438EayftZDNW3e0RTPmQsXp-_chOFX5IEGlhUs0bojs092I9vUsDDTiNKP3Muw=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF5Q75u3SPks0G0TvEBZ2jTMB5HSdcRZ6586OKfKUS14Rfl_flG2vnd-NM6gpVCCVURjxvQAdw7OLV1pxpSWnTnRik6aHxjE5Tgjvr3LGTj2DGp-BfVd-Kz85Gn48EyDxWkr4Gk=s1600-k-no",
-    "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFP9sPjKtmfhzDPK_BLjj39nUOX9fpS6fXZCjQ1UZeLR7KuFR8hG480_i34dpfJGHBPDqDFz9K_uUbxbHiZapcklodfhOvOmIUY9QEasrM84XSEdeXxUjhLNEiUYTMEKSYgAKLXhqa1zOs=s1600-k-no"
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/624054587.jpg?k=737bea953d268587bb563f65b88b05358b8e0897f43d03d19b9a93cdd4837d7c&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/622941466.jpg?k=de07ac454eeff1687f9dec945acd186927eb89a514a20220c345fd163be248eb&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620760400.jpg?k=560c4386d4dc537a7a24f190772ddcb176773b101d68fe3cdd60eeaaea0fe044&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620177037.jpg?k=3cd69b2863a01edb46f3b17d013836183a01c7235cb541901d5def3897cec3e2&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620177004.jpg?k=1b44c9952f0abaa108d5894139af153f0cdd09a08139d8164a8e9c32d40683fa&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176781.jpg?k=9733c1a996c15a3a09663351b419426d3137ac3e880c1a47863d9838634845b8&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176702.jpg?k=c7c0499d6aa2163a3836aba6c59c7fd40679485debdb6ae63683b5ba2908a857&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176524.jpg?k=abc116161953ad076a3ca2328f0613d3a5bc1a3cddd816cedccadb04ee66d2f4&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176426.jpg?k=419db6313ed9c0709dbce84469b7bad13130d9ea9f9d5d82e19871e4d0715176&o=",
+    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/620176263.jpg?k=cd8b457598bd18618db9349f89b91c17c96fe56b1d75f56a34d5acd4261a4de4&o="
   ],
   "socialLinks": {
     "facebook": "https://www.facebook.com/p/Cabana-365-100078758683871/",
     "instagram": "",
-    "google": "https://www.google.com/maps/place/Cabana+365/@45.4761054,25.3010101,16z/data=!4m9!3m8!1s0x40b339589a5ca4a1:0xd945aebe6f752dca!5m2!4m1!1i2!8m2!3d45.4761261!4d25.2996572!16s%2Fg%2F11q4bwhn56?entry=tts&g_ep=EgoyMDI2MDYyNC4wIPu8ASoASAFQAw%3D%3D&skid=c710b6af-def6-4a56-87b6-976997ecfa12&hl=en"
+    "google": "https://www.google.com/maps?q=45.8904,6.7984&hl=en"
   },
   "stats": [
     {
@@ -75,12 +75,12 @@
     }
   ],
   "activeTemplate": "boutique-cabin",
-  "defaultLocale": "ro",
+  "defaultLocale": "en",
   "availableLocales": [
     "ro",
     "en"
   ],
-  "isDemoMode": true,
+  "isDemoMode": false,
   "isLive": false,
   "showCookieBanner": false,
   "agencyWhatsapp": "+40774346050",
@@ -172,7 +172,7 @@
             "id": "chalet-4-0",
             "price": 497,
             "originalPrice": 585,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "15% off",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -182,7 +182,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -195,7 +195,7 @@
             "id": "chalet-4-1",
             "price": 553,
             "originalPrice": 650,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "15% off",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -209,7 +209,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -222,7 +222,7 @@
             "id": "chalet-4-2",
             "price": 585,
             "originalPrice": 585,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -236,7 +236,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 1,
               "payment": "online"
             },
@@ -296,7 +296,7 @@
             "id": "chalet-2-0",
             "price": 585,
             "originalPrice": 585,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -306,7 +306,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -319,7 +319,7 @@
             "id": "chalet-2-1",
             "price": 650,
             "originalPrice": 650,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -333,7 +333,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -394,7 +394,7 @@
             "id": "chalet-5-0",
             "price": 585,
             "originalPrice": 585,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -404,7 +404,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -417,7 +417,7 @@
             "id": "chalet-5-1",
             "price": 650,
             "originalPrice": 650,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -431,7 +431,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -444,7 +444,7 @@
             "id": "chalet-5-2",
             "price": 612,
             "originalPrice": 612,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -458,7 +458,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 1,
               "payment": "online"
             },
@@ -509,7 +509,7 @@
             "id": "mobile-home-0",
             "price": 585,
             "originalPrice": 585,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -519,7 +519,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -532,7 +532,7 @@
             "id": "mobile-home-1",
             "price": 650,
             "originalPrice": 650,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -546,7 +546,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -601,7 +601,7 @@
             "id": "tent-0",
             "price": 585,
             "originalPrice": 585,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Non-refundable",
             "rate": {
@@ -611,7 +611,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -624,7 +624,7 @@
             "id": "tent-1",
             "price": 650,
             "originalPrice": 650,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Non-refundable",
             "rate": {
@@ -638,7 +638,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -699,7 +699,7 @@
             "id": "chalet-3-0",
             "price": 612,
             "originalPrice": 612,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Non-refundable",
             "rate": {
@@ -709,7 +709,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -722,7 +722,7 @@
             "id": "chalet-3-1",
             "price": 680,
             "originalPrice": 680,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -736,7 +736,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -793,7 +793,7 @@
             "id": "chalet-6-0",
             "price": 612,
             "originalPrice": 612,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Non-refundable",
             "rate": {
@@ -803,7 +803,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -816,7 +816,7 @@
             "id": "chalet-6-1",
             "price": 680,
             "originalPrice": 680,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -830,7 +830,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 2,
               "payment": "online"
             },
@@ -843,7 +843,7 @@
             "id": "chalet-6-2",
             "price": 646,
             "originalPrice": 646,
-            "currency": "RON",
+            "currency": "EUR",
             "discount": "",
             "priceNotes": "Free cancellation",
             "rate": {
@@ -857,7 +857,7 @@
               "breakfast": "paid",
               "breakfastLabel": "Exceptional breakfast",
               "breakfastPrice": 135,
-              "breakfastCurrency": "RON",
+              "breakfastCurrency": "EUR",
               "guests": 1,
               "payment": "online"
             },
@@ -962,7 +962,7 @@
     ]
   },
   "about": {
-    "description": "Essential Facilities: CABANA 365 in Braşov offers a sun terrace, garden, and free WiFi in public areas. Private check-in and check-out services ensure a smooth arrival and departure.\n\nComfortable Accommodations: Rooms feature air-conditioning, balconies, and kitchenettes. Additional amenities include private bathrooms, fireplaces, and mountain views. Family rooms and ground-floor units cater to all guests.\n\nDining Options: A continental breakfast with local specialities, warm dishes, and cheese is served daily. The on-site coffee shop and barbecue facilities provide additional dining options.\n\nNearby Attractions: Located 14 km from Cheile Gradistei Adventure Park and 4.7 km from Moieciu, CABANA 365 offers easy access to local landmarks. Sibiu International Airport is 149 km away.",
+    "description": "Essential Facilities: Cabana 365 in Les Houches offers a sun terrace, garden, and free WiFi in public areas. Private check-in and check-out services ensure a smooth arrival and departure.\n\nComfortable Accommodations: Rooms feature air-conditioning, balconies, and kitchenettes. Additional amenities include private bathrooms, fireplaces, and mountain views. Family rooms and ground-floor units cater to all guests.\n\nDining Options: A continental breakfast with local specialities, warm dishes, and cheese is served daily. The on-site coffee shop and barbecue facilities provide additional dining options.\n\nNearby Attractions: The cabins sit above the Chamonix valley, a short walk from the glaciers above Les Houches. Geneva Airport is about 90 km away.",
     "couplesScore": 9.8,
     "topFacilities": [
       {
@@ -1022,7 +1022,7 @@
       }
     ],
     "descriptionI18n": {
-      "ro": "CABANA 365 se află în Brașov, la 7,9 km de Castelul Bran, și include vedere la munte, WiFi gratuit și parcare privată gratuită.\n\nFiecare unitate oferă oaspeților o terasă, o chicinetă complet utilată, cu un frigider, un șemineu, o zonă de relaxare cu o canapea extensibilă, un televizor cu ecran plat și o baie proprie cu duș și articole de toaletă gratuite. Unele unități includ o zonă de luat masa și/sau un balcon.\n\nOaspeții cazați la acest camping au la dispoziție un mic dejun continental.\n\nLa CABANA 365 există un grătar, precum și o grădină.\n\nCABANA 365 se află la 22 km de Dino Parc și la 38 km de Piaţa Sfatului. Aeroportul Internaţional Sibiu se află la 149 km."
+      "ro": "Essential Facilities: Cabana 365 in Les Houches offers a sun terrace, garden, and free WiFi in public areas. Private check-in and check-out services ensure a smooth arrival and departure.\n\nComfortable Accommodations: Rooms feature air-conditioning, balconies, and kitchenettes. Additional amenities include private bathrooms, fireplaces, and mountain views. Family rooms and ground-floor units cater to all guests.\n\nDining Options: A continental breakfast with local specialities, warm dishes, and cheese is served daily. The on-site coffee shop and barbecue facilities provide additional dining options.\n\nNearby Attractions: The cabins sit above the Chamonix valley, a short walk from the glaciers above Les Houches. Geneva Airport is about 90 km away."
     }
   },
   "testimonials": [

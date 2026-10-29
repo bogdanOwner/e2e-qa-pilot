@@ -2,7 +2,7 @@
 
 A small site that shows how e2e-qa-pilot works. Start the page, then send one line in chat. The assistant reads the case file. Each line has a different result.
 
-The page reads `data/customer.json` and English labels from `data/locales/en.json`. Search and booking are local mocks. Search waits about 2 seconds, then lists the rooms in the customer file. Booking waits about 2 seconds, then shows `Your request was successfully sent.` The Booking timeout demo link opens `/?demo=timeout`. Booking then exceeds the 8 second limit and shows `Something went wrong. Please try again.`
+This is an example site with mock data, for trying e2e-qa-pilot. The page reads `data/customer.json` and English labels from the boutique-cabin template. Search reads those rooms on the page. Reserve Now opens `/booking`. Confirm Booking does not send a request. It waits about 2 seconds, then shows `Your request was successfully sent.` The Booking timeout demo link opens `/?demo=timeout`. That flag stays on the confirm URL, and Confirm Booking then shows `Something went wrong. Please try again.`
 
 ## 1. Start the site
 
@@ -40,7 +40,7 @@ Send one of these lines in chat. `figma` is off, so a ready case continues into 
 Review cases/ready.md with e2e-qa-pilot and implement it if it is ready.
 ```
 
-Goal: a pull request labeled `e2e:ready`, with the steps in the description and screenshot links. Chalet 4 is listed at 497 RON, and the confirmation shows booking reference `CAB-1042`. The spec title in `tests/book-chalet.spec.mjs` is different from this case title, so the duplicate check does not treat them as the same test.
+Goal: a pull request labeled `e2e:ready`, with the steps in the description and screenshot links. Chalet 4 is listed at 497 EUR, and the confirmation shows booking reference `CAB-1042`. The spec title in `tests/book-chalet.spec.mjs` is different from this case title, so the duplicate check does not treat them as the same test.
 
 ### Case 2 — only the confirmation wording differs
 

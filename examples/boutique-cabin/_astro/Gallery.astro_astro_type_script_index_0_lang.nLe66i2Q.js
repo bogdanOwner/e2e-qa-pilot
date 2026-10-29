@@ -1,0 +1,1 @@
+import{w as o}from"./propertyGallery.Dji-ROsQ.js";const t=document.getElementById("property-gallery-root");if(t){let e=[];try{e=JSON.parse(t.dataset.photos||"[]")}catch{e=[]}o(t,e,t.dataset.label||"")}

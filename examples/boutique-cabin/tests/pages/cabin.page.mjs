@@ -1,26 +1,57 @@
 export class CabinPage {
   constructor(page) {
     this.page = page;
-    this.checkIn = page.getByLabel('Check-in');
-    this.checkOut = page.getByLabel('Check-out');
-    this.guests = page.getByLabel('Guests');
-    this.search = page.getByRole('button', { name: 'Search' });
-    this.chalet4 = page.getByRole('article').filter({ has: page.getByRole('heading', { name: 'Chalet 4', level: 3 }) });
-    this.chaletRate = page.getByRole('button', { name: 'Select Chalet 4, 497 RON' });
-    this.selection = page.getByRole('complementary', { name: 'Your Selection' });
+    this.search = page.locator('#availability-search-btn');
+    this.chalet4 = page.locator('[data-room-card]').filter({ hasText: 'Chalet 4' });
+    this.chaletRate = this.chalet4.locator('[data-rate-row]').filter({ hasText: '497 EUR' }).getByRole('button', { name: 'Increase quantity' });
+    this.selection = page.locator('#selection-sidebar-panel');
+    this.reserve = page.locator('#reserve-now-btn');
     this.firstName = page.getByLabel('First Name');
     this.lastName = page.getByLabel('Last Name');
     this.email = page.getByLabel('Email Address');
     this.phone = page.getByLabel('Phone Number');
-    this.terms = page.getByRole('checkbox', { name: 'I agree to the Terms of Service and Privacy Policy.' });
-    this.confirm = page.getByRole('button', { name: 'Confirm Booking' });
-    this.resultTitle = page.locator('#result h2');
+    this.terms = page.getByRole('checkbox', { name: /I agree to the Terms of Service and Privacy Policy/ });
+    this.confirm = page.getByRole('button', { name: 'Confirm Booking', exact: true });
+    this.resultTitle = page.locator('#confirm-success-title');
     this.reference = page.getByText('Booking reference: CAB-1042');
+    this.error = page.locator('#confirm-submit-error');
     this.unavailable = page.getByText('Not available for selected dates');
   }
 
   async open({ timeout = false } = {}) {
     await this.page.goto(timeout ? '/?demo=timeout' : '/');
     await this.page.getByRole('heading', { name: 'Cabana 365', level: 1 }).waitFor();
+  }
+
+  async showDate(iso) {
+    const day = () => this.page.locator(`#date-range-calendars [data-date="${iso}"]`);
+    for (let step = 0; step < 18; step += 1) {
+      if (await day().count()) return day();
+      await this.page.locator('#date-range-calendars [data-nav="1"]').first().click();
+    }
+    throw new Error(`Could not find ${iso} in the calendar`);
+  }
+
+  async pickDate(iso) {
+    const day = await this.showDate(iso);
+    await day.dispatchEvent('pointerup');
+  }
+
+  async searchStay() {
+    await this.page.locator('#booking-check-in-trigger').click();
+    await this.page.locator('#date-range-apply').waitFor();
+    await this.pickDate('2026-08-04');
+    await this.pickDate('2026-08-05');
+    await this.page.locator('#date-range-apply').click();
+    await this.search.click();
+    await this.chaletRate.waitFor();
+  }
+
+  async fillGuest() {
+    await this.firstName.fill('Ana');
+    await this.lastName.fill('Pop');
+    await this.email.fill('ana.pop@example.com');
+    await this.phone.fill('723441446');
+    await this.terms.check();
   }
 }
