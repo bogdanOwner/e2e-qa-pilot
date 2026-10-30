@@ -1,10 +1,46 @@
 # Cabin page
 
+## Expected behavior
+
+Chalet 4 is listed at 497 EUR, with 15% off and free cancellation. Chalet 1 is not available for the selected dates.
+
+## Elements
+
+- Check-in: `#booking-check-in-trigger`
+- Check-out: `#booking-check-out-trigger`
+- Apply: `#date-range-apply`
+- Search: `#availability-search-btn`
+- Room list: `#availability-room-list`
+- Chalet 4: `[data-room-card="chalet-4"]`
+- Chalet 4 rate at 497 EUR: `[data-rate-row="chalet-4:chalet-4-0"]`
+- Increase quantity: button "Increase quantity" on that rate
+- Chalet 1: `[data-room-card="chalet-1"]`
+- Reserve Now opens the confirm page: `pages/confirm.md`
+
+## Reference
+
+Captured from the running app. `screenshots/png/availability-results.png`
+
+## Visible copy
+
+- Cabana
+- Check-in
+- Check-out
+- Guests
+- Apply
+- Search
+- Chalet 4
+- 497 EUR
+- 15% off
+- Free cancellation (per rate plan)
+- Not available for selected dates
+- Increase quantity
+- Reserve Now
+
 ## States
 
-- Cabana shows the hotel name, the English about text, facilities, reviews, and the gallery.
-- Availability has Check-in, Check-out, Guests, and Search. After search, each rate has a quantity stepper. Chalet 4 lists 497 EUR with 15% off and free cancellation. Chalet 1 reads `Not available for selected dates`.
-- Your Selection shows the chosen room and the total. Reserve Now opens `/booking`.
-- The confirm page has required First Name and Last Name, an optional Email Address, an optional Phone Number, the terms checkbox, and Confirm Booking. Confirm Booking does not send a request. After a short wait the heading reads `Your request was successfully sent.` and the page shows `Booking reference: CAB-1042`.
+### Availability results
 
-PNG names match [overview.md](../docs/overview.md): `cabin-home.png`, `availability-results.png`, `booking-sent.png`.
+Case step 1. After Search, the room list shows Chalet 4 at 497 EUR, with 15% off and free cancellation. Chalet 1 reads `Not available for selected dates`.
+
+Screenshot: `screenshots/png/availability-results.png`

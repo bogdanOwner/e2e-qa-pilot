@@ -2,8 +2,15 @@ export class CabinPage {
   constructor(page) {
     this.page = page;
     this.search = page.locator('#availability-search-btn');
+    this.roomList = page.locator('#availability-room-list');
     this.chalet4 = page.locator('[data-room-card]').filter({ hasText: 'Chalet 4' });
+    this.chalet1 = page.locator('[data-room-card="chalet-1"]');
     this.chaletRate = this.chalet4.locator('[data-rate-row]').filter({ hasText: '497 EUR' }).getByRole('button', { name: 'Increase quantity' });
+    this.confirmPage = page.locator('#confirm-page-content');
+    this.confirmRoom = page.locator('#confirm-sidebar-room-name');
+    this.confirmPricing = page.locator('#confirm-sidebar-pricing');
+    this.guestForm = page.locator('#confirm-booking-form');
+    this.success = page.locator('#confirm-success-column');
     this.selection = page.locator('#selection-sidebar-panel');
     this.reserve = page.locator('#reserve-now-btn');
     this.firstName = page.getByLabel('First Name');
