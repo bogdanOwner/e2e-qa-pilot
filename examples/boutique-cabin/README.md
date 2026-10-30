@@ -2,7 +2,7 @@
 
 A small site that shows how e2e-qa-pilot works. Start the page, then send one line in chat. The assistant reads the case file. Each line has a different result.
 
-This is an example site with mock data, for trying e2e-qa-pilot. The page reads `data/customer.json` and English labels from the boutique-cabin template. Search reads those rooms on the page. Reserve Now opens `/booking`. Confirm Booking does not send a request. It waits about 2 seconds, then shows `Your request was successfully sent.` Opening `/?demo=timeout` keeps that flag on the confirm URL, and Confirm Booking then shows `Something went wrong. Please try again.`
+This is an example site with mock data, for trying e2e-qa-pilot. The page reads `data/customer.json` and English labels from the boutique-cabin template. Search reads those rooms on the page. Reserve Now opens `/booking`. Confirm Booking does not send a request. After the required fields are filled, it waits about 2 seconds, then shows `Your request was successfully sent.` and booking reference `CAB-1042`.
 
 ## 1. Start the site
 
@@ -15,6 +15,8 @@ npm start
 ```
 
 Open `http://127.0.0.1:4173`.
+
+Note: the Astro build files in `_astro` are committed so this setup does not require a build. Normally those files would not be committed.
 
 Install Chromium once before you ask the assistant to automate a case. The workflow commands will not do this.
 
@@ -50,13 +52,13 @@ Review cases/wording.md with e2e-qa-pilot and implement it if it is ready.
 
 Goal: a pull request labeled `e2e:minor-text-diff`. The case says "Your request was has been successfully sent." The page says "Your request was successfully sent." That sentence is not a passing assertion, and the run continues.
 
-### Case 3 — a step does not match the page
+### Case 3 — the confirmation matches the page
 
 ```text
 Review cases/mismatch.md with e2e-qa-pilot and implement it if it is ready.
 ```
 
-Goal: stop before a pull request and show the problem in chat. The timeout page shows `Something went wrong. Please try again.` The failing assertion stays. `ask_before_pr` asks, and a pull request is opened only after you explicitly authorize it.
+Goal: the same successful confirmation as case 1. Confirm Booking waits about 2 seconds and shows `Your request was successfully sent.` with booking reference `CAB-1042`. There is no timeout failure.
 
 ### Case 4 — the case has no expected result
 
@@ -72,4 +74,4 @@ The lines above are the way to run the cases. The assistant reads the file and c
 
 ## Stored pages
 
-`npm test` checks the pages already saved in `html/` and does not ask an assistant to review a case. `npm run test:mismatch` opens `html/timeout.html`, expects the success sentence, and fails. `npm run build:html` rewrites those files from the live page. The four cases above do not need these commands.
+`npm test` checks the pages already saved in `html/` and does not ask an assistant to review a case. `npm run build:html` rewrites those files from the live page. The four cases above do not need these commands.

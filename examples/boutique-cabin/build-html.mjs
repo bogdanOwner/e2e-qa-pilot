@@ -145,19 +145,6 @@ try {
   await expect(cabin.resultTitle).toHaveText('Your request was successfully sent.', { timeout: 20_000 });
   await expect(cabin.reference).toBeVisible();
   await writePage(page, 'sent.html');
-
-  await cabin.open({ timeout: true });
-  await cabin.searchStay();
-  await cabin.chaletRate.click();
-  await cabin.reserve.click();
-  await page.waitForURL(/\/booking\?/);
-  await expect(page).toHaveURL(/demo=timeout/);
-  await cabin.fillGuest();
-  await cabin.confirm.click();
-  await expect(cabin.error).toHaveText('Something went wrong. Please try again.', { timeout: 20_000 });
-  await expect(cabin.resultTitle).toBeHidden();
-  await expect(cabin.reference).toHaveCount(0);
-  await writePage(page, 'timeout.html');
 } finally {
   await browser?.close();
   await stopServer(child);

@@ -5,7 +5,7 @@ export function createConfig() {
     testDir: './tests',
     timeout: 60_000,
     expect: { timeout: 20_000 },
-    testIgnore: ['**/stored-pages.spec.mjs', '**/mismatch.spec.mjs'],
+    testIgnore: ['**/stored-pages.spec.mjs'],
     use: { baseURL },
     webServer: {
       command: 'node server.mjs',

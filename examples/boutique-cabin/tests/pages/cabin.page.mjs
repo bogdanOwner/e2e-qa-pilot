@@ -13,12 +13,11 @@ export class CabinPage {
     this.confirm = page.getByRole('button', { name: 'Confirm Booking', exact: true });
     this.resultTitle = page.locator('#confirm-success-title');
     this.reference = page.getByText('Booking reference: CAB-1042');
-    this.error = page.locator('#confirm-submit-error');
     this.unavailable = page.getByText('Not available for selected dates');
   }
 
-  async open({ timeout = false } = {}) {
-    await this.page.goto(timeout ? '/?demo=timeout' : '/');
+  async open() {
+    await this.page.goto('/');
     await this.page.getByRole('heading', { name: 'Cabana', level: 1 }).waitFor();
   }
 

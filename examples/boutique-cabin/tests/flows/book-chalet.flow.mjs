@@ -9,8 +9,3 @@ export async function confirmStay(cabin) {
   await cabin.fillGuest();
   await cabin.confirm.click();
 }
-
-export async function bookChalet(cabin) {
-  await selectChalet(cabin);
-  await confirmStay(cabin);
-}

@@ -1,6 +1,5 @@
 import { test, expect } from './fixture.mjs';
-import { CabinPage } from './pages/cabin.page.mjs';
-import { bookChalet, confirmStay, selectChalet } from './flows/book-chalet.flow.mjs';
+import { confirmStay, selectChalet } from './flows/book-chalet.flow.mjs';
 
 test('Reserve Chalet 4 and show the sent confirmation', async ({ cabin }) => {
   test.info().annotations.push(
@@ -16,13 +15,4 @@ test('Reserve Chalet 4 and show the sent confirmation', async ({ cabin }) => {
   await confirmStay(cabin);
   await expect(cabin.resultTitle).toHaveText('Your request was successfully sent.');
   await expect(cabin.reference).toBeVisible();
-});
-
-test('Timeout demo shows the error banner', async ({ page }) => {
-  const cabin = new CabinPage(page);
-  await cabin.open({ timeout: true });
-  await bookChalet(cabin);
-  await expect(cabin.error).toHaveText('Something went wrong. Please try again.');
-  await expect(cabin.resultTitle).toBeHidden();
-  await expect(cabin.reference).toHaveCount(0);
 });

@@ -218,22 +218,7 @@ function patchTemplate() {
     }`,
     `    void payload;
     void turnstileToken;
-    const demo = new URLSearchParams(location.search).get('demo');
     await new Promise((resolve) => window.setTimeout(resolve, 2000));
-    if (demo === 'timeout') {
-      showSubmitError(clientT('boutique_booking_error'));
-      if (submitBtn) {
-        submitBtn.textContent = btnConfirm;
-        submitBtn.disabled = false;
-      }
-      if (mobileBtn) {
-        mobileBtn.textContent = btnConfirm;
-        mobileBtn.disabled = false;
-      }
-      updateSubmitState();
-      return;
-    }
-
     clearPersistedSelections();
     showSuccess(sendEmailConfirmation, email, 'CAB-1042');`,
     'confirm submit',
@@ -271,19 +256,6 @@ function patchTemplate() {
     'booking submit',
   );
 
-  replaceOnce(
-    search,
-    `  if (photo) params.set('photo', photo);
-
-  persistSelections(checkIn, checkOut, selections);`,
-    `  if (photo) params.set('photo', photo);
-
-  const demo = new URLSearchParams(window.location.search).get('demo');
-  if (demo) params.set('demo', demo);
-
-  persistSelections(checkIn, checkOut, selections);`,
-    'demo query',
-  );
   replaceOnce(
     search,
     '<p class="room-card__unavailable-msg">${escapeHtml(cfg.lblNotAvailable)}</p>',
@@ -491,7 +463,6 @@ function copyDist() {
     'README.md',
     'playwright.config.mjs',
     'playwright.live.config.mjs',
-    'playwright.mismatch.config.mjs',
     'playwright.shared.mjs',
     'build-html.mjs',
     'run-playwright.mjs',
