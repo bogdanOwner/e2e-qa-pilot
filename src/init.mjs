@@ -252,10 +252,15 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log } = {}) {
     installMcpEntry(path.join(project, mcpFile), log, project);
   }
 
-  const labels = editors.map((name) => EDITORS[name].label);
+  const restart = {
+    cursor:
+      'Reload the Cursor window, then open a new chat. The chat already open will not see the new MCP server.',
+    claude:
+      'Quit Claude Code and start it again in this folder, then open a new chat. The session already open will not see the new MCP server.',
+  };
   log(`
 Next:
-  1. Restart ${labels.join(' or ')} so it picks up the skills and the MCP server.
+  1. ${editors.map((name) => restart[name]).join('\n     ')}
   2. To review an existing case, connect your case tool (for example Qase) in your editor's MCP settings. To review pasted case text, no case tool is required.
   3. Ask in chat: "Review case <id>." or paste the full case and ask to review it.
      The first run asks once for the keys in .e2e-qa-pilot/settings.md that this input needs.`);

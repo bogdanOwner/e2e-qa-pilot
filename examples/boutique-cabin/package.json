@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "init:cursor": "node ../../bin/cli.mjs init --integration cursor",
+    "init:claude": "node ../../bin/cli.mjs init --integration claude",
     "start": "node server.mjs",
     "test": "playwright test",
     "test:live": "node run-playwright.mjs -c playwright.live.config.mjs",
