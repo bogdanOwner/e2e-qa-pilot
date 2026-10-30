@@ -96,24 +96,35 @@ const boot = `<script id="demo-boot">
     };
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  var bookingOffset = document.createElement('style');
+  bookingOffset.textContent = '#booking{scroll-margin-top:16px}';
+  document.documentElement.appendChild(bookingOffset);
+
+  function mountExampleNote() {
     var booking = document.getElementById('booking');
     if (!booking || document.getElementById('example-note')) return;
     var note = document.createElement('p');
     note.id = 'example-note';
-    note.style.cssText = 'margin:0 0 20px;max-width:42rem;font:400 15px/1.5 Plus Jakarta Sans,sans-serif;color:#414844;';
-    var text = document.createElement('span');
-    text.textContent = 'This is an example site with mock data, for trying e2e-qa-pilot. Confirm Booking does not send a request.';
-    text.style.display = 'block';
-    var link = document.createElement('a');
-    link.id = 'demo-timeout-link';
-    link.href = '/?demo=timeout';
-    link.textContent = 'Booking timeout demo';
-    link.style.color = '#924c00';
-    link.style.fontWeight = '600';
-    note.appendChild(text);
-    note.appendChild(link);
-    booking.insertBefore(note, booking.firstChild);
+    note.textContent = 'This is an example site with mock data. Confirm Booking does not send a real booking.';
+    note.style.cssText = 'margin:0 0 24px;padding:14px 16px;border-radius:12px;background:#fff1d6;border:1px solid #e2b15c;border-left:4px solid #c2692a;font:600 15px/1.5 "Plus Jakarta Sans",sans-serif;color:#5a3410;';
+    var column = booking.querySelector('.max-w-7xl') || booking;
+    var search = document.getElementById('booking-search-section');
+    var heading = search && search.querySelector('h2');
+    var headingRow = heading && heading.parentElement;
+    if (headingRow && search.contains(headingRow)) headingRow.insertAdjacentElement('afterend', note);
+    else if (search && column.contains(search)) column.insertBefore(note, search);
+    else column.insertBefore(note, column.firstChild);
+  }
+  function clearExampleNoteSelection() {
+    var note = document.getElementById('example-note');
+    var sel = window.getSelection && window.getSelection();
+    if (!note || !sel || !sel.anchorNode || !note.contains(sel.anchorNode)) return;
+    sel.removeAllRanges();
+  }
+  document.addEventListener('DOMContentLoaded', mountExampleNote);
+  window.addEventListener('pageshow', function () {
+    mountExampleNote();
+    clearExampleNoteSelection();
   });
 })();
 </script>`;
@@ -256,7 +267,12 @@ const server = http.createServer(async (req, res) => {
   const type = types[path.extname(file)] || 'application/octet-stream';
   if (path.extname(file) === '.html') {
     const html = prepareHtml(fs.readFileSync(file, 'utf8'));
-    send(res, 200, req.method === 'HEAD' ? '' : html, type);
+    if (res.destroyed || res.writableEnded) return;
+    res.writeHead(200, {
+      'content-type': type,
+      'cache-control': 'no-store',
+    });
+    res.end(req.method === 'HEAD' ? '' : html);
     return;
   }
 

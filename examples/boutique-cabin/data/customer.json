@@ -82,8 +82,8 @@
   "activeTemplate": "boutique-cabin",
   "defaultLocale": "en",
   "availableLocales": [
-    "ro",
-    "en"
+    "en",
+    "ro"
   ],
   "isDemoMode": false,
   "isLive": false,

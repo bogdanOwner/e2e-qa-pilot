@@ -2,7 +2,7 @@
 
 A small site that shows how e2e-qa-pilot works. Start the page, then send one line in chat. The assistant reads the case file. Each line has a different result.
 
-This is an example site with mock data, for trying e2e-qa-pilot. The page reads `data/customer.json` and English labels from the boutique-cabin template. Search reads those rooms on the page. Reserve Now opens `/booking`. Confirm Booking does not send a request. It waits about 2 seconds, then shows `Your request was successfully sent.` The Booking timeout demo link opens `/?demo=timeout`. That flag stays on the confirm URL, and Confirm Booking then shows `Something went wrong. Please try again.`
+This is an example site with mock data, for trying e2e-qa-pilot. The page reads `data/customer.json` and English labels from the boutique-cabin template. Search reads those rooms on the page. Reserve Now opens `/booking`. Confirm Booking does not send a request. It waits about 2 seconds, then shows `Your request was successfully sent.` Opening `/?demo=timeout` keeps that flag on the confirm URL, and Confirm Booking then shows `Something went wrong. Please try again.`
 
 ## 1. Start the site
 
