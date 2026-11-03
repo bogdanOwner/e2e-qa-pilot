@@ -10,6 +10,7 @@ All of these hold:
 - Every step has an action and an expected result.
 - The expected result names a screen, quotes a control, or states a visible change.
 - No `correct`, `properly`, `etc.`, and no second name for the same control.
+- A step that enters data may leave the values out. That is not a hole. The run chooses fake values and declares them ([test data](pr-evidence.md#test-data)). A case that names its values is preferred.
 - Steps do not contradict each other.
 
 A missing Figma URL is recorded as "steps are the oracle". It does not fail the case. A case written like the mood diary list below passes with no question.

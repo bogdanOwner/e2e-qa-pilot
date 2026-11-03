@@ -280,3 +280,35 @@ test('docs: repository, homepage, and bugs metadata name the same GitHub reposit
   assert.ok(String(pkg.homepage).startsWith(`https://github.com/${repo[1]}`));
   assert.equal(pkg.bugs?.url, `https://github.com/${repo[1]}/issues`);
 });
+
+test('docs: branch names come from the case, and the PR report avoids repeating the expected result', () => {
+  // These checks read Markdown. They do not prove that an assistant follows the instructions.
+  const commands = path.join(kitRoot, 'processes', 'create-e2e', 'commands');
+  const read = (name) => fs.readFileSync(path.join(commands, name), 'utf8');
+  const template = readRoot(path.join('templates', 'settings.md'));
+  assert.match(template, /^branch_pattern: e2e\/\{title_slug\}$/m);
+  assert.match(readme, /`\{title_slug\}`/);
+
+  const review = read('review-case/SKILL.md');
+  assert.match(review, /Goal: `branch_pattern`/);
+  assert.doesNotMatch(review, /Requirements: `branch_pattern`/);
+
+  for (const name of ['add-from-steps/SKILL.md', 'add-from-design/SKILL.md']) {
+    const body = read(name);
+    assert.match(body, /`\{title_slug\}`/, name);
+    assert.match(body, /`\{case_id\}`/, name);
+    assert.match(body, /e2e\/\{case_id\}-\{title_slug\}/, name);
+    assert.match(body, /git check-ref-format --branch/, name);
+    assert.doesNotMatch(body, /does not substitute placeholders/, name);
+  }
+
+  const evidence = read('shared/pr-evidence.md');
+  assert.match(evidence, /the Actual cell is `✅ As expected`/);
+  assert.match(evidence, /## Test data/);
+  assert.match(evidence, /Never copy an expected result into the checklist/);
+  assert.match(evidence, /`step-03a`/);
+  assert.doesNotMatch(evidence, /repeat the expected result/);
+
+  const ready = read('shared/ready-rules.md');
+  assert.match(ready, /may leave the values out\. That is not a hole/);
+});

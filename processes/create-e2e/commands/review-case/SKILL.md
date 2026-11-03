@@ -30,11 +30,13 @@ Provider keys, `case_id` mode only: `case_tool`, `fetch_case`, `update_case`.
 
 `read_figma` is required even when `figma` is `off`.
 
-If a required key for this mode has no value, ask once in chat for every empty key in that set, except `pr_mode` and the label keys. Those have defaults below. Write the answers into the file, then continue:
+If a required key for this mode has no value, ask once in chat for every empty key in that set, except `branch_pattern`, `pr_mode`, and the label keys. Those have defaults below. Write the answers into the file, then continue:
 
 - Context: `figma`, `read_figma`, and in `case_id` mode also `case_tool`, `fetch_case`, `update_case`
-- Requirements: `branch_pattern`, `test_command`, `png_dir`
-- Goal: `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, `pr_label_mismatch`
+- Requirements: `test_command`, `png_dir`
+- Goal: `branch_pattern`, `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, `pr_label_mismatch`
+
+`branch_pattern`: a missing or empty value is `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode. Write that default. Do not ask. The placeholders are filled in by the implementation skill. A value that is already set stays as it is.
 
 `pr_mode`: a missing or empty value means `create_pr_for_review`. Do not ask. The other legal value is `ask_before_pr`. Any other value: ask once, then write the answer.
 

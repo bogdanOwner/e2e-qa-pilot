@@ -106,7 +106,9 @@ Title: Book Chalet 4 at Cabana
 Preconditions: the guest is on the Cabana page.
 1. Set check-in to 4 Aug 2026 and check-out to 5 Aug 2026, then click Search.
    Expected: Chalet 4 is listed at 497 EUR.
-2. Press Increase quantity on the 497 EUR rate, click Reserve Now, enter the guest details, and click Confirm Booking.
+2. Press Increase quantity on the 497 EUR rate, then click Reserve Now.
+   Expected: the guest form opens on the confirm page.
+3. Enter First Name "Ana", Last Name "Pop", and Email Address "ana.pop@example.com", accept the terms, and click Confirm Booking.
    Expected: the confirmation says "Your request was successfully sent." and a booking reference is shown.
 ```
 
@@ -138,7 +140,7 @@ Run `init` again at any time. It leaves existing files alone.
 
 ## Settings
 
-The first `review-case` run reads `.e2e-qa-pilot/settings.md`. If a key it needs is empty, the assistant asks once in chat and writes your answers into that file. A case id needs `case_tool`, `fetch_case`, and `update_case`. Pasted case text does not. Both inputs need `figma`, `read_figma`, `branch_pattern`, `test_command`, and `png_dir`.
+The first `review-case` run reads `.e2e-qa-pilot/settings.md`. If a key it needs is empty, the assistant asks once in chat and writes your answers into that file. A case id needs `case_tool`, `fetch_case`, and `update_case`. Pasted case text does not. Both inputs need `figma`, `read_figma`, `test_command`, and `png_dir`. `branch_pattern` has a default.
 
 The settings file is included in every tool result, so do not store tokens in it. Put how to fetch and update a case in the file, and keep tokens in your own MCP configuration. Do not paste a secret into the chat.
 
@@ -146,7 +148,8 @@ The settings file is included in every tool result, so do not store tokens in it
 |-----|---------|
 | `case_tool`, `fetch_case`, `update_case` | Where cases live and how to read and update one. Used only for a case id |
 | `figma`, `read_figma` | `on` or `off`, and how to read a frame |
-| `branch_pattern`, `test_command`, `png_dir` | How to name the branch, run the spec, and where PNGs go |
+| `branch_pattern` | Branch name. `{title_slug}` is the case title in kebab-case and `{case_id}` is the case id, for a case id only. Default `e2e/{title_slug}`, or `e2e/{case_id}-{title_slug}` for a case id. A name with no placeholder is used as it is |
+| `test_command`, `png_dir` | How to run the spec, and where PNGs go |
 | `pr_mode` | `create_pr_for_review` (default) or `ask_before_pr`. A missing value means `create_pr_for_review` |
 | `pr_label_ready` | Label when behavior matches and required screenshot evidence is adequate. Default `e2e:ready` |
 | `pr_label_minor_text_diff` | Label when the only issue is a narrow wording difference. Default `e2e:minor-text-diff` |
@@ -156,7 +159,7 @@ The command files list `read_figma` among the required keys even when `figma: of
 
 ## Required inputs and reference conventions
 
-The server requires exactly one of `case_id` or `case_text`. Pasted text needs no case tool. A case id needs `case_tool`, `fetch_case`, `update_case`, and an external case-tool MCP. Generating a spec needs `figma`, `read_figma`, `branch_pattern`, `test_command`, and `png_dir`. `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, and `pr_label_mismatch` have defaults, so a missing value is not a question.
+The server requires exactly one of `case_id` or `case_text`. Pasted text needs no case tool. A case id needs `case_tool`, `fetch_case`, `update_case`, and an external case-tool MCP. Generating a spec needs `figma`, `read_figma`, `test_command`, and `png_dir`. `branch_pattern`, `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, and `pr_label_mismatch` have defaults, so a missing value is not a question.
 
 Reference conventions in the commands, which another project may adapt, include `overview.md`, Gherkin under `specs/`, page contracts under `pages/`, page objects, flows, and a Playwright fixture. There is no settings key for those paths. A project does not have to copy that layout for the server to start. `examples/boutique-cabin` uses it so the reference workflow can be read in one place. That directory is in this git repository and is not part of the published package. Figma helpers such as `attachMilestoneScreenshot` are not in the example and are not provided by this package.
 
