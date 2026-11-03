@@ -23,7 +23,7 @@ This skill checks the expected-result text. It does not run a Figma visual revie
 
 PR body, the word rule, and the screenshot gate: [pr-evidence.md](../shared/pr-evidence.md). Ready checks: [ready-rules.md](../shared/ready-rules.md).
 
-If `figma`, `read_figma`, `branch_pattern`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+If `figma`, `read_figma`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `branch_pattern` uses the default in Branch below. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
 
 ## Title
 
@@ -53,11 +53,16 @@ Stop before any docs or spec when any of these is true:
 
 ## Branch
 
-Read `branch_pattern` from the settings file. It is the configured branch name, not a template. This package does not substitute placeholders.
+Read `branch_pattern` from the settings file. It names the branch for this case. Placeholders are filled in:
 
-If this run has no external case id and the saved value contains `<case-id>`, `{case_id}`, or the words `case id`, ask once for a branch name. Never invent an id.
+- `{title_slug}`: the trimmed case title in kebab-case. Lowercase, every run of characters other than letters and digits becomes one `-`, no leading or trailing `-`, at most 50 characters, cut at a word boundary. "Book Chalet 4 at Cabana" becomes `book-chalet-4-at-cabana`.
+- `{case_id}`: the case id in lowercase kebab-case. It is filled in only in `case_id` mode. In `case_text` mode drop this placeholder and the separator next to it. Never invent an id.
 
-Run `git check-ref-format --branch` on the final name. If Git accepts the configured value, use it. If Git rejects it, ask once for another name.
+A missing or empty `branch_pattern` uses `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode, for example `e2e/book-chalet-4-at-cabana`. Do not ask.
+
+A value with no placeholder is a literal branch name and is used as it is. It puts every case on that one branch, so the template recommends a placeholder.
+
+Run `git check-ref-format --branch` on the final name. If Git accepts it, use it. If Git rejects it, ask once for another name.
 
 From fresh `main`:
 
@@ -76,9 +81,9 @@ Commit messages: `fix: <short explanation>`.
 
 Read `png_dir` from the settings file. Read the settings file for where page objects, flows, and the spec live.
 
-1. `overview.md`, Gherkin under `specs/`, page contracts under `pages/`. Copy each expected result into `## Expected behavior`. Locator hints in `## Elements` may change between runs. Expected-behavior text may not. `## Reference` says "Captured from the running app" and cites `screenshots/<state>.png` under `png_dir`. Do not invent a Figma node. `## Visible copy` records the exact on-screen title, button labels, placeholders, tab names, and toast text. `## States` has one block per distinct screen (open picker, filled chip, next tab, toast), each naming its screenshot and case step. The overview coverage table has the step, the action, the page contract, and the screenshot. No Figma column. One modal stays one page contract. A different dialog gets its own page contract.
+1. `overview.md`, Gherkin under `specs/`, page contracts under `pages/`. Copy each expected result into `## Expected behavior`. Locator hints in `## Elements` may change between runs. Expected-behavior text may not. `## Reference` says "Captured from the running app" and cites `screenshots/<state>.png` under `png_dir`. Do not invent a Figma node. `## Visible copy` records the exact on-screen title, button labels, placeholders, tab names, and toast text. `## Test data` lists each value a step types or selects, and whether the case gave it or the run chose it ([Test data rules](../shared/pr-evidence.md#test-data)). `## States` has one block per distinct screen (open picker, filled chip, next tab, toast), each naming its screenshot and case step. The overview coverage table has the step, the action, the page contract, and the screenshot. No Figma column. One modal stays one page contract. A different dialog gets its own page contract.
 2. Page objects. Reuse existing ones. Read the settings file for where they live.
-3. Flows. Reuse existing ones. Pass `testInfo`. Before each screenshot:
+3. Flows. Reuse existing ones. Pass `testInfo`. Keep the values a flow types in one named constant, so the spec, the page contract, and the pull request use the same ones. Before each screenshot:
 
 ```typescript
 testInfo.annotations.push({
@@ -92,6 +97,8 @@ testInfo.annotations.push({
 ```
 
 4. Thin spec. `case_id` title: `<case-id> <case title>`. `case_text` title: the trimmed title, with no invented id. Import `test` from the fixture named in the settings file.
+
+Before the final click of a step that enters data, assert each entered value and each toggled control. Take the filled-state screenshot at that point.
 
 Prefer `getByRole`, `getByLabel`, `getByPlaceholder`. Wait with `expect(...).toBeVisible()` or `toHaveURL()`.
 
@@ -127,6 +134,7 @@ Look at the PNG before it is copied into `png_dir` or linked in the pull request
 
 - Keep it when the image shows the control or change named in that row (open modal, open picker, filled chip, new tab, toast).
 - A picture that matches an earlier step does not prove this step.
+- A step that enters or selects data needs the filled state on screen: the values and the checked controls, before the final click. When the step also submits, add a second image of the result. Links are `step-03a` and `step-03b`. An empty form or a result card alone does not prove the entry.
 - One retry only: capture the proving control (`locator.screenshot` or a clip of that control), not the same full viewport.
 - If the second image still does not show the step, omit the file. The table row stays. The Screenshot cell is `—`. No image heading for that step.
 - An omitted earlier image is not, by itself, a failed assertion.
@@ -147,7 +155,7 @@ The five-run ceiling is for the whole spec, not five per step. Each command is o
 
 ## Pull request
 
-One PR to `main`. Never auto-merge. Evidence rules and the body template are in [pr-evidence.md](../shared/pr-evidence.md).
+One PR to `main`. Never auto-merge. Evidence rules, the body layout, and the steps table are in [pr-evidence.md](../shared/pr-evidence.md). In the steps table the Actual cell is `✅ As expected` when it equals the expected result. Only a difference carries text.
 
 Read `pr_mode`. A missing value means `create_pr_for_review`. `ask_before_pr` stops before a pull request for a functional mismatch, an unresolved difference, or a failed final-screenshot gate. Stop and ask in chat. A narrow minor text difference does not trigger that stop. If the discrepancy remains, create the pull request only after the user explicitly authorizes it. When the expected behavior has not changed, preserve the failing assertion.
 

@@ -18,9 +18,9 @@ Input is exactly one of `case_id` or `case_text`, plus `.e2e-qa-pilot/settings.m
 
 `case_text`: the pasted text is the case. Do not call `fetch_case`. Do not call `update_case`. A case tool is not required.
 
-Read `read_figma`, `png_dir`, `branch_pattern`, and `test_command` from that file.
+Read `read_figma`, `png_dir`, `branch_pattern`, and `test_command` from that file. A missing or empty `branch_pattern` uses the default in Branch below.
 
-If `figma`, `read_figma`, `branch_pattern`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+If `figma`, `read_figma`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `branch_pattern` uses the default in Branch below. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
 
 **Docs first, code second.** Do not add a spec until the feature has an overview, Gherkin, and page contracts.
 
@@ -49,11 +49,16 @@ Display text preserves the original casing and internal wording, with surroundin
 
 ## Branch
 
-Read `branch_pattern` from the settings file. It is the configured branch name, not a template. This package does not substitute placeholders.
+Read `branch_pattern` from the settings file. It names the branch for this case. Placeholders are filled in:
 
-If this run has no external case id and the saved value contains `<case-id>`, `{case_id}`, or the words `case id`, ask once for a branch name. Never invent an id.
+- `{title_slug}`: the trimmed case title in kebab-case. Lowercase, every run of characters other than letters and digits becomes one `-`, no leading or trailing `-`, at most 50 characters, cut at a word boundary. "Book Chalet 4 at Cabana" becomes `book-chalet-4-at-cabana`.
+- `{case_id}`: the case id in lowercase kebab-case. It is filled in only in `case_id` mode. In `case_text` mode drop this placeholder and the separator next to it. Never invent an id.
 
-Run `git check-ref-format --branch` on the final name. If Git accepts the configured value, use it. If Git rejects it, ask once for another name.
+A missing or empty `branch_pattern` uses `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode, for example `e2e/book-chalet-4-at-cabana`. Do not ask.
+
+A value with no placeholder is a literal branch name and is used as it is. It puts every case on that one branch, so the template recommends a placeholder.
+
+Run `git check-ref-format --branch` on the final name. If Git accepts it, use it. If Git rejects it, ask once for another name.
 
 From fresh `main`:
 
@@ -102,6 +107,8 @@ await attachMilestoneScreenshot(page, testInfo, MILESTONE_SCREENSHOTS.personalSp
 - **Spec test title:** `case_id` uses the exact case title prefixed with the case id — for example `test('<case-id> As a User I can edit the personal goal.', …)`. Use the title from `fetch_case`. `case_text` uses the trimmed title, with no invented id. Do not invent a separate descriptive name.
 
 Read the settings file for where page objects, flows, and the spec live. Reuse existing page objects and flows.
+
+A step that types or selects data follows the Test data rules in [pr-evidence.md](../shared/pr-evidence.md#test-data): values from the case, or declared fake values, and the filled state on a screenshot before the final click.
 
 ## Phase C — Mandatory report review
 
@@ -152,6 +159,10 @@ When the user accepts the difference as a known visual gap, record it under `## 
 "Fix the test" means a locator or a wait. It does not mean rewriting an expected result.
 
 Do not apply a label while `ask_before_pr` is still waiting for an answer or for explicit authorization. Otherwise apply exactly one of `pr_label_ready`, `pr_label_minor_text_diff`, or `pr_label_mismatch` from the settings file. The defaults are `e2e:ready`, `e2e:minor-text-diff`, and `e2e:mismatch`. Full `MATCH`, with the end state shown and no text difference, uses `pr_label_ready`. If GitHub access is missing, report that and do not claim a pull request exists.
+
+## Pull request body
+
+The body layout, the steps table with its `✅` and `❌` icons, and the screenshot links are in [pr-evidence.md](../shared/pr-evidence.md). The Actual cell is `✅ As expected` when it equals the expected result.
 
 ## Tool contract
 

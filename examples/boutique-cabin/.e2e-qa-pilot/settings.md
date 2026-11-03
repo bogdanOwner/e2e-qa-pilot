@@ -5,9 +5,10 @@
 # difference, or a failed final screenshot remains. The other value is create_pr_for_review.
 pr_mode: ask_before_pr
 
-# Exact branch name for git checkout -b. Placeholders are not filled in.
-# Name the case. One shared name puts every case on the same branch.
-branch_pattern: e2e/book-chalet-4
+# Branch name for git checkout -b. {title_slug} is the case title in kebab-case,
+# for example e2e/book-chalet-4-at-cabana. {case_id} is filled in only for a case id.
+# A name without a placeholder is used as it is and puts every case on one branch.
+branch_pattern: e2e/{title_slug}
 
 # Folder for the screenshot PNGs linked from the pull request.
 png_dir: screenshots/png

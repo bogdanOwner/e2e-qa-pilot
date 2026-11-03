@@ -328,7 +328,17 @@ test('case_text call returns pasted-case instructions without a provider', () =>
   assert.match(steps, /Do not claim that no duplicate exists/);
   assert.match(steps, /git check-ref-format --branch/);
   assert.match(steps, /Never invent an id/);
-  assert.match(steps, /does not substitute placeholders/);
+  assert.match(steps, /`\{title_slug\}`/);
+  assert.match(steps, /`\{case_id\}`/);
+  assert.match(steps, /e2e\/\{title_slug\}/);
+  assert.match(steps, /e2e\/\{case_id\}-\{title_slug\}/);
+  assert.match(steps, /Do not ask/);
+  assert.match(steps, /literal branch name/);
+  assert.match(steps, /`✅ As expected`/);
+  assert.match(steps, /## Test data/);
+  assert.match(steps, /`step-03a` \(filled\) and `step-03b` \(result\)/);
+  assert.match(steps, /An empty form does not prove the entry/);
+  assert.match(steps, /asserts each entered value and each toggled control/);
   assert.match(steps, /starts with `<case-id>`/);
   assert.match(steps, /assertion_edits/);
   assert.match(steps, /figma: on/);
