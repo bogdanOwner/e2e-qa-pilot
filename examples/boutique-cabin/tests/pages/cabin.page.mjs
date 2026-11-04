@@ -14,6 +14,14 @@ export class CabinPage {
     this.resultTitle = page.locator('#confirm-success-title');
     this.reference = page.getByText('Booking reference: CAB-1042');
     this.unavailable = page.getByText('Not available for selected dates');
+    this.guestsTrigger = page.getByRole('button', { name: 'Guests', exact: true });
+    this.guestsPanel = page.getByRole('dialog', { name: 'Guests' });
+    this.guestsSummary = page.locator('#guests-summary');
+    this.childrenIncrease = page.locator('#guests-panel [data-guest-step="children"][data-dir="1"]');
+    this.childrenCount = page.locator('#guests-children-count');
+    this.childAge = page.locator('#child-ages-list select');
+    this.childAgeError = page.locator('#child-ages-error');
+    this.guestsDone = page.getByRole('button', { name: 'Done', exact: true });
   }
 
   async open() {
@@ -50,5 +58,17 @@ export class CabinPage {
     await this.lastName.fill('Pop');
     await this.email.fill('ana.pop@example.com');
     await this.terms.check();
+  }
+
+  async openGuests() {
+    await this.guestsTrigger.click();
+    await this.guestsPanel.waitFor();
+  }
+
+  async setChildren(count) {
+    for (let n = 0; n < count; n += 1) {
+      await this.childrenIncrease.click();
+    }
+    await this.childAge.waitFor();
   }
 }
