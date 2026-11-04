@@ -44,8 +44,6 @@ The guest searches 4 to 5 Aug 2026, reserves Chalet 4 at 497 EUR, fills the gues
 
 **Result**: `e2e:ready`, 3 of 3 steps passed, no assertion was edited. [See the pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3). This run used Grok 4.7, a small and inexpensive model. Results vary by model.
 
-![The booking confirmation captured in pull request 3](https://github.com/bogdanOwner/e2e-qa-pilot/raw/e2e/book-chalet-4-at-cabana/examples/boutique-cabin/screenshots/png/booking-sent.png)
-
 <details>
 <summary>Case text: <code>cases/ready.md</code></summary>
 
