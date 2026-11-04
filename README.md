@@ -75,7 +75,7 @@ Nothing is auto-merged.
 
 ## Quick start
 
-The worked example is a small site in a clone of this repository. The published npm package does not include `examples/boutique-cabin`. Start the page, then send one chat line that names a case file. The four lines cover two successful confirmations, a wording difference, and a case with no expected result.
+The worked example is a small site in a clone of this repository. The published npm package does not include `examples/boutique-cabin`. Start the page, then send one chat line that names a case file. The four lines cover a passing case, a wording difference, a real bug, and a case with no expected result.
 
 ```bash
 cd examples/boutique-cabin

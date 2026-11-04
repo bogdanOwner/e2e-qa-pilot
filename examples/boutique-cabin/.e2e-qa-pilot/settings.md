@@ -1,9 +1,10 @@
 # Settings
 
 ```text
-# ask_before_pr stops before a pull request when a functional mismatch, an unresolved
-# difference, or a failed final screenshot remains. The other value is create_pr_for_review.
-pr_mode: ask_before_pr
+# create_pr_for_review always opens the pull request, including a draft for a mismatch.
+# The other value is ask_before_pr, which stops before a pull request when a functional
+# mismatch, an unresolved difference, or a failed final screenshot remains.
+pr_mode: create_pr_for_review
 
 # Branch name for git checkout -b. {title_slug} is the case title in kebab-case,
 # for example e2e/book-chalet-4-at-cabana. {case_id} is filled in only for a case id.

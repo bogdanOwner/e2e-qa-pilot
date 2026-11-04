@@ -386,6 +386,15 @@ function patchTemplate() {
     'home validate',
   );
 
+  // Deliberate defect for cases/mismatch.md: a chosen child age is not saved,
+  // so the red "Select age" error stays after Done.
+  replaceOnce(
+    booking,
+    "state.childAges[idx] = select.value === '' ? null : Number(select.value);",
+    'state.childAges[idx] = null;',
+    'seeded child age bug',
+  );
+
   const exampleCopy = {
     footer_rights: 'Example site for e2e-qa-pilot. Mock data only.',
     activate_top_headline: 'Example site for e2e-qa-pilot. Mock data only.',

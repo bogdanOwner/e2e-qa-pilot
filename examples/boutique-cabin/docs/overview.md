@@ -7,3 +7,5 @@ One page for Cabana, plus a confirm page at `/booking`. Search reads the rooms f
 | Cabana | cabin-home.png |
 | Availability | availability-results.png |
 | Booking sent | booking-sent.png |
+
+Known defect (deliberate, used by `cases/mismatch.md`): in the Guests picker a chosen child age is not saved, so the red "Select age" label stays after Done and the picker does not close.
