@@ -6,10 +6,10 @@ Each of the four cases below ends differently. Together they show what you get, 
 
 | # | You send | You get |
 |---|----------|---------|
-| 1 | `Review cases/ready.md ...` | A pull request labeled `e2e:ready`. Every step matches. [Real PR](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3) |
-| 2 | `Review cases/wording.md ...` | A pull request labeled `e2e:minor-text-diff`. The behavior works and one sentence differs. A human decides. |
-| 3 | `Review cases/mismatch.md ...` | A draft pull request labeled `e2e:mismatch`. It names the failed step and shows the bug on screen. |
-| 4 | `Review cases/ambiguous.md ...` | No spec and no pull request. The assistant asks for the missing expected results. |
+| 1 | `Review cases/ready.md ...` | A pull request labeled `e2e:ready`. Every step matches. [Pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3) |
+| 2 | `Review cases/wording.md ...` | A pull request labeled `e2e:minor-text-diff`. The behavior works and one sentence differs. [Pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/4) |
+| 3 | `Review cases/mismatch.md ...` | A draft pull request labeled `e2e:mismatch`. It names the failed step and shows the bug on screen. This run uses [`pr_mode: create_pr_for_review`](.e2e-qa-pilot/settings.md#L7). Set `ask_before_pr` there if you do not want a draft. [Pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/5) |
+| 4 | `Review cases/ambiguous.md ...` | No spec and no pull request. The assistant asks what should be visible after each step. The reply is quoted below. |
 
 ## Quick start
 
@@ -70,7 +70,7 @@ This case is the same as Case 1, except that step 3 expects "Your request was **
 
 A small wording difference does not stop the run. The assistant still tests the whole flow and opens a pull request. The pull request shows the case sentence next to the screen sentence, so a person decides whether to merge or to fix the text. The exact sentence is never reported as a pass, and the assertion is not edited to make it green. The skill tests function, not copy.
 
-**Result**: `e2e:minor-text-diff`. Pull request: _added after the first run_.
+**Result**: `e2e:minor-text-diff`, 2 of 3 steps passed. Step 3 quotes the case sentence next to the screen sentence. No assertion was edited. [See the pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/4).
 
 <details>
 <summary>Case text: <code>cases/wording.md</code></summary>
@@ -96,9 +96,9 @@ Review cases/mismatch.md with e2e-qa-pilot and implement it if it is ready.
 
 The site has one deliberate defect. In the Guests picker, add a child and choose an age. The age is not saved, so the red **Select age** label stays after you click Done, and the picker does not close. The case is correct. The product is wrong.
 
-The run fails at step 1. Steps 2 and 3 never run, so no time is spent on them. The assistant still opens a pull request, as a draft with the red `e2e:mismatch` label. It shows the failed step, what was expected, what the screen showed, and a screenshot of the red label. A failed assertion is a finding for a person to judge, not an automatic verdict.
+The run fails at step 1. Steps 2 and 3 never run, so no time is spent on them. This example uses [`pr_mode: create_pr_for_review`](.e2e-qa-pilot/settings.md#L7), so the assistant still opens a draft pull request with the red `e2e:mismatch` label. Set `ask_before_pr` on that line if you do not want a draft in this case. The pull request shows the failed step, what was expected, what the screen showed, and a screenshot of the red label. A failed assertion is a finding for a person to judge, not an automatic verdict.
 
-**Result**: draft `e2e:mismatch`. Pull request: _added after the first run_.
+**Result**: draft `e2e:mismatch`. Step 1 failed: the Guests picker stayed open and the red "Select age" label was still visible. Steps 2 and 3 did not run. [See the pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/5).
 
 <details>
 <summary>Case text: <code>cases/mismatch.md</code></summary>
@@ -122,9 +122,21 @@ Preconditions: the guest is on the Cabana page.
 Review cases/ambiguous.md with e2e-qa-pilot and implement it if it is ready.
 ```
 
-The steps say what to do, but not what should happen. The assistant does not guess an expected result and does not start a spec. It asks you to add the expected results or update the case. Nothing is run in the browser, so no tokens go into a test nobody can judge.
+The steps say what to do, but not what should happen. The assistant does not guess an expected result and does not start a spec. It asks what should be visible after each step. Nothing is run in the browser, so no tokens go into a test nobody can judge.
 
-**Result**: a question in chat. No pull request.
+**Result**: a question in chat. No spec and no pull request.
+
+The assistant replied:
+
+```text
+Book a chalet is not ready to automate. Each step says what to do and leaves out what should be visible, so there is nothing to assert yet.
+
+Step 1: "Set check-in to 4 Aug 2026 and check-out to 5 Aug 2026, then click Search." This step has no expected result. What should be visible after Search?
+
+Step 2: "Press Increase quantity on a Chalet 4 rate, then click Reserve Now." This step has no expected result. What should be visible after Reserve Now?
+
+Step 3: "On the confirm page, enter the guest details, accept the terms, and click Confirm Booking." This step has no expected result. What should be visible after Confirm Booking?
+```
 
 <details>
 <summary>Case text: <code>cases/ambiguous.md</code></summary>
