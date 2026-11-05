@@ -25,6 +25,7 @@ const mcpDoc = readRoot('mcp.md');
 
 const markdownFiles = [
   ...['README.md', 'mcp.md'].map(rootFile),
+  ...listFiles(path.join(kitRoot, 'docs')).filter((file) => file.endsWith('.md')),
   ...listFiles(path.join(kitRoot, 'processes')).filter((file) => file.endsWith('.md')),
 ];
 
@@ -63,7 +64,7 @@ function callTool(args, name = 'review_case') {
 test('docs: every relative link and anchor resolves', () => {
   for (const file of markdownFiles) {
     const text = fs.readFileSync(file, 'utf8');
-    for (const match of stripFences(text).matchAll(/\[[^\]]*\]\(([^)\s]+)\)/g)) {
+    for (const match of stripFences(text).matchAll(/\[[^]]*]\(([^)\s]+)\)/g)) {
       const target = match[1];
       // Skip external URLs and template placeholders such as <case-url>.
       if (/^[a-z][a-z0-9+.-]*:/i.test(target) || target.startsWith('<')) continue;
@@ -83,7 +84,7 @@ test('docs: links in the packaged README and mcp.md point at files that npm ship
   const shipped = new Set(['LICENSE', 'package.json', ...pkg.files]);
   for (const name of ['README.md', 'mcp.md']) {
     const file = rootFile(name);
-    for (const match of stripFences(fs.readFileSync(file, 'utf8')).matchAll(/\[[^\]]*\]\(([^)\s]+)\)/g)) {
+    for (const match of stripFences(fs.readFileSync(file, 'utf8')).matchAll(/\[[^]]*]\(([^)\s]+)\)/g)) {
       const [rel] = match[1].split('#');
       if (!rel || /^[a-z][a-z0-9+.-]*:/i.test(rel)) continue;
       const fromRoot = path.relative(kitRoot, path.resolve(path.dirname(file), rel));
@@ -108,7 +109,7 @@ test('docs: the tool names in the docs match the catalog the server publishes', 
 test('docs: the input contract is stated, and the example calls follow it', () => {
   // The contract lives in mcp.md. The README is a landing page and links to it.
   assert.match(mcpDoc, /exactly one of `case_id` or `case_text`/);
-  assert.match(readme, /\]\(mcp\.md/);
+  assert.match(readme, /]\(mcp\.md/);
 
   const calls = fencedBlocks(mcpDoc, 'json')
     .map((block) => JSON.parse(block))
@@ -123,9 +124,10 @@ test('docs: the input contract is stated, and the example calls follow it', () =
   assert.ok(outcomes.includes(true) && outcomes.includes(false), 'mcp.md needs a valid and an invalid example call');
 });
 
-test('docs: the pasted-case example in the README is well formed and accepted', () => {
-  const example = fencedBlocks(readme, 'text').find((block) => /^Title:/m.test(block));
-  assert.ok(example, 'README has no pasted-case example with a Title: line');
+test('docs: the pasted-case example in the install doc is well formed and accepted', () => {
+  const install = readRoot(path.join('docs', 'install.md'));
+  const example = fencedBlocks(install, 'text').find((block) => /^Title:/m.test(block));
+  assert.ok(example, 'docs/install.md has no pasted-case example with a Title: line');
   assert.match(example, /^Preconditions:/m);
   const steps = example.match(/^\d+\./gm) ?? [];
   const expected = example.match(/Expected:/g) ?? [];
@@ -158,16 +160,17 @@ test('docs: install commands use the package name from package.json', () => {
   }
 });
 
-test('docs: settings keys in the template are listed in the README and the review-case command', () => {
+test('docs: settings keys in the template are listed in the settings doc and the review-case command', () => {
   const template = readRoot(path.join('templates', 'settings.md'));
   const keys = new Set([...template.matchAll(/^([a-z][a-z_]*):/gm)].map((match) => match[1]));
   assert.ok(keys.size > 0);
+  const settingsDoc = readRoot(path.join('docs', 'settings.md'));
   const review = fs.readFileSync(
     path.join(kitRoot, 'processes', 'create-e2e', 'commands', 'review-case', 'SKILL.md'),
     'utf8',
   );
   for (const key of keys) {
-    assert.ok(readme.includes(`\`${key}\``), `README does not list ${key}`);
+    assert.ok(settingsDoc.includes(`\`${key}\``), `docs/settings.md does not list ${key}`);
     assert.ok(review.includes(`\`${key}\``), `review-case does not list ${key}`);
   }
 });
@@ -190,9 +193,17 @@ test('docs: AutoFix nightly is labelled not implemented and has no commitments',
     'utf8',
   );
   assert.match(autofix, /not implemented/i);
-  for (const [name, text] of [['README.md', readme], ['mcp.md', mcpDoc]]) {
+  const docs = listFiles(path.join(kitRoot, 'docs')).filter((file) => file.endsWith('.md'));
+  const checked = [
+    ['README.md', readme],
+    ['mcp.md', mcpDoc],
+    ...docs.map((file) => [path.relative(kitRoot, file), fs.readFileSync(file, 'utf8')]),
+  ];
+  for (const [name, text] of checked) {
     const lines = text.split('\n').filter((line) => /autofix/i.test(line));
-    assert.ok(lines.length > 0, `${name} does not mention AutoFix`);
+    if (name === 'README.md' || name === 'mcp.md') {
+      assert.ok(lines.length > 0, `${name} does not mention AutoFix`);
+    }
     for (const line of lines) assert.match(line, /not implemented/i, `${name}: ${line}`);
   }
   assert.ok(!fs.existsSync(path.join(kitRoot, 'processes', 'autofix-nightly', 'commands')));
@@ -212,7 +223,7 @@ test('docs: dependency, license, and engine claims match package.json', () => {
 
   assert.equal(pkg.license, 'MIT');
   assert.match(readRoot('LICENSE'), /^MIT License/);
-  assert.match(readme, /\[MIT\]\(LICENSE\)/);
+  assert.match(readme, /\[MIT]\(LICENSE\)/);
 
   const engine = pkg.engines.node.match(/^>=\s*(\d+)/);
   assert.ok(engine, 'package.json engines.node should be a ">=" range');
@@ -286,8 +297,8 @@ test('docs: branch names come from the case, and the PR report avoids repeating 
   const commands = path.join(kitRoot, 'processes', 'create-e2e', 'commands');
   const read = (name) => fs.readFileSync(path.join(commands, name), 'utf8');
   const template = readRoot(path.join('templates', 'settings.md'));
-  assert.match(template, /^branch_pattern: e2e\/\{title_slug\}$/m);
-  assert.match(readme, /`\{title_slug\}`/);
+  assert.match(template, /^branch_pattern: e2e\/\{title_slug}$/m);
+  assert.match(readme, /`\{title_slug}`/);
 
   const review = read('review-case/SKILL.md');
   assert.match(review, /Goal: `branch_pattern`/);
@@ -295,9 +306,9 @@ test('docs: branch names come from the case, and the PR report avoids repeating 
 
   for (const name of ['add-from-steps/SKILL.md', 'add-from-design/SKILL.md']) {
     const body = read(name);
-    assert.match(body, /`\{title_slug\}`/, name);
-    assert.match(body, /`\{case_id\}`/, name);
-    assert.match(body, /e2e\/\{case_id\}-\{title_slug\}/, name);
+    assert.match(body, /`\{title_slug}`/, name);
+    assert.match(body, /`\{case_id}`/, name);
+    assert.match(body, /e2e\/\{case_id}-\{title_slug}/, name);
     assert.match(body, /git check-ref-format --branch/, name);
     assert.doesNotMatch(body, /does not substitute placeholders/, name);
   }

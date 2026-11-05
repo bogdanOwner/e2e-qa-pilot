@@ -2,6 +2,8 @@
 
 MCP is the connection between your project and the assistant you already use. `init` sets it up for Cursor and Claude Code, and both use the same three tools. You ask in plain words. There is no new screen to learn.
 
+Install steps, settings keys, and the trust statement are in [docs](docs/README.md). This page is the tool contract.
+
 ## What the server does and does not do
 
 The server is small on purpose: [src/mcp.mjs](src/mcp.mjs), one file, no dependencies. It returns text. It does not run the workflow, run tests, call a case tool, Figma, or GitHub, or write to your project. It makes no network requests.
@@ -152,7 +154,7 @@ The MCP tools and the stubs do not always give the same instructions. A tool ret
 
 ## What is and is not verified
 
-The tests in `test/cli.test.mjs` start the server over stdio and send JSON-RPC messages, and they run `init` in temporary folders. They check that the instruction text contains the rules. They do not run Cursor or Claude Code, so compatibility with a specific client or version is not verified here, and they do not prove that an assistant follows the instructions. `test/docs.test.mjs` checks these documents against the code. It is a documentation check, not a behavioral or integration test.
+The tests in `test/cli.test.mjs` start the server over stdio and send JSON-RPC messages, and they run `init` in temporary folders. They check that the instruction text contains the rules. They do not run Cursor or Claude Code, so compatibility with a specific client or version is not verified here, and they do not prove that an assistant follows the instructions. `test/docs.test.mjs` checks these documents against the code. It is a documentation check, not a behavioral or integration test. A longer account of scope and trust is in [scope and trust](docs/scope-and-trust.md).
 
 ## Known limitations
 

@@ -20,8 +20,13 @@
     "src",
     "processes",
     "templates",
+    "docs",
+    "assets",
     "README.md",
-    "mcp.md"
+    "mcp.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md"
   ],
   "engines": {
     "node": ">=22"
