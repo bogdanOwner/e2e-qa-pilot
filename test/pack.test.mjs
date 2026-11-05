@@ -191,10 +191,11 @@ test('packed tarball installs offline and serves init and mcp', async (t) => {
     app,
   );
 
+  const rootPkg = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
   const installedPkg = JSON.parse(
     fs.readFileSync(path.join(app, 'node_modules', 'e2e-qa-pilot', 'package.json'), 'utf8'),
   );
-  assert.equal(installedPkg.version, '0.1.0');
+  assert.equal(installedPkg.version, rootPkg.version);
   for (const field of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
     assert.equal(installedPkg[field], undefined, `installed package.json has ${field}`);
   }
@@ -204,7 +205,7 @@ test('packed tarball installs offline and serves init and mcp', async (t) => {
     ['node_modules/e2e-qa-pilot/bin/cli.mjs', '--version'],
     { cwd: app, encoding: 'utf8' },
   ).trim();
-  assert.equal(version, '0.1.0');
+  assert.equal(version, rootPkg.version);
 
   const cli = ['node_modules/e2e-qa-pilot/bin/cli.mjs'];
   execFileSync(process.execPath, [...cli, 'init', '--integration', 'cursor'], {

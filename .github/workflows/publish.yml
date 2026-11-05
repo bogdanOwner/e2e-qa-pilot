@@ -1,0 +1,136 @@
+name: Publish
+
+# The release commit rewrites the line marked release-default.
+# That value is what the Run workflow form shows next time.
+# Version rules live in scripts/release-version.mjs and run under npm test.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Next release. Edit to publish a different x.y.z. Clear to bump the patch.
+        required: false
+        default: "0.4.0" # release-default
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require bogdanOwner
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_ACTOR" != "bogdanOwner" ]; then
+            echo "Only bogdanOwner can publish. This run is ${GITHUB_ACTOR}."
+            exit 1
+          fi
+
+      - name: Require main
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "Run this workflow from main. This run is $GITHUB_REF."
+            exit 1
+          fi
+
+      - name: Require secrets
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$RELEASE_TOKEN" ]; then
+            echo "Add the RELEASE_TOKEN secret: a fine-grained personal access token for this repository with Contents and Workflows set to Read and write."
+            exit 1
+          fi
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "Add the NPM_TOKEN secret: an npm granular token that can publish e2e-qa-pilot."
+            exit 1
+          fi
+
+      # The token is used for this fetch only. persist-credentials is false so
+      # npm test cannot push with it. Later git commands pass the header once.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Fetch tags
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          auth=$(printf 'x-access-token:%s' "$RELEASE_TOKEN" | base64 -w 0 | tr -d '\n')
+          git -c "http.extraheader=AUTHORIZATION: basic ${auth}" fetch origin --tags --force --no-recurse-submodules
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Prepare release
+        id: release
+        env:
+          REQUESTED: ${{ inputs.version }}
+        run: node scripts/release-version.mjs prepare
+
+      - name: Test
+        run: npm test
+
+      - name: Commit and tag
+        if: steps.release.outputs.retry != 'true'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json .github/workflows/publish.yml
+          git commit -m "chore: release ${VERSION}"
+          git tag -a "v${VERSION}" -m "v${VERSION}"
+          auth=$(printf 'x-access-token:%s' "$RELEASE_TOKEN" | base64 -w 0 | tr -d '\n')
+          git -c "http.extraheader=AUTHORIZATION: basic ${auth}" push --atomic origin "HEAD:main" "v${VERSION}"
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          VERSION: ${{ steps.release.outputs.version }}
+          RETRY: ${{ steps.release.outputs.retry }}
+        run: |
+          set -euo pipefail
+          if ! git rev-parse --verify --quiet "refs/tags/v${VERSION}" >/dev/null; then
+            echo "Tag v${VERSION} is not in this checkout."
+            exit 1
+          fi
+          stage=$(mktemp -d)
+          trap 'rm -rf "$stage"' EXIT
+          git archive --format=tar "v${VERSION}" | tar -x -C "$stage"
+          node scripts/release-version.mjs verify-archive "$stage/package.json" "$VERSION"
+          set +e
+          log=$(cd "$stage" && npm publish 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$log"
+          printf '%s\n' "$log" | node scripts/release-version.mjs classify-publish "$status" "$RETRY"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          if gh release view "v${VERSION}" >/dev/null 2>&1; then
+            echo "GitHub Release v${VERSION} already exists."
+            exit 0
+          fi
+          gh release create "v${VERSION}" --title "v${VERSION}" --generate-notes --repo "$GITHUB_REPOSITORY"
