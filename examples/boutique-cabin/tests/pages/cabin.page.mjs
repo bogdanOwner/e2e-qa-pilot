@@ -1,8 +1,11 @@
+import { stay } from '../flows/book-chalet.flow.mjs';
+
 export class CabinPage {
   constructor(page) {
     this.page = page;
     this.search = page.locator('#availability-search-btn');
-    this.chalet4 = page.locator('[data-room-card]').filter({ hasText: 'Chalet 4' });
+    this.chalet4 = page.locator('[data-room-card="chalet-4"]');
+    this.chalet1 = page.locator('[data-room-card="chalet-1"]');
     this.chaletRate = this.chalet4.locator('[data-rate-row]').filter({ hasText: '497 EUR' }).getByRole('button', { name: 'Increase quantity' });
     this.selection = page.locator('#selection-sidebar-panel');
     this.reserve = page.locator('#reserve-now-btn');
@@ -11,8 +14,11 @@ export class CabinPage {
     this.email = page.getByLabel('Email Address');
     this.terms = page.getByRole('checkbox', { name: /I agree to the Terms of Service and Privacy Policy/ });
     this.confirm = page.getByRole('button', { name: 'Confirm Booking', exact: true });
+    this.guestForm = page.locator('#confirm-page-content');
+    this.success = page.locator('#confirm-success-column');
     this.resultTitle = page.locator('#confirm-success-title');
     this.reference = page.getByText('Booking reference: CAB-1042');
+    this.referenceLine = page.locator('#confirm-success-ref');
     this.unavailable = page.getByText('Not available for selected dates');
   }
 
@@ -35,20 +41,20 @@ export class CabinPage {
     await day.dispatchEvent('pointerup');
   }
 
-  async searchStay() {
+  async searchStay({ checkIn, checkOut } = stay) {
     await this.page.locator('#booking-check-in-trigger').click();
     await this.page.locator('#date-range-apply').waitFor();
-    await this.pickDate('2026-08-04');
-    await this.pickDate('2026-08-05');
+    await this.pickDate(checkIn);
+    await this.pickDate(checkOut);
     await this.page.locator('#date-range-apply').click();
     await this.search.click();
     await this.chaletRate.waitFor();
   }
 
-  async fillGuest() {
-    await this.firstName.fill('Ana');
-    await this.lastName.fill('Pop');
-    await this.email.fill('ana.pop@example.com');
+  async fillGuest({ firstName, lastName, email } = stay) {
+    await this.firstName.fill(firstName);
+    await this.lastName.fill(lastName);
+    await this.email.fill(email);
     await this.terms.check();
   }
 }
