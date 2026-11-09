@@ -20,6 +20,11 @@ pr_mode is create_pr_for_review by default. The other value is ask_before_pr.
 A missing pr_mode uses create_pr_for_review. Do not ask.
 A missing label uses the default below. Do not ask.
 
+An optional ## Project rules heading can override the branch, commit subject,
+base branch, screenshot directory, fixture, and spec or page paths. Leave
+that heading out to keep the defaults. Do not copy the examples from the
+settings doc into this file. See docs/settings.md.
+
 branch_pattern names the branch. {title_slug} is the case title in kebab-case.
 {case_id} is filled in only for a case id. A missing branch_pattern uses
 e2e/{title_slug}, or e2e/{case_id}-{title_slug} for a case id. A value without a
