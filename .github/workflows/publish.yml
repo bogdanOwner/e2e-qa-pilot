@@ -10,7 +10,7 @@ on:
       version:
         description: Next release. Edit to publish a different x.y.z. Clear to bump the patch.
         required: false
-        default: "0.4.0" # release-default
+        default: "0.4.1" # release-default
 
 permissions:
   contents: write

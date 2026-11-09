@@ -1,6 +1,6 @@
 {
   "name": "e2e-qa-pilot",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "An MCP server and set of Markdown commands that guide your AI assistant from a manual test case to a reviewed Playwright spec and a pull request, with a human deciding when the case or the screen is unclear.",
   "type": "module",
   "license": "MIT",
