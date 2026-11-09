@@ -66,7 +66,14 @@ Display text preserves the original casing and internal wording, with surroundin
 The branch name is the resolved name from [Workflow resolution](#workflow-resolution). Placeholders are filled in:
 
 - `{title_slug}`: the trimmed case title in kebab-case. Lowercase, every run of characters other than letters and digits becomes one `-`, no leading or trailing `-`, at most 50 characters, cut at a word boundary. "Book Chalet 4 at Cabana" becomes `book-chalet-4-at-cabana`.
-- `{case_id}`: the case id in lowercase kebab-case. It is filled in only in `case_id` mode. In `case_text` mode drop this placeholder and the separator next to it. Never invent an id.
+- `{case_id}`: the case id in lowercase kebab-case. It is filled in only in `case_id` mode. In `case_text` mode, a `branch_pattern` value drops this placeholder and the separator next to it. Never invent an id.
+
+Do not create a branch or a commit while `{case_id}`, `{plane_id}`, or `{title_slug}` is still in the text. `{explanation}` is the short explanation this run writes. It is not asked as an identifier.
+
+- A `## Project rules` branch or commit line that contains `{case_id}` when this run has no case id: ask once. Do not drop that token and do not invent an id. The mode default still avoids the token: pasted text uses `e2e/{title_slug}`, and a case id uses `e2e/{case_id}-{title_slug}`.
+- `{plane_id}` is the full issue key the ticket step recorded, such as `DEV-123`, unless that same section says it is only the number. A missing value asks once. Do not invent one. Do not create a ticket unless the section says to create one. A repo with no ticket line and no `{plane_id}` token never asks and never creates a ticket.
+- A template that writes a prefix immediately before `{plane_id}`, such as `DEV-{plane_id}`, while the recorded key already starts with that prefix: ask once. Do not write `DEV-DEV-123` and do not strip the prefix.
+- `{title_slug}` with no title: ask once for the title. Do not take it from a step.
 
 A missing or empty `branch_pattern`, and no branch line in `## Project rules`, uses `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode, for example `e2e/book-chalet-4-at-cabana`. Do not ask. A section branch line replaces `branch_pattern` for this run. Do not combine the two.
 
