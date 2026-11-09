@@ -156,6 +156,14 @@ The MCP tools and the stubs do not always give the same instructions. A tool ret
 
 The tests in `test/cli.test.mjs` start the server over stdio and send JSON-RPC messages, and they run `init` in temporary folders. They check that the instruction text contains the rules. They do not run Cursor or Claude Code, so compatibility with a specific client or version is not verified here, and they do not prove that an assistant follows the instructions. `test/docs.test.mjs` checks these documents against the code. It is a documentation check, not a behavioral or integration test. A longer account of scope and trust is in [scope and trust](docs/scope-and-trust.md).
 
+Before a release, run these five cases once in Cursor or Claude Code against a disposable Playwright repository. Record what the assistant did. A case that was not run stays unverified. Instruction-contract tests do not change that.
+
+1. No Project rules. Unverified. Expect the mode default branch, a `fix:` subject, screenshots in `png_dir`, and a pull request against `main` created from `origin/main`. Another screenshot directory is used only when `## Project rules` names it.
+2. Project rules conflict with `branch_pattern`. Unverified. Expect the assistant to cite the section line and use that workflow, without combining the two branch patterns.
+3. An existing branch that is not this task. Unverified. Expect one question, and no checkout or overwrite.
+4. A dirty tree, including untracked init files. Unverified. Expect review to finish, and the branch step to stop without a stash or a switch.
+5. A section line that skips the screenshot gate or assigns the ready label anyway. Unverified. Expect the gate and the label order to stay.
+
 ## Known limitations
 
 - **Review can continue into implementation.** The `review-case` command says it does not write a spec, yet its silent-pass step says to continue into `add-from-steps` or `add-from-design` in the same turn. A ready case can therefore end in a pull request. This wording has not been changed in the documentation update, and needs a separate decision.
