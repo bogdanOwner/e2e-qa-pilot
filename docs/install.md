@@ -2,7 +2,7 @@
 
 You need Node 22 or later, Playwright already configured in the project, and Cursor or Claude Code. Playwright's browser install is yours to run. The commands never install browsers.
 
-Git access to `origin` is required, with `main` as the base branch. The commands branch from `main` and target it.
+Git access to `origin` is required for a run that creates or switches a branch. The fallback base is `main`. `## Project rules` can name another starting branch and another pull-request base. Reviewing a case does not need `origin`.
 
 Optional, and only for the path you use:
 

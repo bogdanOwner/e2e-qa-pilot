@@ -89,7 +89,7 @@ All keys, defaults, and the label rules are in [Settings](docs/settings.md). Do 
 
 ## Get started
 
-You need Node 22 or later, plus Cursor or Claude Code. The three tools are `review_case`, `add_from_steps`, and `add_from_design`. They return instructions, and your assistant does the work. The branch name comes from the case title (`{title_slug}`).
+You need Node 22 or later, plus Cursor or Claude Code. The three tools are `review_case`, `add_from_steps`, and `add_from_design`. They return instructions, and your assistant does the work. The default branch name comes from the case title (`{title_slug}`), or `e2e/{case_id}-{title_slug}` for a case id. `## Project rules` can replace that name, the commit subject, and the pull-request base. The fallback base is `main`.
 
 ```bash
 npx e2e-qa-pilot init

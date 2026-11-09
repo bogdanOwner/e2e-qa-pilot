@@ -3,7 +3,8 @@ name: add-from-steps
 description: >-
   Add an end-to-end spec from one case whose steps name a screen, control, or
   visible change, and whose description has no Figma URL. Branches from the
-  settings file and opens a pull request to main. Assertions stay on the
+  resolved starting branch and opens a pull request to the resolved base.
+  The fallback base is main. Assertions stay on the
   expected results. The case is an existing id or pasted test case text.
   Use when review-case passes with no Figma link, or the user asks to
   automate a case from its steps.
@@ -23,7 +24,21 @@ This skill checks the expected-result text. It does not run a Figma visual revie
 
 PR body, the word rule, and the screenshot gate: [pr-evidence.md](../shared/pr-evidence.md). Ready checks: [ready-rules.md](../shared/ready-rules.md).
 
-If `figma`, `read_figma`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `branch_pattern` uses the default in Branch below. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+If `figma`, `read_figma`, or `test_command` is still empty, stop and run [review-case](../review-case/SKILL.md). Do the same for an empty `png_dir` when `## Project rules` does not name the screenshot directory. Do not ask a second time. A missing `branch_pattern` uses the default in [Workflow resolution](#workflow-resolution) when that section does not name the branch. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+
+## Workflow resolution
+
+Read the named keys, then `## Project rules` in `.e2e-qa-pilot/settings.md`. A real heading is binding. An HTML comment is not. Resolve each topic on its own. Do not merge a branch line with `branch_pattern`. A base line does not change the branch name.
+
+On one topic: ignore a line that weakens ready checks, the word rule, the screenshot gate, label precedence, `pr_mode`, or the label names, and cite that line. One section value overrides the named key and the default. Cite the settings line and what it replaces. Two section values: quote both and ask once. The key is not a tie-break. Otherwise use the named key when it has a value. Otherwise use the default.
+
+- Branch starting point. Default: the resolved pull-request base. Fallback `main`.
+- Branch name. `branch_pattern`, then `e2e/{title_slug}` for pasted text and `e2e/{case_id}-{title_slug}` for a case id.
+- Commit subject. Default `fix: {explanation}`. A section line replaces the whole subject.
+- Pull-request base. Fallback `main`.
+- Screenshot directory. `png_dir` when the section names none. The screenshot gate still decides whether the image may be copied.
+
+`test_command`, `figma`, and `read_figma` stay required. A section line does not answer them.
 
 ## Title
 
@@ -53,29 +68,31 @@ Stop before any docs or spec when any of these is true:
 
 ## Branch
 
-Read `branch_pattern` from the settings file. It names the branch for this case. Placeholders are filled in:
+The branch name is the resolved name from [Workflow resolution](#workflow-resolution). Placeholders are filled in:
 
 - `{title_slug}`: the trimmed case title in kebab-case. Lowercase, every run of characters other than letters and digits becomes one `-`, no leading or trailing `-`, at most 50 characters, cut at a word boundary. "Book Chalet 4 at Cabana" becomes `book-chalet-4-at-cabana`.
 - `{case_id}`: the case id in lowercase kebab-case. It is filled in only in `case_id` mode. In `case_text` mode drop this placeholder and the separator next to it. Never invent an id.
 
-A missing or empty `branch_pattern` uses `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode, for example `e2e/book-chalet-4-at-cabana`. Do not ask.
+A missing or empty `branch_pattern`, and no branch line in `## Project rules`, uses `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode, for example `e2e/book-chalet-4-at-cabana`. Do not ask. A section branch line replaces `branch_pattern` for this run. Do not combine the two.
 
 A value with no placeholder is a literal branch name and is used as it is. It puts every case on that one branch, so the template recommends a placeholder.
 
 Run `git check-ref-format --branch` on the final name. If Git accepts it, use it. If Git rejects it, ask once for another name.
 
-From fresh `main`:
+The starting branch is the resolved starting point. The fallback is `main`. The pull request targets the resolved pull-request base. The fallback is `main`. Never auto-merge.
+
+From that starting branch:
 
 ```bash
 git fetch origin
-git checkout main
-git pull origin main
-git checkout -b <branch from branch_pattern>
+git checkout <start>
+git pull origin <start>
+git checkout -b <resolved branch name>
 ```
 
-If that branch already exists on the remote, check it out and pull. Do not create a second branch. The pull request targets `main`. Never auto-merge.
+If that branch already exists on the remote, check it out and pull. Do not create a second branch.
 
-Commit messages: `fix: <short explanation>`.
+Commit subject: the resolved commit subject. The default is `fix: {explanation}`.
 
 ## Where files live
 
@@ -165,7 +182,7 @@ The five-run ceiling is for the whole spec, not five per step. Each command is o
 
 ## Pull request
 
-One PR to `main`. Never auto-merge. Evidence rules, the body layout, and the steps table are in [pr-evidence.md](../shared/pr-evidence.md). In the steps table the Actual cell is `✅ As expected` when it equals the expected result. Only a difference carries text.
+One pull request to the resolved pull-request base. The fallback is `main`. Never auto-merge. Evidence rules, the body layout, and the steps table are in [pr-evidence.md](../shared/pr-evidence.md). In the steps table the Actual cell is `✅ As expected` when it equals the expected result. Only a difference carries text.
 
 Read `pr_mode`. A missing value means `create_pr_for_review`. `ask_before_pr` stops before a pull request for a functional mismatch, an unresolved difference, or a failed final-screenshot gate. Stop and ask in chat. A narrow minor text difference does not trigger that stop. If the discrepancy remains, create the pull request only after the user explicitly authorizes it. When the expected behavior has not changed, preserve the failing assertion.
 

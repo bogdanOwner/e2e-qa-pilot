@@ -18,9 +18,23 @@ Input is exactly one of `case_id` or `case_text`, plus `.e2e-qa-pilot/settings.m
 
 `case_text`: the pasted text is the case. Do not call `fetch_case`. Do not call `update_case`. A case tool is not required.
 
-Read `read_figma`, `png_dir`, `branch_pattern`, and `test_command` from that file. A missing or empty `branch_pattern` uses the default in Branch below.
+Read `read_figma`, `png_dir`, `branch_pattern`, and `test_command` from that file. A missing or empty `branch_pattern` uses the default in [Workflow resolution](#workflow-resolution) when that section does not name the branch.
 
-If `figma`, `read_figma`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `branch_pattern` uses the default in Branch below. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+If `figma`, `read_figma`, or `test_command` is still empty, stop and run [review-case](../review-case/SKILL.md). Do the same for an empty `png_dir` when `## Project rules` does not name the screenshot directory. Do not ask a second time. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
+
+## Workflow resolution
+
+Read the named keys, then `## Project rules` in `.e2e-qa-pilot/settings.md`. A real heading is binding. An HTML comment is not. Resolve each topic on its own. Do not merge a branch line with `branch_pattern`. A base line does not change the branch name.
+
+On one topic: ignore a line that weakens ready checks, the word rule, the screenshot gate, label precedence, `pr_mode`, or the label names, and cite that line. One section value overrides the named key and the default. Cite the settings line and what it replaces. Two section values: quote both and ask once. The key is not a tie-break. Otherwise use the named key when it has a value. Otherwise use the default.
+
+- Branch starting point. Default: the resolved pull-request base. Fallback `main`.
+- Branch name. `branch_pattern`, then `e2e/{title_slug}` for pasted text and `e2e/{case_id}-{title_slug}` for a case id.
+- Commit subject. Default `fix: {explanation}`. A section line replaces the whole subject.
+- Pull-request base. Fallback `main`.
+- Screenshot directory. `png_dir` when the section names none. The screenshot gate still decides whether the image may be copied.
+
+`test_command`, `figma`, and `read_figma` stay required. A section line does not answer them.
 
 **Match the repo, then code.** Resolve locations in [Where files live](#where-files-live). When that resolution is the reference layout, do not add a spec until the feature has an overview, Gherkin, and page contracts. Otherwise do not create `overview.md`, `specs/`, or `pages/`.
 
@@ -49,27 +63,31 @@ Display text preserves the original casing and internal wording, with surroundin
 
 ## Branch
 
-Read `branch_pattern` from the settings file. It names the branch for this case. Placeholders are filled in:
+The branch name is the resolved name from [Workflow resolution](#workflow-resolution). Placeholders are filled in:
 
 - `{title_slug}`: the trimmed case title in kebab-case. Lowercase, every run of characters other than letters and digits becomes one `-`, no leading or trailing `-`, at most 50 characters, cut at a word boundary. "Book Chalet 4 at Cabana" becomes `book-chalet-4-at-cabana`.
 - `{case_id}`: the case id in lowercase kebab-case. It is filled in only in `case_id` mode. In `case_text` mode drop this placeholder and the separator next to it. Never invent an id.
 
-A missing or empty `branch_pattern` uses `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode, for example `e2e/book-chalet-4-at-cabana`. Do not ask.
+A missing or empty `branch_pattern`, and no branch line in `## Project rules`, uses `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode, for example `e2e/book-chalet-4-at-cabana`. Do not ask. A section branch line replaces `branch_pattern` for this run. Do not combine the two.
 
 A value with no placeholder is a literal branch name and is used as it is. It puts every case on that one branch, so the template recommends a placeholder.
 
 Run `git check-ref-format --branch` on the final name. If Git accepts it, use it. If Git rejects it, ask once for another name.
 
-From fresh `main`:
+The starting branch is the resolved starting point. The fallback is `main`. The pull request targets the resolved pull-request base. The fallback is `main`. Never auto-merge. Do not open a pull request until Phase D is clear.
+
+From that starting branch:
 
 ```bash
 git fetch origin
-git checkout main
-git pull origin main
-git checkout -b <branch from branch_pattern>
+git checkout <start>
+git pull origin <start>
+git checkout -b <resolved branch name>
 ```
 
-If that branch already exists on the remote, check it out and pull. Do not create a second branch. The pull request targets `main`. Never auto-merge. Do not open a pull request until Phase D is clear.
+If that branch already exists on the remote, check it out and pull. Do not create a second branch.
+
+Commit subject: the resolved commit subject. The default is `fix: {explanation}`.
 
 ## Where files live
 

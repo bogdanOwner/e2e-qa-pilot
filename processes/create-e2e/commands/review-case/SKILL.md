@@ -37,10 +37,23 @@ Provider keys, `case_id` mode only: `case_tool`, `fetch_case`, `update_case`.
 If a required key for this mode has no value, ask once in chat for every empty key in that set, except `branch_pattern`, `pr_mode`, and the label keys. Those have defaults below. Write the answers into the file, then continue:
 
 - Context: `figma`, `read_figma`, and in `case_id` mode also `case_tool`, `fetch_case`, `update_case`
-- Requirements: `test_command`, `png_dir`
+- Requirements: `test_command`, `png_dir`. Skip `png_dir` when `## Project rules` already names the screenshot directory, as [Project rules](#project-rules) describes.
 - Goal: `branch_pattern`, `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, `pr_label_mismatch`
 
 `branch_pattern`: a missing or empty value is `e2e/{title_slug}` in `case_text` mode and `e2e/{case_id}-{title_slug}` in `case_id` mode. Write that default. Do not ask. The placeholders are filled in by the implementation skill. A value that is already set stays as it is.
+
+## Project rules
+
+Read `## Project rules` in the same settings file after the named keys. A real heading is binding. An HTML comment is not. `branch_pattern` stays in the Goal list above, not in Requirements.
+
+Resolve the branch name and the screenshot directory on their own. Do not merge a branch line with `branch_pattern`.
+
+- A line that weakens ready checks, the word rule, the screenshot gate, label precedence, `pr_mode`, or the label names is ignored. Cite the line. `test_command`, `figma`, and `read_figma` stay required. A section line does not answer them.
+- One section value for that topic overrides the key and the default. Cite the settings line and the key or default it replaces. Two values for one topic: quote both and ask once. The key is not a tie-break.
+- Otherwise use the key when it has a value.
+- Otherwise use the default in this section.
+
+When the section names the branch, do not write the `branch_pattern` default. Leave a value that is already set as it is. When the section names the screenshot directory, do not ask for `png_dir` and do not write one. An empty `test_command` is still one question.
 
 `pr_mode`: a missing or empty value means `create_pr_for_review`. Do not ask. The other legal value is `ask_before_pr`. Any other value: ask once, then write the answer.
 
