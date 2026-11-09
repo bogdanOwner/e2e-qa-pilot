@@ -20,6 +20,10 @@ This skill does not write a spec and does not create a second case. Implementati
 
 Ready checks, the question shape, and the mood-diary example: [ready-rules.md](../shared/ready-rules.md).
 
+## Git
+
+This skill does not create or switch branches. A dirty working tree does not block fetching a case, the ready checks, or the one question per hole. `origin` is not required. Writing answers into `.e2e-qa-pilot/settings.md` is not a branch operation. If this review continues into an implementation skill in the same turn, that skill stops before any branch change while those edits, or untracked files from `init`, are still uncommitted. It names the paths. It does not stash, reset, or delete them.
+
 ## Settings
 
 Read `.e2e-qa-pilot/settings.md`. The keys live in the template comment.

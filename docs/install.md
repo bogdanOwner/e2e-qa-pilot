@@ -36,6 +36,8 @@ Restart Cursor or Claude Code, then open a new chat. A chat that was already ope
 | `.claude/skills/<name>/SKILL.md` | The same skills for Claude Code |
 | `.cursor/mcp.json` and `.mcp.json` | One `e2e-qa-pilot` entry. Other servers in the file are kept. An entry that is already listed stays as it is |
 
+Those files are untracked until you commit them. Review the diff and commit it before a workflow that creates or switches a branch. Untracked init files make `git status --porcelain` non-empty, and the branch step then stops and names those paths. It does not stash, reset, or delete them. Reviewing a case does not need a clean tree or `origin`.
+
 ## Upgrade
 
 Run `init` again at any time. It leaves existing files alone.

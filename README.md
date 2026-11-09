@@ -95,6 +95,8 @@ You need Node 22 or later, plus Cursor or Claude Code. The three tools are `revi
 npx e2e-qa-pilot init
 ```
 
+`init` writes `.e2e-qa-pilot/settings.md`, a copy of the Create e2e commands under `.e2e-qa-pilot/processes/create-e2e/`, editor skill stubs, and an MCP entry. Those files start untracked. Review and commit them before a run that creates or switches a branch. A case review can run while they are still untracked. The branch step stops until they are committed. It does not stash or delete them.
+
 Restart the editor, open a new chat, and send one line. A pasted case needs a `Title:` line. A case id needs your case tool connected.
 
 ```text

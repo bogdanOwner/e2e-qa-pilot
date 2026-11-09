@@ -262,6 +262,7 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log } = {}) {
 Next:
   1. ${editors.map((name) => restart[name]).join('\n     ')}
   2. To review an existing case, connect your case tool (for example Qase) in your editor's MCP settings. To review pasted case text, no case tool is required.
-  3. Ask in chat: "Review case <id>." or paste the full case and ask to review it.
+  3. Review and commit the files init wrote before a run that creates or switches a branch. A case review can run before that commit. See docs/install.md.
+  4. Ask in chat: "Review case <id>." or paste the full case and ask to review it.
      The first run asks once for the keys in .e2e-qa-pilot/settings.md that this input needs.`);
 }
