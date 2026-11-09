@@ -45,7 +45,7 @@ Display text preserves the original casing and internal wording, with surroundin
 Stop before any docs or spec when any of these is true:
 
 - `case_id`: a spec whose title starts with `<case-id>` already exists. Do not add a second spec.
-- `case_text`: search existing spec titles in the spec location from settings. Normalize by trimming, lowercasing, collapsing whitespace, and stripping punctuation. An equal normalized title is the existing spec. Do not add another. A normalized title that contains the other, in either direction, is only a likely match. Read that spec. Ask one question only when the read leaves it ambiguous whether it is the same test. Do not block a genuinely different test because its title contains similar words. If the spec location cannot be listed or read, say the duplicate check could not be completed. Do not claim that no duplicate exists.
+- `case_text`: search existing spec titles in the resolved spec directory from [Where files live](#where-files-live). Normalize by trimming, lowercasing, collapsing whitespace, and stripping punctuation. An equal normalized title is the existing spec. Do not add another. A normalized title that contains the other, in either direction, is only a likely match. Read that spec. Ask one question only when the read leaves it ambiguous whether it is the same test. Do not block a genuinely different test because its title contains similar words. If the spec directory cannot be listed or read, say the duplicate check could not be completed. Do not claim that no duplicate exists.
 - `case_id`: the description or a custom field contains a `figma.com` URL and the settings file has `figma: on`. `case_text`: a `figma.com` URL anywhere in the pasted text and `figma: on`. Use [add-from-design](../add-from-design/SKILL.md).
 - A step has no expected result, uses `correct`, `properly`, or `etc.`, gives one control two names, or contradicts another step. Use [review-case](../review-case/SKILL.md). Do not implement in that turn.
 
@@ -77,13 +77,23 @@ If that branch already exists on the remote, check it out and pull. Do not creat
 
 Commit messages: `fix: <short explanation>`.
 
+## Where files live
+
+Resolve the spec directory, and a fixture or page objects only when this repo already uses them. Do not create a fixture or a page-object layer to satisfy this command. Do not edit the Playwright config. Do not create `overview.md`, `specs/`, or `pages/` unless that reference layout is already here.
+
+1. A path for that topic in `## Project rules` in `.e2e-qa-pilot/settings.md`.
+2. The active project. Read the Playwright config's test directory and the directory that already holds specs. Use a fixture only when existing specs import one. Reuse page objects only when the repo already has them. Otherwise keep the spec in the style the repo already uses.
+3. The reference layout, only when this repo already has it: `overview.md`, Gherkin under `specs/`, and page contracts under `pages/`. Keep writing there. Do not replace that layout with another one.
+
+Several plausible paths, and no single one is clear: ask once. Do not guess. Screenshot files are a separate choice. They go to `png_dir` unless `## Project rules` names a screenshot directory.
+
 ## Docs, then code
 
-Read `png_dir` from the settings file. Read the settings file for where page objects, flows, and the spec live.
+Read `png_dir` from the settings file. Use the locations from [Where files live](#where-files-live).
 
-1. `overview.md`, Gherkin under `specs/`, page contracts under `pages/`. Copy each expected result into `## Expected behavior`. Locator hints in `## Elements` may change between runs. Expected-behavior text may not. `## Reference` says "Captured from the running app" and cites `screenshots/<state>.png` under `png_dir`. Do not invent a Figma node. `## Visible copy` records the exact on-screen title, button labels, placeholders, tab names, and toast text. `## Test data` lists each value a step types or selects, and whether the case gave it or the run chose it ([Test data rules](../shared/pr-evidence.md#test-data)). `## States` has one block per distinct screen (open picker, filled chip, next tab, toast), each naming its screenshot and case step. The overview coverage table has the step, the action, the page contract, and the screenshot. No Figma column. One modal stays one page contract. A different dialog gets its own page contract.
-2. Page objects. Reuse existing ones. Read the settings file for where they live.
-3. Flows. Reuse existing ones. Pass `testInfo`. Keep the values a flow types in one named constant, so the spec, the page contract, and the pull request use the same ones. Before each screenshot:
+1. When the resolved layout is the reference layout, write `overview.md`, Gherkin under `specs/`, and page contracts under `pages/`. Copy each expected result into `## Expected behavior`. Locator hints in `## Elements` may change between runs. Expected-behavior text may not. `## Reference` says "Captured from the running app" and cites `screenshots/<state>.png` under `png_dir`. Do not invent a Figma node. `## Visible copy` records the exact on-screen title, button labels, placeholders, tab names, and toast text. `## Test data` lists each value a step types or selects, and whether the case gave it or the run chose it ([Test data rules](../shared/pr-evidence.md#test-data)). `## States` has one block per distinct screen (open picker, filled chip, next tab, toast), each naming its screenshot and case step. The overview coverage table has the step, the action, the page contract, and the screenshot. No Figma column. One modal stays one page contract. A different dialog gets its own page contract. When the resolved layout is not the reference layout, do not create those files.
+2. Page objects, only when the repo already has them. Reuse those.
+3. Flows, only when the repo already has them. Reuse those. Pass `testInfo`. Keep the values a flow types in one named constant, so the spec, the page contract when one exists, and the pull request use the same ones. Before each screenshot:
 
 ```typescript
 testInfo.annotations.push({
@@ -96,7 +106,7 @@ testInfo.annotations.push({
 });
 ```
 
-4. Thin spec. `case_id` title: `<case-id> <case title>`. `case_text` title: the trimmed title, with no invented id. Import `test` from the fixture named in the settings file.
+4. Thin spec in the resolved spec directory. `case_id` title: `<case-id> <case title>`. `case_text` title: the trimmed title, with no invented id. Import `test` from the fixture existing specs already use. When the repo has no fixture, import `test` the way those specs do. Do not add a fixture file.
 
 Before the final click of a step that enters data, assert each entered value and each toggled control. Take the filled-state screenshot at that point.
 

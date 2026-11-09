@@ -22,7 +22,7 @@ Read `read_figma`, `png_dir`, `branch_pattern`, and `test_command` from that fil
 
 If `figma`, `read_figma`, `test_command`, or `png_dir` is still empty, stop and run [review-case](../review-case/SKILL.md). Do not ask a second time. A missing `branch_pattern` uses the default in Branch below. A missing `pr_mode` means `create_pr_for_review`. A missing label uses `e2e:ready`, `e2e:minor-text-diff`, or `e2e:mismatch`. Empty `case_tool`, `fetch_case`, and `update_case` are expected in `case_text` mode.
 
-**Docs first, code second.** Do not add a spec until the feature has an overview, Gherkin, and page contracts.
+**Match the repo, then code.** Resolve locations in [Where files live](#where-files-live). When that resolution is the reference layout, do not add a spec until the feature has an overview, Gherkin, and page contracts. Otherwise do not create `overview.md`, `specs/`, or `pages/`.
 
 Case steps define *what* to automate. Page contracts and Figma define *what the screen should look like*.
 
@@ -45,7 +45,7 @@ Display text preserves the original casing and internal wording, with surroundin
 
 `case_id`: a spec whose title starts with `<case-id>` already exists. Do not add a second spec.
 
-`case_text`: search existing spec titles in the spec location from settings. Normalize by trimming, lowercasing, collapsing whitespace, and stripping punctuation. An equal normalized title is the existing spec. Do not add another. A normalized title that contains the other, in either direction, is only a likely match. Read that spec. Ask one question only when the read leaves it ambiguous whether it is the same test. Do not block a genuinely different test because its title contains similar words. If the spec location cannot be listed or read, say the duplicate check could not be completed. Do not claim that no duplicate exists.
+`case_text`: search existing spec titles in the resolved spec directory from [Where files live](#where-files-live). Normalize by trimming, lowercasing, collapsing whitespace, and stripping punctuation. An equal normalized title is the existing spec. Do not add another. A normalized title that contains the other, in either direction, is only a likely match. Read that spec. Ask one question only when the read leaves it ambiguous whether it is the same test. Do not block a genuinely different test because its title contains similar words. If the spec directory cannot be listed or read, say the duplicate check could not be completed. Do not claim that no duplicate exists.
 
 ## Branch
 
@@ -71,10 +71,20 @@ git checkout -b <branch from branch_pattern>
 
 If that branch already exists on the remote, check it out and pull. Do not create a second branch. The pull request targets `main`. Never auto-merge. Do not open a pull request until Phase D is clear.
 
+## Where files live
+
+Resolve the spec directory, and a fixture or page objects only when this repo already uses them. Do not create a fixture or a page-object layer to satisfy this command. Do not edit the Playwright config. Do not create `overview.md`, `specs/`, or `pages/` unless that reference layout is already here.
+
+1. A path for that topic in `## Project rules` in `.e2e-qa-pilot/settings.md`.
+2. The active project. Read the Playwright config's test directory and the directory that already holds specs. Use a fixture only when existing specs import one. Reuse page objects only when the repo already has them. Otherwise keep the spec in the style the repo already uses.
+3. The reference layout, only when this repo already has it: `overview.md`, Gherkin under `specs/`, and page contracts under `pages/`. Keep writing there. Do not replace that layout with another one.
+
+Several plausible paths, and no single one is clear: ask once. Do not guess. Screenshot files are a separate choice. They go to `png_dir` unless `## Project rules` names a screenshot directory.
+
 ## Phase A — Intake: step coverage map (before coding)
 
 1. From the resolved case, extract **steps**, **preconditions**, and the **Figma URL**. `case_id` reads that URL from the description or a custom field. `case_text` reads it from the pasted text.
-2. Add a **step coverage table** to the feature `overview.md`:
+2. When the resolved layout is the reference layout, add a **step coverage table** to the feature `overview.md`. Otherwise do not create `overview.md`. Record the same coverage beside the spec, in the doc the repo already uses for that feature.
 
 | Step | Gherkin / action | Page contract | Milestone attachment | Figma frame |
 |------|------------------|---------------|----------------------|-------------|
@@ -83,7 +93,7 @@ If that branch already exists on the remote, check it out and pull. Do not creat
 3. For each page in the table, capture a **reference image**:
    - **Preferred:** `read_figma` from the settings file, saved under `png_dir`
    - **Fallback:** a capture from the running app if the Figma frame is missing or outdated
-4. Add `## Case coverage` to affected page contracts. Fill `## Visible copy` and `## States` from the Figma frame: exact titles, button labels, placeholders, and one state block per distinct screen, each citing its screenshot under `png_dir`.
+4. When page contracts already exist, add `## Case coverage` to the affected ones. Fill `## Visible copy` and `## States` from the Figma frame: exact titles, button labels, placeholders, and one state block per distinct screen, each citing its screenshot under `png_dir`. Do not create a page-contract file for a repo that does not use them.
 
 ## Phase B — Implementation: annotate milestones in the report
 
@@ -103,10 +113,10 @@ await attachMilestoneScreenshot(page, testInfo, MILESTONE_SCREENSHOTS.personalSp
 ```
 
 - Add a new constant in the milestone screenshot helper when a case step has no existing attachment name.
-- Include the case id in the feature `overview.md`, or the inline display title when there is no id.
+- When the reference layout is in use, include the case id in the feature `overview.md`, or the inline display title when there is no id. Do not create `overview.md` for that line.
 - **Spec test title:** `case_id` uses the exact case title prefixed with the case id — for example `test('<case-id> As a User I can edit the personal goal.', …)`. Use the title from `fetch_case`. `case_text` uses the trimmed title, with no invented id. Do not invent a separate descriptive name.
 
-Read the settings file for where page objects, flows, and the spec live. Reuse existing page objects and flows.
+Use the locations from [Where files live](#where-files-live). Reuse page objects and flows only when the repo already has them. Import `test` from the fixture existing specs already use. When the repo has no fixture, import `test` the way those specs do. Do not add a fixture file. The spec goes in the resolved spec directory.
 
 A step that types or selects data follows the Test data rules in [pr-evidence.md](../shared/pr-evidence.md#test-data): values from the case, or declared fake values, and the filled state on a screenshot before the final click.
 
