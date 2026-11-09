@@ -72,20 +72,26 @@ A missing or empty `branch_pattern`, and no branch line in `## Project rules`, u
 
 A value with no placeholder is a literal branch name and is used as it is. It puts every case on that one branch, so the template recommends a placeholder.
 
-Run `git check-ref-format --branch` on the final name. If Git accepts it, use it. If Git rejects it, ask once for another name.
+This procedure runs only before a branch is created or switched. Later edits on the branch this run already created are not a second dirty-tree stop. The same checks apply when `## Project rules` is absent. Default names stay. Automatic reuse does not. Do not open a pull request until Phase D is clear.
 
-The starting branch is the resolved starting point. The fallback is `main`. The pull request targets the resolved pull-request base. The fallback is `main`. Never auto-merge. Do not open a pull request until Phase D is clear.
+1. `git status --porcelain`. Any output: stop, list the paths, and say that generated init files and settings edits need a commit first. Do not switch. Do not stash, reset, or delete them.
+2. The starting branch and the pull-request base are already resolved separately. The fallback for each is `main`. The pull request targets that base. Never auto-merge.
+3. `git fetch origin`. That updates remote-tracking refs only. Do not fetch into a local branch. A failed fetch stops the run. Do not treat a failed fetch as a local-only branch.
+4. Verify `refs/remotes/origin/<start>`. If it is missing, stop and report that ref. Do not substitute a local branch of the same name.
+5. `git check-ref-format --branch` on the resolved name. If Git rejects it, ask once for another name.
+6. Look for that exact name in local heads and in `origin` remote-tracking refs.
 
-From that starting branch:
+A case id or ticket key inside the name is not ownership. A matching tip subject is not ownership. A fixed branch name in `## Project rules` is not ownership.
 
-```bash
-git fetch origin
-git checkout <start>
-git pull origin <start>
-git checkout -b <resolved branch name>
-```
+Reuse only when the user confirmed this branch, an existing pull request for that exact head names this case or the recorded ticket key and does not name a different one, or this same run already created the branch. Otherwise ask once. Do not check it out, create a tracking branch, push, or overwrite.
 
-If that branch already exists on the remote, check it out and pull. Do not create a second branch.
+A name that exists neither locally nor on `origin` is new: `git checkout -b <destination> origin/<start>`. A fixed name may be created this way when it does not exist yet.
+
+After a successful fetch, an existing name is one of three cases. Ownership is the same test in each. Do not run a plain `git pull`. Never use `reset --hard`, `checkout -B`, a force push, or a stash.
+
+- Local and remote. Both refs exist. Ownership fails: ask once and do not switch. Ownership holds: check out the local branch and `git merge --ff-only origin/<name>`. Diverged history stops the run and is reported. Do not push and do not reset the local branch onto the remote.
+- Remote only. `origin/<name>` exists and the local branch does not. Ownership fails: ask once and do not create the local branch. Ownership holds: `git checkout --track origin/<name>`. That creates the local branch at the remote tip. Do not create it from `origin/<start>`, and do not push.
+- Local only. The local branch exists and `origin/<name>` does not. Ownership fails: ask once and do not switch. Ownership holds: check out that local branch and leave its commits as they are. Do not fast-forward against a missing remote ref, do not push, and do not create the remote branch. Publishing stays with the later pull-request step.
 
 Commit subject: the resolved commit subject. The default is `fix: {explanation}`.
 
