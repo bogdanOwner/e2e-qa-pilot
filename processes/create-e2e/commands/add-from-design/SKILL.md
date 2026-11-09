@@ -84,7 +84,7 @@ This procedure runs only before a branch is created or switched. Later edits on 
 1. `git status --porcelain`. Any output: stop, list the paths, and say that generated init files and settings edits need a commit first. Do not switch. Do not stash, reset, or delete them.
 2. The starting branch and the pull-request base are already resolved separately. The fallback for each is `main`. The pull request targets that base. Never auto-merge.
 3. `git fetch origin`. That updates remote-tracking refs only. Do not fetch into a local branch. A failed fetch stops the run. Do not treat a failed fetch as a local-only branch.
-4. Verify `refs/remotes/origin/<start>`. If it is missing, stop and report that ref. Do not substitute a local branch of the same name.
+4. Verify `refs/remotes/origin/<start>`. If it is missing, stop before creating a branch and report that ref. When `origin/HEAD` resolves, name that remote default as a hint only. Tell the user they can set the starting branch and the pull-request base in `## Project rules`. Do not check out `master`, `develop`, the hinted branch, or a local branch of the same name in its place. Review does not need a remote.
 5. `git check-ref-format --branch` on the resolved name. If Git rejects it, ask once for another name.
 6. Look for that exact name in local heads and in `origin` remote-tracking refs.
 
