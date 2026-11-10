@@ -1,6 +1,6 @@
 # Settings
 
-The first `review_case` run reads `.e2e-qa-pilot/settings.md`. If a key it needs is empty, the assistant asks once in chat and writes your answers into that file. A case id needs `case_tool`, `fetch_case`, and `update_case`. Pasted case text does not. Both inputs need `figma`, `read_figma`, `test_command`, and `png_dir`. `branch_pattern` has a default.
+The first `review_case` run reads `.e2e-qa-pilot/settings.md`. If a key it needs is empty, the assistant asks once in chat and writes your answers into that file. A case id needs `case_tool`, `fetch_case`, and `update_case`. Pasted case text does not. Both inputs need `figma`, `read_figma`, and `test_command`. `png_dir` is required unless `## Project rules` names the screenshot directory. `branch_pattern` has a default.
 
 The settings file is included in every tool result, so do not store tokens in it. Put how to fetch and update a case in the file, and keep tokens in your own MCP configuration. Do not paste a secret into the chat.
 
@@ -31,7 +31,71 @@ Nothing is auto-merged. The default `pr_mode` is `create_pr_for_review`. It allo
 
 ## Required inputs
 
-The server requires exactly one of `case_id` or `case_text`. Pasted text needs no case tool. A case id needs `case_tool`, `fetch_case`, `update_case`, and an external case-tool MCP. Generating a spec needs `figma`, `read_figma`, `test_command`, and `png_dir`. `branch_pattern`, `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, and `pr_label_mismatch` have defaults, so a missing value is not a question. The input contract is in [mcp.md](../mcp.md).
+The server requires exactly one of `case_id` or `case_text`. Pasted text needs no case tool. A case id needs `case_tool`, `fetch_case`, `update_case`, and an external case-tool MCP. Generating a spec needs `figma`, `read_figma`, and `test_command`. It also needs `png_dir` unless `## Project rules` names the screenshot directory. `branch_pattern`, `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, and `pr_label_mismatch` have defaults, so a missing value is not a question. The input contract is in [mcp.md](../mcp.md).
+
+## Project rules
+
+Most projects only need the named keys above. Set the branch name with `branch_pattern` and the screenshot directory with `png_dir`. `## Project rules` is optional. The generated settings file does not include the heading. Leave it out to keep those keys and their defaults.
+
+Add the heading when the repository needs a workflow convention the keys do not cover, such as the Git starting branch, the pull-request base, the commit subject, or a ticket step the repository already runs. One line for a topic replaces that key or default. Other topics stay as they are. Two lines for the same topic on the same run are quoted, and the assistant asks once. Project rules cannot override ready checks, the word rule, the screenshot gate, pull-request label precedence, `pr_mode`, `pr_label_ready`, `pr_label_minor_text_diff`, or `pr_label_mismatch`. `test_command`, `figma`, and `read_figma` stay required named settings. A line in this section does not answer them.
+
+### Simple customization
+
+Use this when new work starts from `develop` and the commit subject should differ from `fix: {explanation}`.
+
+```markdown
+## Project rules
+
+Start from `develop`.
+Open the pull request against `develop`.
+Commit subject: `test(e2e): {explanation}`
+```
+
+`Start from` is the branch new work is created from. `Open the pull request against` is the pull-request base. They are separate, and the base line leaves the branch name unchanged. With no start line, the start is the resolved pull-request base. With neither line, each falls back to `main`.
+
+### An existing project's workflow
+
+Adapt this example. The paths belong to one repository and are not required for every Playwright project. e2e-qa-pilot does not provide built-in Jira, Plane, or GitHub Issues clients. The ticket lines are one approach. Replace them when this repository already uses a different step.
+
+```markdown
+## Project rules
+
+Start from `develop`.
+Open the pull request against `develop`.
+
+Use an existing issue key for this run.
+If none was provided, ask once for the full issue key.
+Record it as `{plane_id}`.
+Do not create a ticket.
+
+Branch: `{plane_id}-{title_slug}`
+Commit subject: `fix({plane_id}): {explanation}`
+
+Screenshots: `tests/account/screenshots`
+Fixture: `tests/fixture.ts`
+Specs: `tests/e2e`
+Pages: `tests/pages`
+```
+
+The issue identifier comes from the ticket system your repository already uses. For example:
+
+- **Jira:** `PROJ-123`
+- **Plane:** `DEV-123`
+- **GitHub Issues:** `123` (unique only within its repository)
+- **Other trackers:** Any identifier supported by your repository's workflow.
+
+`{plane_id}` is the only issue-identifier placeholder currently supported by the e2e-qa-pilot skills. Despite its historical name, it can hold an identifier from **any ticket system**, not just Plane.
+
+These identifiers are examples, not required formats. The skills use the identifier recorded for the current run; they do not automatically retrieve or create tickets.
+
+If your repository does not use issue identifiers, remove the ticket instructions and use a commit subject without an issue placeholder. Configure the branch name with `branch_pattern`. Write the whole commit line. Deleting only `{plane_id}` from a subject such as `fix({plane_id}): {explanation}` leaves `fix():`.
+
+- `{title_slug}` is the case title in kebab-case. `Verify Login` becomes `verify-login`.
+- `{case_id}` is the case id, and only when this run uses a case id. A Project rules line that still contains `{case_id}` asks once when this run has no case id.
+- `{plane_id}` is the full issue identifier recorded for the run. It does not create or retrieve a ticket. A missing value asks once, and the run does not invent one. A prefix written in front of the token, such as `PROJ-{plane_id}`, asks once when the recorded key already starts with `PROJ-`.
+- `{explanation}` is the short explanation written for the commit subject. With no commit line, the subject is `fix: {explanation}`.
+
+In the example above, the branch line replaces `branch_pattern` for that run. `Screenshots` replaces `png_dir`. `Fixture`, `Specs`, and `Pages` name paths the repository already uses.
 
 ## Reference conventions
 

@@ -323,3 +323,65 @@ test('docs: branch names come from the case, and the PR report avoids repeating 
   const ready = read('shared/ready-rules.md');
   assert.match(ready, /may leave the values out\. That is not a hole/);
 });
+
+test('docs: project rules are an instruction contract, not proof an assistant complies', () => {
+  // These checks read Markdown. They do not run Cursor or Claude Code.
+  const commands = path.join(kitRoot, 'processes', 'create-e2e', 'commands');
+  const read = (name) => fs.readFileSync(path.join(commands, name), 'utf8');
+  const review = read('review-case/SKILL.md');
+  const steps = read('add-from-steps/SKILL.md');
+  const design = read('add-from-design/SKILL.md');
+  const evidence = read('shared/pr-evidence.md');
+  const template = readRoot(path.join('templates', 'settings.md')).replace(/<!--[\s\S]*?-->/g, '');
+  const install = readRoot(path.join('docs', 'install.md'));
+  const settingsDoc = readRoot(path.join('docs', 'settings.md'));
+
+  assert.doesNotMatch(template, /^## Project rules$/m);
+  assert.match(review, /e2e\/\{title_slug\}/);
+  assert.match(review, /e2e\/\{case_id\}-\{title_slug\}/);
+  assert.match(review, /do not ask for `png_dir`/);
+  assert.match(review, /empty `test_command` is still one question/);
+  assert.match(review, /dirty working tree does not block/);
+  assert.match(review, /destructive git command/);
+  assert.match(review, /Goal: `branch_pattern`/);
+
+  for (const [name, body] of [
+    ['add-from-steps', steps],
+    ['add-from-design', design],
+  ]) {
+    assert.match(body, /fix: \{explanation\}/, name);
+    assert.match(body, /e2e\/\{title_slug\}/, name);
+    assert.match(body, /e2e\/\{case_id\}-\{title_slug\}/, name);
+    assert.match(body, /does not change the branch name/, name);
+    assert.match(body, /replaces `branch_pattern`/, name);
+    assert.match(body, /git status --porcelain/, name);
+    assert.match(body, /Local and remote/, name);
+    assert.match(body, /Remote only/, name);
+    assert.match(body, /Local only/, name);
+    assert.match(body, /Do not fast-forward against a missing remote ref, do not push/, name);
+    assert.match(body, /reset --hard/, name);
+    assert.match(body, /checkout -B/, name);
+    assert.match(body, /plain `git pull`/, name);
+    assert.match(body, /DEV-DEV-123/, name);
+    assert.match(body, /Do not invent one/, name);
+    assert.match(body, /active project/i, name);
+    assert.match(body, /`png_dir` when the section names none/, name);
+    assert.match(body, /origin\/HEAD/, name);
+    assert.match(body, /Do not check out `master`, `develop`/, name);
+    assert.match(body, /destructive git command/, name);
+    assert.doesNotMatch(body, /From fresh `main`/, name);
+    assert.doesNotMatch(body, /git checkout main/, name);
+    assert.doesNotMatch(body, /Commit messages: `fix:/, name);
+  }
+
+  assert.match(evidence, /The fallback is `main`/);
+  assert.match(evidence, /does not change the branch name/);
+  assert.match(evidence, /`png_dir` when it does not/);
+  assert.match(evidence, /1\. A functional assertion failure/);
+  assert.doesNotMatch(evidence, /e2e\/\{case_id\}-\{title_slug\}/);
+  assert.doesNotMatch(install, /with `main` as the base branch/);
+  assert.match(install, /commit it before a workflow that creates or switches a branch/);
+  const simpleAt = settingsDoc.indexOf('### Simple customization');
+  const advancedAt = settingsDoc.indexOf("### An existing project's workflow");
+  assert.ok(simpleAt !== -1 && advancedAt > simpleAt);
+});

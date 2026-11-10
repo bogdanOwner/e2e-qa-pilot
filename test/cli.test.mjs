@@ -7,6 +7,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { runInit } from '../src/init.mjs';
 import { handleMessage } from '../src/mcp.mjs';
+import { MARKER_LINE } from '../src/kit.mjs';
 
 const cli = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'cli.mjs');
 
@@ -473,4 +474,60 @@ test('mcp rejects a non-object message and keeps serving', async (t) => {
   assert.equal(lines[0].error.code, -32700);
   assert.match(stderr, /Parse error/);
   assert.equal(lines[1].result.serverInfo.name, 'e2e-qa-pilot');
+});
+
+test('init keeps project rules and package instructions apart from a local command edit', () => {
+  // Installer contract. It does not prove that an assistant follows Project rules.
+  const dir = tempProject();
+  const settingsPath = path.join(dir, '.e2e-qa-pilot', 'settings.md');
+  fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+  const original = [
+    '# Settings',
+    '',
+    'branch_pattern: e2e/from-key',
+    '',
+    '## Project rules',
+    '',
+    'Branch: `qa/{title_slug}`',
+    '',
+  ].join('\n');
+  fs.writeFileSync(settingsPath, original);
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  runInit(['--integration', 'cursor', '--force'], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(settingsPath, 'utf8'), original);
+
+  const text = instructionText(callTool(dir, 'add_from_steps', { case_text: 'Title: Sign in\n' }));
+  assert.match(text, /## Project rules/);
+  assert.match(text, /Branch: `qa\/\{title_slug\}`/);
+  assert.match(text, /Do not merge a branch line with `branch_pattern`/);
+
+  const localSkill = path.join(
+    dir,
+    '.e2e-qa-pilot',
+    'processes',
+    'create-e2e',
+    'commands',
+    'add-from-steps',
+    'SKILL.md',
+  );
+  const markedSkill = path.join(
+    dir,
+    '.e2e-qa-pilot',
+    'processes',
+    'create-e2e',
+    'commands',
+    'add-from-design',
+    'SKILL.md',
+  );
+  fs.writeFileSync(localSkill, 'OLD LOCAL SKILL\n');
+  fs.writeFileSync(markedSkill, `custom marked skill\n${MARKER_LINE}\n`);
+  runInit(['--integration', 'cursor', '--force'], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(localSkill, 'utf8'), 'OLD LOCAL SKILL\n');
+  const refreshed = fs.readFileSync(markedSkill, 'utf8');
+  assert.match(refreshed, /Workflow resolution/);
+  assert.doesNotMatch(refreshed, /custom marked skill/);
+  const again = instructionText(callTool(dir, 'add_from_steps', { case_text: 'Title: Sign in\n' }));
+  assert.match(again, /Do not merge a branch line with `branch_pattern`/);
+  assert.doesNotMatch(again, /OLD LOCAL SKILL/);
+  assert.equal(fs.readFileSync(settingsPath, 'utf8'), original);
 });

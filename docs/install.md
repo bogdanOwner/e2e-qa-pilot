@@ -2,7 +2,7 @@
 
 You need Node 22 or later, Playwright already configured in the project, and Cursor or Claude Code. Playwright's browser install is yours to run. The commands never install browsers.
 
-Git access to `origin` is required, with `main` as the base branch. The commands branch from `main` and target it.
+Git access to `origin` is required for a run that creates or switches a branch. The fallback base is `main`. `## Project rules` can name another starting branch and another pull-request base. Reviewing a case does not need `origin`.
 
 Optional, and only for the path you use:
 
@@ -35,6 +35,8 @@ Restart Cursor or Claude Code, then open a new chat. A chat that was already ope
 | `.cursor/skills/<name>/SKILL.md` | Cursor skills (`review-case`, `add-from-steps`, `add-from-design`). Each is a short stub that points at the commands above |
 | `.claude/skills/<name>/SKILL.md` | The same skills for Claude Code |
 | `.cursor/mcp.json` and `.mcp.json` | One `e2e-qa-pilot` entry. Other servers in the file are kept. An entry that is already listed stays as it is |
+
+Those files are untracked until you commit them. Review the diff and commit it before a workflow that creates or switches a branch. Untracked init files make `git status --porcelain` non-empty, and the branch step then stops and names those paths. It does not stash, reset, or delete them. Reviewing a case does not need a clean tree or `origin`.
 
 ## Upgrade
 

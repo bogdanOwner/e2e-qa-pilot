@@ -89,11 +89,13 @@ All keys, defaults, and the label rules are in [Settings](docs/settings.md). Do 
 
 ## Get started
 
-You need Node 22 or later, plus Cursor or Claude Code. The three tools are `review_case`, `add_from_steps`, and `add_from_design`. They return instructions, and your assistant does the work. The branch name comes from the case title (`{title_slug}`).
+You need Node 22 or later, plus Cursor or Claude Code. The three tools are `review_case`, `add_from_steps`, and `add_from_design`. They return instructions, and your assistant does the work. The default branch name comes from the case title (`{title_slug}`), or `e2e/{case_id}-{title_slug}` for a case id. `## Project rules` can replace that name, the commit subject, and the pull-request base. The fallback base is `main`.
 
 ```bash
 npx e2e-qa-pilot init
 ```
+
+`init` writes `.e2e-qa-pilot/settings.md`, a copy of the Create e2e commands under `.e2e-qa-pilot/processes/create-e2e/`, editor skill stubs, and an MCP entry. Those files start untracked. Review and commit them before a run that creates or switches a branch. A case review can run while they are still untracked. The branch step stops until they are committed. It does not stash or delete them.
 
 Restart the editor, open a new chat, and send one line. A pasted case needs a `Title:` line. A case id needs your case tool connected.
 
