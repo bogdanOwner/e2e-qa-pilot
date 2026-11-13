@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { runInit, INIT_USAGE } from '../src/init.mjs';
+import { runInit, runUpgrade, INIT_USAGE, UPGRADE_USAGE } from '../src/init.mjs';
 import { runMcp } from '../src/mcp.mjs';
 import { readPackageVersion } from '../src/kit.mjs';
 
@@ -8,14 +8,19 @@ const [command, ...rest] = process.argv.slice(2);
 const USAGE = `e2e-qa-pilot ${readPackageVersion()}
 
 Commands:
-  init [path]   Install the skills and settings into your project
-  mcp           Start the MCP server (stdio). Your editor runs this for you.
+  init [path]     Install the skills and settings into your project
+  upgrade [path]  Update the installed skills to this package version
+  mcp             Start the MCP server (stdio). Your editor runs this for you.
 
-${INIT_USAGE}`;
+${INIT_USAGE}
+
+${UPGRADE_USAGE}`;
 
 try {
   if (command === 'init') {
     runInit(rest);
+  } else if (command === 'upgrade') {
+    runUpgrade(rest);
   } else if (command === 'mcp') {
     runMcp();
   } else if (command === '--version' || command === '-v') {

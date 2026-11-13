@@ -19,7 +19,10 @@ const RUNTIME_FILES = [
   'src/init.mjs',
   'src/mcp.mjs',
   'src/kit.mjs',
+  'src/manifest.mjs',
   'templates/settings.md',
+  'templates/project.md',
+  'templates/always-on.md',
 ];
 
 function walkFiles(dir) {
@@ -279,7 +282,7 @@ test('packed tarball installs offline and serves init and mcp', async (t) => {
   assert.equal(byId[1].result.serverInfo.name, 'e2e-qa-pilot');
   assert.deepEqual(
     byId[2].result.tools.map((tool) => tool.name),
-    ['review_case', 'add_from_steps', 'add_from_design'],
+    ['review_case', 'add_from_steps', 'add_from_design', 'setup_project'],
   );
   for (const tool of byId[2].result.tools) {
     assert.deepEqual(tool.inputSchema.required, []);

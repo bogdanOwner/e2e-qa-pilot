@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { kitRoot, CATALOG, listFiles } from '../src/kit.mjs';
 import { serverEntry } from '../src/init.mjs';
 import { handleMessage } from '../src/mcp.mjs';
@@ -305,7 +306,8 @@ test('docs: branch names come from the case, and the PR report avoids repeating 
   assert.doesNotMatch(review, /Requirements: `branch_pattern`/);
 
   for (const name of ['add-from-steps/SKILL.md', 'add-from-design/SKILL.md']) {
-    const body = read(name);
+    const body = `${read(name)}\n${read('shared/workflow.md')}`;
+    assert.match(read(name), /shared\/workflow\.md/, name);
     assert.match(body, /`\{title_slug}`/, name);
     assert.match(body, /`\{case_id}`/, name);
     assert.match(body, /e2e\/\{case_id}-\{title_slug}/, name);
@@ -339,16 +341,17 @@ test('docs: project rules are an instruction contract, not proof an assistant co
   assert.doesNotMatch(template, /^## Project rules$/m);
   assert.match(review, /e2e\/\{title_slug\}/);
   assert.match(review, /e2e\/\{case_id\}-\{title_slug\}/);
-  assert.match(review, /do not ask for `png_dir`/);
+  assert.match(review, /Skip `png_dir` when `## Test layout`/);
   assert.match(review, /empty `test_command` is still one question/);
   assert.match(review, /dirty working tree does not block/);
   assert.match(review, /destructive git command/);
   assert.match(review, /Goal: `branch_pattern`/);
 
-  for (const [name, body] of [
+  for (let [name, body] of [
     ['add-from-steps', steps],
     ['add-from-design', design],
   ]) {
+    body = `${body}\n${read('shared/workflow.md')}`;
     assert.match(body, /fix: \{explanation\}/, name);
     assert.match(body, /e2e\/\{title_slug\}/, name);
     assert.match(body, /e2e\/\{case_id\}-\{title_slug\}/, name);
@@ -381,7 +384,124 @@ test('docs: project rules are an instruction contract, not proof an assistant co
   assert.doesNotMatch(evidence, /e2e\/\{case_id\}-\{title_slug\}/);
   assert.doesNotMatch(install, /with `main` as the base branch/);
   assert.match(install, /commit it before a workflow that creates or switches a branch/);
-  const simpleAt = settingsDoc.indexOf('### Simple customization');
-  const advancedAt = settingsDoc.indexOf("### An existing project's workflow");
-  assert.ok(simpleAt !== -1 && advancedAt > simpleAt);
+  assert.doesNotMatch(settingsDoc, /Simple customization/);
+});
+
+test('docs: every project.md section is explained in the project doc and the shared rules', () => {
+  // Reads Markdown. It does not prove an assistant follows the instructions.
+  const template = readRoot(path.join('templates', 'project.md')).replace(/<!--[\s\S]*?-->/g, '');
+  const headings = [...template.matchAll(/^## (.+)$/gm)].map((match) => match[1]);
+  assert.ok(headings.length >= 8);
+  const doc = readRoot(path.join('docs', 'project.md'));
+  const rules = fs.readFileSync(
+    path.join(kitRoot, 'processes', 'create-e2e', 'commands', 'shared', 'project-config.md'),
+    'utf8',
+  );
+  const setup = fs.readFileSync(
+    path.join(kitRoot, 'processes', 'create-e2e', 'commands', 'setup-project', 'SKILL.md'),
+    'utf8',
+  );
+  for (const heading of headings) {
+    assert.ok(doc.includes(`\`## ${heading}\``), `docs/project.md does not explain ## ${heading}`);
+    assert.ok(rules.includes(`### ${heading}`), `project-config.md has no section for ${heading}`);
+  }
+  assert.match(setup, /project-config\.md/);
+});
+
+test('docs: the example branch pattern in the project doc resolves as the doc says', () => {
+  const doc = readRoot(path.join('docs', 'project.md'));
+  const pattern = doc.match(/Branch: (\{ticket_id}\[_\{case_id}]_\{title_slug})`/);
+  assert.ok(pattern, 'docs/project.md shows no optional-group branch pattern');
+  const fill = (text, values) =>
+    text
+      .replace(/\[([^\]]*)]/g, (_, group) => {
+        const names = [...group.matchAll(/\{(\w+)}/g)].map((m) => m[1]);
+        return names.every((name) => values[name]) ? group : '';
+      })
+      .replace(/\{(\w+)}/g, (_, name) => values[name]);
+  const withId = fill(pattern[1], { ticket_id: 'PROJ-123', case_id: 'qase-7', title_slug: 'login-error' });
+  const without = fill(pattern[1], { ticket_id: 'PROJ-123', title_slug: 'login-error' });
+  assert.equal(withId, 'PROJ-123_qase-7_login-error');
+  assert.equal(without, 'PROJ-123_login-error');
+  assert.ok(doc.includes(withId) && doc.includes(without));
+});
+
+test('docs: no document still says three tools or three skills', () => {
+  for (const file of markdownFiles) {
+    const text = stripFences(fs.readFileSync(file, 'utf8'));
+    assert.doesNotMatch(text, /\bthree (?:tools|skills|commands)\b/i, path.relative(kitRoot, file));
+  }
+});
+
+test('docs: read_figma is documented as needed only with figma on', () => {
+  for (const name of ['settings.md', 'project.md']) {
+    const text = readRoot(path.join('docs', name));
+    assert.doesNotMatch(text, /Both inputs need `figma`, `read_figma`/, name);
+    assert.doesNotMatch(text, /Generating a spec needs `figma`, `read_figma`/, name);
+  }
+  const template = readRoot(path.join('templates', 'project.md')).replace(/<!--[\s\S]*?-->/g, '');
+  assert.doesNotMatch(template, /opt-in/);
+});
+
+test('docs: nothing still mentions the old plane_id placeholder or the Project rules section', () => {
+  for (const file of [...markdownFiles, ...listFiles(path.join(kitRoot, 'templates')), ...listFiles(path.join(kitRoot, 'src'))]) {
+    const text = fs.readFileSync(file, 'utf8');
+    assert.doesNotMatch(text, /plane_id/, path.relative(kitRoot, file));
+    assert.doesNotMatch(text, /Project rules/i, path.relative(kitRoot, file));
+  }
+});
+
+test('docs: the example project files are valid, neutral to each other, and hold no secret', () => {
+  const dir = path.join(kitRoot, 'examples', 'project-files');
+  const template = readRoot(path.join('templates', 'project.md')).replace(/<!--[\s\S]*?-->/g, '');
+  const known = [...template.matchAll(/^## (.+)$/gm)].map((match) => match[1]);
+  const fill = (text, values) =>
+    text
+      .replace(/\[([^\]]*)]/g, (_, group) => {
+        const names = [...group.matchAll(/\{(\w+)}/g)].map((m) => m[1]);
+        return names.every((name) => values[name]) ? group : '';
+      })
+      .replace(/\{(\w+)}/g, (_, name) => values[name]);
+  const files = fs.readdirSync(dir).filter((name) => name.endsWith('.md'));
+  assert.deepEqual(files.sort(), ['jira-xray-launchdarkly.md', 'plane-qase-growthbook.md']);
+  for (const name of files) {
+    const text = fs.readFileSync(path.join(dir, name), 'utf8');
+    for (const heading of [...text.matchAll(/^## (.+)$/gm)].map((match) => match[1])) {
+      assert.ok(known.includes(heading), `${name}: unknown section ## ${heading}`);
+    }
+    assert.doesNotMatch(text, /(?:token|secret|password|api[_-]?key)\s*[:=]/i, name);
+    assert.doesNotMatch(text, /plane_id/, name);
+    const branch = text.match(/^Branch: `([^`]+)`/m);
+    if (!branch) continue;
+    for (const values of [
+      { ticket_id: 'PROJ-123', case_id: 'case-7', title_slug: 'login-error' },
+      { ticket_id: 'PROJ-123', title_slug: 'login-error' },
+    ]) {
+      const result = fill(branch[1], values);
+      assert.doesNotMatch(result, /[\[\]{}]/, `${name}: ${result}`);
+      const git = spawnSync('git', ['check-ref-format', '--branch', result]);
+      assert.equal(git.status, 0, `${name}: git rejects ${result}`);
+    }
+  }
+});
+
+test('docs: the templates show everything in a rendered view, with no HTML comment', () => {
+  // GitHub and IDE previews hide HTML comments, so a template that keeps its guidance in
+  // one looks empty.
+  for (const name of ['project.md', 'settings.md', 'always-on.md']) {
+    assert.doesNotMatch(readRoot(path.join('templates', name)), /<!--/, name);
+  }
+  const project = readRoot(path.join('templates', 'project.md'));
+  const sections = project.split(/^## /m).slice(1);
+  assert.ok(sections.length >= 8);
+  for (const section of sections) {
+    const name = section.split('\n')[0];
+    assert.match(section, /^> Use this/m, `no visible description under ## ${name}`);
+    assert.match(section, /^```text$/m, `no visible example under ## ${name}`);
+    assert.doesNotMatch(section, /TODO/, name);
+  }
+  const settings = readRoot(path.join('templates', 'settings.md'));
+  for (const key of ['case_tool', 'fetch_case', 'update_case', 'figma', 'read_figma', 'test_command', 'png_dir', 'branch_pattern', 'pr_mode']) {
+    assert.match(settings, new RegExp(`^${key}:`, 'm'), `settings.md does not show ${key}`);
+  }
 });

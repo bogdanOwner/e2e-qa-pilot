@@ -5,7 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { runInit } from '../src/init.mjs';
+import { runInit, runUpgrade } from '../src/init.mjs';
+import { hashText, readManifest, writeManifest, MANIFEST_FILE } from '../src/manifest.mjs';
 import { handleMessage } from '../src/mcp.mjs';
 import { MARKER_LINE } from '../src/kit.mjs';
 
@@ -21,7 +22,7 @@ test('init defaults to the current folder and installs both editors', () => {
   const dir = tempProject();
   runInit([], { cwd: dir, ...quiet });
   for (const editor of ['.cursor', '.claude']) {
-    for (const name of ['review-case', 'add-from-steps', 'add-from-design']) {
+    for (const name of ['review-case', 'add-from-steps', 'add-from-design', 'setup-project']) {
       assert.ok(fs.existsSync(path.join(dir, editor, 'skills', name, 'SKILL.md')));
     }
   }
@@ -182,7 +183,9 @@ async function stopChild(child) {
   });
 }
 
-test('mcp lists three tools and returns instructions', async (t) => {
+const ALL_TOOLS = ['review_case', 'add_from_steps', 'add_from_design', 'setup_project'];
+
+test('mcp lists four tools and returns instructions', async (t) => {
   const dir = tempProject();
   let child;
   t.after(async () => {
@@ -213,7 +216,7 @@ test('mcp lists three tools and returns instructions', async (t) => {
   assert.equal(byId[1].result.serverInfo.name, 'e2e-qa-pilot');
   assert.deepEqual(
     byId[2].result.tools.map((tool) => tool.name),
-    ['review_case', 'add_from_steps', 'add_from_design'],
+    ALL_TOOLS,
   );
   assert.match(byId[3].result.content[0].text, /Case id: QA-1/);
   assert.match(byId[3].result.content[0].text, /Review case steps/);
@@ -261,12 +264,16 @@ test('tools/list schema keeps case_id optional for protocol 2025-03-26', () => {
   const listed = handleMessage({ jsonrpc: '2.0', id: 2, method: 'tools/list' }, os.tmpdir());
   assert.deepEqual(
     listed.result.tools.map((tool) => tool.name),
-    ['review_case', 'add_from_steps', 'add_from_design'],
+    ALL_TOOLS,
   );
   for (const tool of listed.result.tools) {
     assert.equal(tool.inputSchema.type, 'object');
     assert.deepEqual(tool.inputSchema.required, []);
     assert.equal(tool.inputSchema.additionalProperties, false);
+    if (tool.name === 'setup_project') {
+      assert.deepEqual(tool.inputSchema.properties, {});
+      continue;
+    }
     assert.equal(tool.inputSchema.properties.case_id.type, 'string');
     assert.equal(tool.inputSchema.properties.case_text.type, 'string');
   }
@@ -524,10 +531,341 @@ test('init keeps project rules and package instructions apart from a local comma
   runInit(['--integration', 'cursor', '--force'], { cwd: dir, ...quiet });
   assert.equal(fs.readFileSync(localSkill, 'utf8'), 'OLD LOCAL SKILL\n');
   const refreshed = fs.readFileSync(markedSkill, 'utf8');
-  assert.match(refreshed, /Workflow resolution/);
+  assert.match(refreshed, /workflow\.md/);
   assert.doesNotMatch(refreshed, /custom marked skill/);
   const again = instructionText(callTool(dir, 'add_from_steps', { case_text: 'Title: Sign in\n' }));
   assert.match(again, /Do not merge a branch line with `branch_pattern`/);
   assert.doesNotMatch(again, /OLD LOCAL SKILL/);
   assert.equal(fs.readFileSync(settingsPath, 'utf8'), original);
+});
+
+test('init writes project.md once and never overwrites it, even with --force', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const file = path.join(dir, '.e2e-qa-pilot', 'project.md');
+  const template = fs.readFileSync(file, 'utf8');
+  for (const heading of [
+    '## Ticket',
+    '## Branch & commit',
+    '## Case tool',
+    '## Design',
+    '## Feature flags',
+    '## Context repos',
+    '## Test layout',
+    '## Rules',
+  ]) {
+    assert.ok(template.includes(heading), `project.md template lacks ${heading}`);
+  }
+  fs.writeFileSync(file, '## Ticket\n\nTracker: Plane.\n');
+  runInit(['--integration', 'cursor', '--force'], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(file, 'utf8'), '## Ticket\n\nTracker: Plane.\n');
+});
+
+test('both editors get the same always-on instruction', () => {
+  const dir = tempProject();
+  runInit([], { cwd: dir, ...quiet });
+  const rule = fs.readFileSync(path.join(dir, '.cursor', 'rules', 'e2e-qa-pilot.mdc'), 'utf8');
+  const claude = fs.readFileSync(path.join(dir, 'CLAUDE.md'), 'utf8');
+  assert.match(rule, /^---\n[\s\S]*alwaysApply: true[\s\S]*---/);
+  assert.match(rule, /\.e2e-qa-pilot\/project\.md/);
+  assert.match(claude, /<!-- e2e-qa-pilot:begin -->/);
+  assert.match(claude, /<!-- e2e-qa-pilot:end -->/);
+  const body = fs
+    .readFileSync(new URL('../templates/always-on.md', import.meta.url), 'utf8')
+    .trim();
+  assert.ok(rule.includes(body));
+  assert.ok(claude.includes(body));
+});
+
+test('init adds the CLAUDE.md block without touching other text, and --force replaces only the block', () => {
+  const dir = tempProject();
+  const file = path.join(dir, 'CLAUDE.md');
+  const mine = '# My project\n\nAlways use pnpm.\n';
+  fs.writeFileSync(file, mine);
+  runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
+  const added = fs.readFileSync(file, 'utf8');
+  assert.ok(added.startsWith(mine));
+  assert.equal(added.split('<!-- e2e-qa-pilot:begin -->').length, 2);
+
+  runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(file, 'utf8'), added);
+
+  const edited = added.replace(
+    /<!-- e2e-qa-pilot:begin -->[\s\S]*<!-- e2e-qa-pilot:end -->/,
+    '<!-- e2e-qa-pilot:begin -->\nOLD BLOCK\n<!-- e2e-qa-pilot:end -->',
+  );
+  fs.writeFileSync(file, `${edited}\nTail kept.\n`);
+  runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
+  assert.match(fs.readFileSync(file, 'utf8'), /OLD BLOCK/);
+  runInit(['--integration', 'claude', '--force'], { cwd: dir, ...quiet });
+  const forced = fs.readFileSync(file, 'utf8');
+  assert.doesNotMatch(forced, /OLD BLOCK/);
+  assert.ok(forced.startsWith(mine));
+  assert.match(forced, /Tail kept\./);
+  assert.equal(forced.split('<!-- e2e-qa-pilot:begin -->').length, 2);
+});
+
+test('--force refreshes the Cursor rule only while it has the marker', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const rule = path.join(dir, '.cursor', 'rules', 'e2e-qa-pilot.mdc');
+  fs.writeFileSync(rule, 'my own rule\n');
+  runInit(['--integration', 'cursor', '--force'], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(rule, 'utf8'), 'my own rule\n');
+  fs.writeFileSync(rule, `old\n${MARKER_LINE}\n`);
+  runInit(['--integration', 'cursor', '--force'], { cwd: dir, ...quiet });
+  assert.match(fs.readFileSync(rule, 'utf8'), /alwaysApply: true/);
+});
+
+test('case tools return the project file, and say when it is missing', () => {
+  const dir = tempProject();
+  const missing = instructionText(callTool(dir, 'review_case', { case_text: 'Title: Sign in\n' }));
+  assert.match(missing, /## Project file \(\.e2e-qa-pilot\/project\.md\)/);
+  assert.match(missing, /missing: \.e2e-qa-pilot\/project\.md/);
+  assert.match(missing, /## Shared: project-config\.md/);
+
+  const file = path.join(dir, '.e2e-qa-pilot', 'project.md');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, '## Branch & commit\n\nBranch: `DEV_{ticket_id}[_{case_id}]_{title_slug}`\n');
+  for (const tool of ['review_case', 'add_from_steps', 'add_from_design']) {
+    const text = instructionText(callTool(dir, tool, { case_text: 'Title: Sign in\n' }));
+    assert.match(text, /Branch: `DEV_\{ticket_id\}\[_\{case_id\}\]_\{title_slug\}`/, tool);
+  }
+});
+
+test('setup_project takes no input and returns the setup instructions', () => {
+  const dir = tempProject();
+  const text = instructionText(callTool(dir, 'setup_project', {}));
+  assert.match(text, /# e2e-qa-pilot: setup_project/);
+  assert.match(text, /Set up the project file/);
+  assert.match(text, /## Shared: project-config\.md/);
+  assert.doesNotMatch(text, /Input mode:/);
+  assert.match(text, /Never paste a secret/);
+
+  const omitted = instructionText(
+    handleMessage(
+      { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'setup_project' } },
+      dir,
+    ),
+  );
+  assert.match(omitted, /Set up the project file/);
+
+  const rejected = callTool(dir, 'setup_project', { case_id: 'QA-1' });
+  assert.equal(rejected.result.isError, true);
+  assert.match(rejected.result.content[0].text, /takes no input/);
+});
+
+test('the instructions cover the optional case id, read-only flags, and read-only context repos', () => {
+  // Reads Markdown. It does not prove an assistant follows the instructions.
+  const dir = tempProject();
+  const steps = instructionText(callTool(dir, 'add_from_steps', { case_text: 'Title: Sign in\n' }));
+  assert.match(steps, /Optional group/);
+  assert.match(steps, /\{ticket_id\}\[_\{case_id\}\]_\{title_slug\}/);
+  const review = instructionText(callTool(dir, 'review_case', { case_text: 'Title: Sign in\n' }));
+  assert.match(review, /Feature flag: <key> = on\|off/);
+  assert.match(review, /Never create, change, or toggle a flag/);
+  assert.match(review, /Never clone, check out, commit to, push to, comment on, or open a pull request/);
+});
+
+test('CLAUDE.md block: a begin marker with no end marker is left alone, a stray end marker is ignored', () => {
+  const dir = tempProject();
+  const file = path.join(dir, 'CLAUDE.md');
+
+  const broken = 'Mine\n<!-- e2e-qa-pilot:begin -->\nhalf a block, then my own notes\n';
+  fs.writeFileSync(file, broken);
+  runInit(['--integration', 'claude', '--force'], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(file, 'utf8'), broken);
+
+  const stray = 'Quote: <!-- e2e-qa-pilot:end --> in my notes\n';
+  fs.writeFileSync(file, stray);
+  runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
+  const once = fs.readFileSync(file, 'utf8');
+  assert.ok(once.startsWith(stray));
+  runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(file, 'utf8'), once);
+});
+
+test('setup_project rejects any argument that is not an empty object', () => {
+  const dir = tempProject();
+  for (const args of ['QA-1', ['QA-1'], 5, { case_id: 'QA-1' }]) {
+    const outcome = callTool(dir, 'setup_project', args);
+    assert.equal(outcome.result.isError, true, JSON.stringify(args));
+  }
+  assert.equal(callTool(dir, 'setup_project', {}).result.isError, undefined);
+});
+
+test('setup_project includes the project.md template when the file is missing', () => {
+  const dir = tempProject();
+  const text = instructionText(callTool(dir, 'setup_project', {}));
+  assert.match(text, /Write it from this template/);
+  assert.match(text, /^## Feature flags$/m);
+  assert.doesNotMatch(text, /ask the person to run setup_project/);
+  const caseText = instructionText(callTool(dir, 'review_case', { case_text: 'Title: Sign in\n' }));
+  assert.doesNotMatch(caseText, /Write it from this template/);
+  assert.match(caseText, /ask the person to run setup_project/);
+});
+
+const REVIEW_SKILL = '.e2e-qa-pilot/processes/create-e2e/commands/review-case/SKILL.md';
+
+function readJson(file) {
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+test('init writes a manifest that lists managed files and never the person\'s files', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const manifest = readManifest(dir);
+  assert.equal(manifest.schema, 1);
+  assert.deepEqual(manifest.integrations, ['cursor']);
+  assert.equal(manifest.package_version, readJson(path.join(cli, '..', '..', 'package.json')).version);
+  assert.equal(
+    manifest.files[REVIEW_SKILL],
+    hashText(fs.readFileSync(path.join(dir, REVIEW_SKILL), 'utf8')),
+  );
+  assert.ok(manifest.files['.cursor/rules/e2e-qa-pilot.mdc']);
+  assert.equal(manifest.files['.e2e-qa-pilot/settings.md'], undefined);
+  assert.equal(manifest.files['.e2e-qa-pilot/project.md'], undefined);
+  assert.ok(manifest.templates.project_headings.includes('Ticket'));
+
+  runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
+  const both = readManifest(dir);
+  assert.deepEqual(both.integrations, ['cursor', 'claude']);
+  assert.ok(both.files['CLAUDE.md']);
+  assert.ok(both.files['.claude/skills/review-case/SKILL.md']);
+});
+
+test('upgrade replaces untouched files, keeps edited ones, and never touches settings or project.md', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const settings = path.join(dir, '.e2e-qa-pilot', 'settings.md');
+  const project = path.join(dir, '.e2e-qa-pilot', 'project.md');
+  fs.appendFileSync(settings, '\ntest_command: npx playwright test\n');
+  fs.appendFileSync(project, '\nmy own note\n');
+  const settingsBefore = fs.readFileSync(settings, 'utf8');
+  const projectBefore = fs.readFileSync(project, 'utf8');
+
+  // An older package wrote this skill: the disk matches the manifest, so upgrade may replace it.
+  const old = path.join(dir, REVIEW_SKILL);
+  fs.writeFileSync(old, 'OLD PACKAGE SKILL\n');
+  // The person edited this one: the disk does not match the manifest.
+  const edited = path.join(dir, '.cursor', 'skills', 'add-from-steps', 'SKILL.md');
+  const editedText = `${fs.readFileSync(edited, 'utf8')}\nmy edit\n`;
+  fs.writeFileSync(edited, editedText);
+  const manifest = readManifest(dir);
+  manifest.files[REVIEW_SKILL] = hashText('OLD PACKAGE SKILL\n');
+  manifest.package_version = '0.0.1';
+  writeManifest(dir, manifest);
+
+  const lines = [];
+  runUpgrade([], { cwd: dir, log: (line) => lines.push(line) });
+  assert.match(fs.readFileSync(old, 'utf8'), /Review case steps/);
+  assert.equal(fs.readFileSync(edited, 'utf8'), editedText);
+  assert.ok(fs.existsSync(`${edited}.new`));
+  assert.match(lines.join('\n'), /kept \.cursor\/skills\/add-from-steps\/SKILL\.md/);
+  assert.equal(fs.readFileSync(settings, 'utf8'), settingsBefore);
+  assert.equal(fs.readFileSync(project, 'utf8'), projectBefore);
+  assert.equal(readManifest(dir).package_version, readJson(path.join(cli, '..', '..', 'package.json')).version);
+
+  runUpgrade(['--force'], { cwd: dir, ...quiet });
+  assert.notEqual(fs.readFileSync(edited, 'utf8'), editedText);
+  assert.equal(fs.readFileSync(settings, 'utf8'), settingsBefore);
+});
+
+test('upgrade keeps an edited CLAUDE.md block until --force, and never touches the text around it', () => {
+  const dir = tempProject();
+  fs.writeFileSync(path.join(dir, 'CLAUDE.md'), 'My notes\n');
+  runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
+  const file = path.join(dir, 'CLAUDE.md');
+  const edited = fs.readFileSync(file, 'utf8').replace('Do not ask what', 'Please ask what');
+  fs.writeFileSync(file, edited);
+
+  runUpgrade([], { cwd: dir, ...quiet });
+  assert.equal(fs.readFileSync(file, 'utf8'), edited);
+  runUpgrade(['--force'], { cwd: dir, ...quiet });
+  const after = fs.readFileSync(file, 'utf8');
+  assert.ok(after.startsWith('My notes\n'));
+  assert.match(after, /Do not ask what/);
+});
+
+test('upgrade removes a file the package no longer ships, unless the person edited it', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const gone = '.e2e-qa-pilot/processes/create-e2e/commands/old/SKILL.md';
+  const kept = '.e2e-qa-pilot/processes/create-e2e/commands/older/SKILL.md';
+  for (const rel of [gone, kept]) {
+    fs.mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true });
+    fs.writeFileSync(path.join(dir, rel), `${rel}\n`);
+  }
+  const manifest = readManifest(dir);
+  manifest.files[gone] = hashText(`${gone}\n`);
+  manifest.files[kept] = hashText('what the package wrote\n');
+  writeManifest(dir, manifest);
+  runUpgrade([], { cwd: dir, ...quiet });
+  assert.equal(fs.existsSync(path.join(dir, gone)), false);
+  assert.equal(fs.existsSync(path.join(dir, kept)), true);
+});
+
+test('upgrade names the project sections and settings keys added since the install', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const manifest = readManifest(dir);
+  manifest.templates.project_headings = manifest.templates.project_headings.filter((name) => name !== 'Rules');
+  writeManifest(dir, manifest);
+  const project = path.join(dir, '.e2e-qa-pilot', 'project.md');
+  fs.writeFileSync(project, fs.readFileSync(project, 'utf8').replace(/## Rules[\s\S]*$/, ''));
+
+  const lines = [];
+  runUpgrade([], { cwd: dir, log: (line) => lines.push(line) });
+  assert.match(lines.join('\n'), /todo: .*project\.md: new optional section "## Rules"/);
+
+  const second = [];
+  runUpgrade([], { cwd: dir, log: (line) => second.push(line) });
+  assert.doesNotMatch(second.join('\n'), /todo:/);
+});
+
+test('upgrade needs a usable manifest from this or an older schema', () => {
+  const dir = tempProject();
+  assert.throws(() => runUpgrade([], { cwd: dir, ...quiet }), /Run "npx e2e-qa-pilot init" first/);
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const manifest = readManifest(dir);
+  manifest.schema = 99;
+  writeManifest(dir, manifest);
+  assert.throws(() => runUpgrade([], { cwd: dir, ...quiet }), /newer than this e2e-qa-pilot understands/);
+  fs.writeFileSync(path.join(dir, MANIFEST_FILE), 'not json');
+  assert.throws(() => runUpgrade([], { cwd: dir, ...quiet }), /No usable/);
+  assert.throws(() => runUpgrade(['--integration', 'cursor'], { cwd: dir, ...quiet }), /Unknown argument/);
+});
+
+test('a tool result says to run upgrade when the project files come from another version', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const fresh = instructionText(callTool(dir, 'review_case', { case_text: 'Title: Sign in\n' }));
+  assert.doesNotMatch(fresh, /npx e2e-qa-pilot upgrade/);
+  const manifest = readManifest(dir);
+  manifest.package_version = '0.0.1';
+  writeManifest(dir, manifest);
+  for (const [tool, args] of [
+    ['review_case', { case_text: 'Title: Sign in\n' }],
+    ['setup_project', {}],
+  ]) {
+    const text = instructionText(callTool(dir, tool, args));
+    assert.match(text, /installed by e2e-qa-pilot 0\.0\.1/, tool);
+    assert.match(text, /npx e2e-qa-pilot upgrade/, tool);
+  }
+});
+
+test('init does not hide old files: it keeps the old version in the manifest until they are current', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const skill = path.join(dir, REVIEW_SKILL);
+  fs.writeFileSync(skill, 'OLD PACKAGE SKILL\n');
+  const manifest = readManifest(dir);
+  manifest.package_version = '0.0.1';
+  manifest.files[REVIEW_SKILL] = hashText('OLD PACKAGE SKILL\n');
+  writeManifest(dir, manifest);
+  const lines = [];
+  runInit(['--integration', 'cursor'], { cwd: dir, log: (line) => lines.push(line) });
+  assert.equal(readManifest(dir).package_version, '0.0.1');
+  assert.match(lines.join('\n'), /Run "npx e2e-qa-pilot upgrade"/);
+  assert.equal(fs.readFileSync(skill, 'utf8'), 'OLD PACKAGE SKILL\n');
 });

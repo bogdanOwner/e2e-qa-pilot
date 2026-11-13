@@ -1,7 +1,16 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import readline from 'node:readline';
-import { commandsDir, CATALOG, CASE_INPUT_SCHEMA, SERVER_NAME, readPackageVersion } from './kit.mjs';
+import {
+  commandsDir,
+  CATALOG,
+  CASE_INPUT_SCHEMA,
+  NO_INPUT_SCHEMA,
+  kitRoot,
+  SERVER_NAME,
+  readPackageVersion,
+} from './kit.mjs';
+import { versionNotice } from './manifest.mjs';
 
 // A small stdio MCP server with no dependencies, so every line it runs can be read.
 // Tool names, descriptions, and the input schema come from kit.mjs.
@@ -13,7 +22,7 @@ import { commandsDir, CATALOG, CASE_INPUT_SCHEMA, SERVER_NAME, readPackageVersio
 const TOOLS = Object.fromEntries(
   CATALOG.map((entry) => [
     entry.tool,
-    { command: entry.command, description: entry.description },
+    { command: entry.command, description: entry.description, input: entry.input ?? 'case' },
   ]),
 );
 
@@ -82,41 +91,62 @@ function sourceBlock(source) {
   ].join('\n');
 }
 
+function projectFiles(projectDir, { forSetup = false } = {}) {
+  const settingsPath = path.join(projectDir, '.e2e-qa-pilot', 'settings.md');
+  const projectPath = path.join(projectDir, '.e2e-qa-pilot', 'project.md');
+  return {
+    settings: fs.existsSync(settingsPath)
+      ? read(settingsPath)
+      : `(missing: ${settingsPath}. Run \`npx e2e-qa-pilot init\` in the project.)`,
+    project: fs.existsSync(projectPath)
+      ? read(projectPath)
+      : forSetup
+        ? `(missing: .e2e-qa-pilot/project.md. Write it from this template.)\n\n${read(path.join(kitRoot, 'templates', 'project.md'))}`
+        : '(missing: .e2e-qa-pilot/project.md. Optional for a case run. If it would help, ask the person to run setup_project.)',
+  };
+}
+
+const CASE_INTRO = [
+  'You do the work yourself with the tools you already have (your case tool, Playwright, GitHub, and any',
+  'MCP server or CLI that .e2e-qa-pilot/project.md names).',
+  'This server fetched nothing. Ask the human when a step is vague, read every screenshot yourself,',
+  'and never paste a secret into the chat.',
+];
+
+const SETUP_INTRO = [
+  'No case is needed. You do the work yourself with the tools you already have',
+  '(file reads, git, gh, and the MCP servers connected in this editor).',
+  'This server detected nothing. Never paste a secret into the chat or into these files.',
+];
+
 export function buildToolText(toolName, source, projectDir) {
   const tool = TOOLS[toolName];
-  const skill = read(path.join(commandsDir, tool.command, 'SKILL.md'));
-  const ready = read(path.join(commandsDir, 'shared', 'ready-rules.md'));
-  const evidence = read(path.join(commandsDir, 'shared', 'pr-evidence.md'));
+  const setup = tool.input === 'none';
+  const shared = (name) => read(path.join(commandsDir, 'shared', name));
+  const { settings, project } = projectFiles(projectDir, { forSetup: setup });
 
-  const settingsPath = path.join(projectDir, '.e2e-qa-pilot', 'settings.md');
-  const settings = fs.existsSync(settingsPath)
-    ? read(settingsPath)
-    : `(missing: ${settingsPath}. Run \`npx e2e-qa-pilot init\` in the project.)`;
+  const sections = [
+    ['Settings (.e2e-qa-pilot/settings.md)', settings],
+    ['Project file (.e2e-qa-pilot/project.md)', project],
+    ['Instructions', read(path.join(commandsDir, tool.command, 'SKILL.md'))],
+    ['Shared: project-config.md', shared('project-config.md')],
+  ];
+  if (!setup) {
+    sections.push(
+      ['Shared: workflow.md', shared('workflow.md')],
+      ['Shared: ready-rules.md', shared('ready-rules.md')],
+      ['Shared: pr-evidence.md', shared('pr-evidence.md')],
+    );
+  }
+
+  const notice = versionNotice(projectDir, readPackageVersion());
 
   return [
     `# ${SERVER_NAME}: ${toolName}`,
+    ...(notice ? ['', notice] : []),
     '',
-    sourceBlock(source),
-    '',
-    'You do the work yourself with the tools you already have (your case tool, Playwright, GitHub).',
-    'This server fetched nothing. Ask the human when a step is vague, read every screenshot yourself,',
-    'and never paste a secret into the chat.',
-    '',
-    '## Settings (.e2e-qa-pilot/settings.md)',
-    '',
-    settings,
-    '',
-    '## Instructions',
-    '',
-    skill,
-    '',
-    '## Shared: ready-rules.md',
-    '',
-    ready,
-    '',
-    '## Shared: pr-evidence.md',
-    '',
-    evidence,
+    ...(setup ? SETUP_INTRO : [sourceBlock(source), '', ...CASE_INTRO]),
+    ...sections.flatMap(([title, body]) => ['', `## ${title}`, '', body]),
   ].join('\n');
 }
 
@@ -152,7 +182,7 @@ export function handleMessage(message, projectDir) {
           tools: Object.entries(TOOLS).map(([name, tool]) => ({
             name,
             description: tool.description,
-            inputSchema: CASE_INPUT_SCHEMA,
+            inputSchema: tool.input === 'none' ? NO_INPUT_SCHEMA : CASE_INPUT_SCHEMA,
           })),
         },
       };
@@ -160,6 +190,21 @@ export function handleMessage(message, projectDir) {
       const name = params?.name;
       if (!TOOLS[name]) {
         return { error: { code: -32602, message: `Unknown tool: ${name}` } };
+      }
+      if (TOOLS[name].input === 'none') {
+        const args = params?.arguments;
+        const empty = args === undefined || args === null || (isRecord(args) && Object.keys(args).length === 0);
+        if (!empty) {
+          return {
+            result: {
+              isError: true,
+              content: [{ type: 'text', text: `${name} takes no input.` }],
+            },
+          };
+        }
+        return {
+          result: { content: [{ type: 'text', text: buildToolText(name, null, projectDir) }] },
+        };
       }
       const source = resolveCaseInput(params?.arguments);
       if (source.error) {

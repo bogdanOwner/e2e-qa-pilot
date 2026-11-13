@@ -32,6 +32,14 @@ export const CASE_INPUT_SCHEMA = {
   additionalProperties: false,
 };
 
+// setup_project takes no case. It only helps the human fill .e2e-qa-pilot/project.md.
+export const NO_INPUT_SCHEMA = {
+  type: 'object',
+  properties: {},
+  required: [],
+  additionalProperties: false,
+};
+
 export const CATALOG = [
   {
     command: 'review-case',
@@ -51,22 +59,36 @@ export const CATALOG = [
     description:
       'Write the Playwright spec for a reviewed case supplied as case_id or case_text that has a figma.com URL and figma: on. Compares each milestone with its frame. A narrow minor text difference is documented as e2e:minor-text-diff. Other differences follow pr_mode and can be a draft e2e:mismatch. Returns the instructions to follow.',
   },
+  {
+    command: 'setup-project',
+    tool: 'setup_project',
+    input: 'none',
+    description:
+      'Fill in .e2e-qa-pilot/project.md for this repository: ticket id, branch and commit format, case tool, Figma, feature flags, read-only context repositories, and test layout. Inspects the repo first and asks one batch of questions only for what it cannot detect. Takes no case. Returns the instructions to follow.',
+  },
 ];
 
 export const COMMANDS = CATALOG.map((entry) => entry.command);
 
+// Each editor gets the same skills and the same always-on text.
+// alwaysOn is where that text goes: a Cursor rule file, or a managed block in CLAUDE.md.
 export const EDITORS = {
   cursor: {
     skillsDir: '.cursor',
     mcpFile: path.join('.cursor', 'mcp.json'),
     label: 'Cursor',
+    alwaysOn: { kind: 'file', file: path.join('.cursor', 'rules', 'e2e-qa-pilot.mdc') },
   },
   claude: {
     skillsDir: '.claude',
     mcpFile: '.mcp.json',
     label: 'Claude Code',
+    alwaysOn: { kind: 'block', file: 'CLAUDE.md' },
   },
 };
+
+export const BLOCK_START = '<!-- e2e-qa-pilot:begin -->';
+export const BLOCK_END = '<!-- e2e-qa-pilot:end -->';
 
 export const commandsDir = path.join(kitRoot, 'processes', 'create-e2e', 'commands');
 
