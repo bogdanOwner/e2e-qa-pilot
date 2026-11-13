@@ -19,4 +19,6 @@ npm test
 
 The commands under `processes/create-e2e/commands/` are the spec, so a behavior change starts there. The overview is [Create e2e](processes/create-e2e/README.md).
 
+`templates/always-on.md` is written for the assistant, not for people. `init` copies it word for word into the Cursor rule and into the `CLAUDE.md` block, so it belongs to both editors and holds no comments. A person reads it only inside those two files.
+
 Report vulnerabilities through [SECURITY.md](SECURITY.md). Community expectations are in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

@@ -6,7 +6,7 @@
 - Case tools: Qase is the worked example, and the `review_case` command describes how it updates a Qase case. Other tools may work if your assistant can read and update them through its own MCP server, but none are tested or officially supported here. This package does not implement a case-tool client. Pasted case text needs none.
 - A person decides when a requirement is ambiguous. The assistant is told to ask and not to invent an expected result. `ask_before_pr` also stops for a functional mismatch, an unresolved difference, or a failed final-screenshot gate. A narrow minor text difference does not trigger that stop.
 
-**Create e2e is implemented.** The three tools, `review_case`, `add_from_steps`, and `add_from_design`, hand your assistant those instructions. While writing the spec, the assistant may adjust locators or waits in that spec. **AutoFix nightly is not implemented.** There are no commands, tools, or install step for it. See [AutoFix nightly](../processes/autofix-nightly/README.md).
+**Create e2e is implemented.** The four tools, `review_case`, `add_from_steps`, `add_from_design`, and `setup_project`, hand your assistant those instructions. Only `setup_project` writes `.e2e-qa-pilot/project.md`, and only after you approve the finished file. The server itself writes nothing. While writing the spec, the assistant may adjust locators or waits in that spec. **AutoFix nightly is not implemented.** There are no commands, tools, or install step for it. See [AutoFix nightly](../processes/autofix-nightly/README.md).
 
 ## Trust
 

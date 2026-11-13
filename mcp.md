@@ -1,6 +1,6 @@
 # MCP
 
-MCP is the connection between your project and the assistant you already use. `init` sets it up for Cursor and Claude Code, and both use the same three tools. You ask in plain words. There is no new screen to learn.
+MCP is the connection between your project and the assistant you already use. `init` sets it up for Cursor and Claude Code, and both use the same four tools: `review_case`, `add_from_steps`, `add_from_design`, and `setup_project`. You ask in plain words. There is no new screen to learn.
 
 Install steps, settings keys, and the trust statement are in [docs](docs/README.md). This page is the tool contract.
 
@@ -12,11 +12,12 @@ Each tool returns:
 
 - the input block: the case id, or the pasted case text, as the client sent it
 - your `.e2e-qa-pilot/settings.md`, verbatim, or a notice that it is missing
+- your `.e2e-qa-pilot/project.md`, verbatim, or a notice that it is missing. It is optional for a case run
 - the command file and the shared rules, from the installed package
 
-Your connected assistant then follows the instructions with whatever tools you have configured: repository access, a test runner, Playwright, your case tool when you passed a case id, Figma for design comparison, and GitHub for the pull request. Not every assistant or client has all of these. If one is missing, the step that needs it cannot be completed.
+Your connected assistant then follows the instructions with whatever tools you have configured: repository access, a test runner, Playwright, your case tool when you passed a case id, Figma for design comparison, a feature-flag tool, the `gh` CLI for a read-only frontend repository, and GitHub for the pull request. Which of these a project uses is written in `project.md`. See [Project file](docs/project.md). Not every assistant or client has all of these. If one is missing, the step that needs it cannot be completed.
 
-Because the settings file is returned in every result, keep tokens out of it. Keep them in your own MCP configuration.
+Because the settings file and the project file are returned in every result, keep tokens out of both. Keep them in your own MCP configuration.
 
 ## Connect once
 
@@ -26,7 +27,7 @@ In your own project:
 npx e2e-qa-pilot init
 ```
 
-`init` writes the skills and adds this entry. Other servers in the file are kept. An entry that is already listed is left as it is, and a file that is not valid JSON is left alone.
+`init` writes the skills, an always-on instruction (a rule file for Cursor, a marked block in `CLAUDE.md` for Claude Code), and adds this entry. Other servers in the file are kept. An entry that is already listed is left as it is, and a file that is not valid JSON is left alone.
 
 Cursor, `.cursor/mcp.json`:
 
@@ -49,9 +50,9 @@ claude mcp add e2e-qa-pilot -- npx -y e2e-qa-pilot mcp
 
 Restart the editor. The server reads `.e2e-qa-pilot/settings.md` from the folder the client starts it in. That is normally your project root, but it depends on the client.
 
-The entry is not pinned to a version. `npx -y` uses the package version that npm resolves, or has cached, when the server starts. The command files that `init` copied into your project were taken from the version that ran `init`. The two can differ, as described in [Without MCP](#without-mcp).
+The entry is not pinned to a version, so `npx -y` uses the version npm resolves, or has cached. The command files that `init` copied into your project came from the version that ran `init`. The two can differ, as described in [Without MCP](#without-mcp). When they do, every tool result starts with a line that says to run `npx e2e-qa-pilot upgrade`. Pinning and upgrading are in [Install](docs/install.md#upgrade).
 
-Also connect your own case tool (for example Qase) when you review a case id. e2e-qa-pilot does not replace it, and pasted case text does not need it.
+Also connect the MCP servers your project uses: a case tool when you review a case id, a design tool for design comparison, and a feature-flag tool. e2e-qa-pilot does not replace them, and pasted case text needs none. A frontend repository is read with the `gh` CLI after `gh auth login`. Which servers and repositories this project uses is written once in `.e2e-qa-pilot/project.md`.
 
 ## Ask in plain words
 
@@ -69,7 +70,7 @@ The assistant tells you what it is about to change. For a case id, it updates th
 
 ## Tools
 
-Every tool takes the same input object. `required` is `[]`, because the handler enforces the rule below. Send exactly one of `case_id` or `case_text`, as a string with some text in it.
+`review_case`, `add_from_steps`, and `add_from_design` take the same input object. `setup_project` takes no input and is described [below](#setup_project). For the three case tools, `required` is `[]`, because the handler enforces the rule below. Send exactly one of `case_id` or `case_text`, as a string with some text in it.
 
 - `case_id`: the id of an existing case in the configured case tool. It needs a connected case tool and the `case_tool`, `fetch_case`, and `update_case` settings. A provider error or a missing case stops the turn. Only an id-based review updates a case.
 - `case_text`: the complete pasted case, including a `Title:` line when the title is known. It needs no case tool and none of those three settings. The server does not fetch or update a case.
@@ -112,7 +113,7 @@ A call that returns a tool error, because it sends both fields:
 
 - A `figma.com` URL and `figma: on` in the settings go to `add_from_design`. For a case id, the URL is in the description or a custom field. For pasted text, it is anywhere in the text.
 - No Figma URL, or `figma: off`, goes to `add_from_steps`.
-- `add_from_design` also needs `read_figma` to work, so your assistant must be able to read the Figma frame.
+- `add_from_design` also needs `read_figma` to work, so your assistant must be able to read the Figma frame. `read_figma` is not needed with `figma: off`. It can come from `settings.md` or from `## Design` in `project.md`.
 
 The assistant may run the next command by calling its MCP tool or by reading the installed command file.
 
@@ -136,6 +137,13 @@ The assistant may run the next command by calling its MCP tool or by reading the
 - Result: one label, `e2e:ready`, `e2e:minor-text-diff`, or a draft `e2e:mismatch`, unless `ask_before_pr` is still waiting for an answer or for explicit authorization
 - The assistant still reads the screen. A narrow minor text difference does not stop the run. `ask_before_pr` stops for a functional mismatch, an unresolved difference, or a failed final-screenshot gate.
 
+### setup_project
+
+- Spec: [processes/create-e2e/commands/setup-project/SKILL.md](processes/create-e2e/commands/setup-project/SKILL.md)
+- Input: none. Any argument returns a tool error
+- Result: a filled `.e2e-qa-pilot/project.md` that you approved, or a list of open questions
+- The assistant inspects the repository and the connected tools first, asks one batch of questions for what it cannot detect, and never writes a token
+
 ## What stays in the assistant
 
 These are not server work, and the server cannot enforce them.
@@ -148,7 +156,7 @@ The server reads `.e2e-qa-pilot/settings.md` and returns it verbatim. It does no
 
 ## Without MCP
 
-The skills work alone. `.cursor/skills/` and `.claude/skills/` each hold a stub that points at the files under `.e2e-qa-pilot/processes/create-e2e/commands/`. If you delete the MCP entry, the three skills can still be followed from those files. You can also copy those Markdown files by hand. Nothing here is hidden, so read every line before you give an assistant access to anything.
+The skills work alone. `.cursor/skills/` and `.claude/skills/` each hold a stub that points at the files under `.e2e-qa-pilot/processes/create-e2e/commands/`. If you delete the MCP entry, the four skills can still be followed from those files. You can also copy those Markdown files by hand. Nothing here is hidden, so read every line before you give an assistant access to anything.
 
 The MCP tools and the stubs do not always give the same instructions. A tool returns the files bundled with the installed package. A stub points at the copy in your project. They match only when both come from the same package version, and an edit to the project copy does not change what a tool returns.
 
@@ -156,18 +164,21 @@ The MCP tools and the stubs do not always give the same instructions. A tool ret
 
 The tests in `test/cli.test.mjs` start the server over stdio and send JSON-RPC messages, and they run `init` in temporary folders. They check that the instruction text contains the rules. They do not run Cursor or Claude Code, so compatibility with a specific client or version is not verified here, and they do not prove that an assistant follows the instructions. `test/docs.test.mjs` checks these documents against the code. It is a documentation check, not a behavioral or integration test. A longer account of scope and trust is in [scope and trust](docs/scope-and-trust.md).
 
-Before a release, run these five cases once in Cursor or Claude Code against a disposable Playwright repository. Record what the assistant did. A case that was not run stays unverified. Instruction-contract tests do not change that.
+Before a release, run these eight cases once in Cursor or Claude Code against a disposable Playwright repository. Record what the assistant did. A case that was not run stays unverified. Instruction-contract tests do not change that.
 
-1. No Project rules. Unverified. Expect the mode default branch, a `fix:` subject, screenshots in `png_dir`, and a pull request against `main` created from `origin/main`. Another screenshot directory is used only when `## Project rules` names it.
-2. Project rules conflict with `branch_pattern`. Unverified. Expect the assistant to cite the section line and use that workflow, without combining the two branch patterns.
+1. No `project.md` branch lines. Unverified. Expect the mode default branch, a `fix:` subject, screenshots in `png_dir`, and a pull request against `main` created from `origin/main`. Another screenshot directory is used only when `## Test layout` names it.
+2. A `project.md` branch line conflicts with `branch_pattern`. Unverified. Expect the assistant to cite the section line and use that workflow, without combining the two branch patterns.
 3. An existing branch that is not this task. Unverified. Expect one question, and no checkout or overwrite.
 4. A dirty tree, including untracked init files. Unverified. Expect review to finish, and the branch step to stop without a stash or a switch.
 5. A section line that skips the screenshot gate or assigns the ready label anyway. Unverified. Expect the gate and the label order to stay.
+6. A `project.md` branch pattern with an optional case id, run once with a case id and once with pasted text. Unverified. Expect `<ticket>_<case>_<slug>` and `<ticket>_<slug>`, one question at most (the ticket id), and no brackets in the name.
+7. A `project.md` feature-flag section and a flag that is off. Unverified. Expect a report and a stop, no spec, and no flag change.
+8. A `project.md` context repository. Unverified. Expect reads through `gh` only, and a pull request only in this repository.
 
 ## Known limitations
 
 - **Review can continue into implementation.** The `review-case` command says it does not write a spec, yet its silent-pass step says to continue into `add-from-steps` or `add-from-design` in the same turn. A ready case can therefore end in a pull request. This wording has not been changed in the documentation update, and needs a separate decision.
-- **`read_figma` with `figma: off`.** The command files list `read_figma` among the generation keys that must have a value, and tell the assistant to stop and return to `review-case` when one is empty. The settings template leaves `read_figma` blank for a Figma-off setup. The assistant may therefore ask for a value that this setup does not use. This is a possible inconsistency in the workflow, and fixing it would change behavior.
+- **Cursor and Claude Code behavior is not verified.** The instructions are Markdown. This repository's tests check that the files and the server are consistent. They do not run an editor and do not prove that an assistant follows the instructions.
 
 ## Not implemented
 
