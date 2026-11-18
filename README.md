@@ -1,6 +1,5 @@
 <!--suppress HtmlDeprecatedAttribute -->
 <div align="center">
-  <img src="assets/logo.jpg" width="128" alt="e2e-qa-pilot logo">
   <h1>e2e-qa-pilot</h1>
   <p><em>Turn manual test cases into reviewed, automated Playwright PRs.</em></p>
   <p>
