@@ -17,9 +17,17 @@ The settings file is included in every tool result, so do not store tokens in it
 | `pr_label_minor_text_diff` | Label when the only issue is a narrow wording difference. Default `e2e:minor-text-diff` |
 | `pr_label_mismatch` | Label for a functional or unresolved mismatch, or inadequate required screenshot evidence. Default `e2e:mismatch` |
 
-`read_figma` is required only when `figma` is `on`. With `figma: off`, in `settings.md` or in `## Design` of `project.md`, leave it blank. The assistant does not ask for it.
+No Figma? Answer `off` and leave `read_figma` blank. `read_figma` is required only when `figma` is `on`. With `figma: off`, in `settings.md` or in `## Design` of `project.md`, leave it blank. The assistant does not ask for it.
 
 ## Pull request outcomes
+
+| Label | Color | Meaning |
+|-------|-------|---------|
+| `e2e:ready` | 🟢 green `#0E8A16` | Behavior matches and the required screenshots are adequate |
+| `e2e:minor-text-diff` | 🟡 yellow `#FBCA04` | Behavior matches and the only issue is a narrow wording difference |
+| `e2e:mismatch` | 🔴 red `#D73A4A` | A functional or unresolved mismatch, or inadequate screenshots. Draft pull request |
+
+When a label is missing in your repository, the assistant creates it with these colors and descriptions. It does not change a label that already exists. The colors are not a setting, so a renamed label (`pr_label_*`) is created with the same color as the one it replaces.
 
 When the assistant has the tools and permissions the commands name, the intended deliverables are a Playwright spec, a step-by-step results table, screenshot evidence, pull request comments, and a pull request for human QA review. A label is a review outcome. It does not mean the change is approved or merged.
 

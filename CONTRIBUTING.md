@@ -22,3 +22,16 @@ The commands under `processes/create-e2e/commands/` are the spec, so a behavior 
 `templates/always-on.md` is written for the assistant, not for people. `init` copies it word for word into the Cursor rule and into the `CLAUDE.md` block, so it belongs to both editors and holds no comments. A person reads it only inside those two files.
 
 Report vulnerabilities through [SECURITY.md](SECURITY.md). Community expectations are in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+## Release checks
+
+Before a release, run these eight cases once in Cursor or Claude Code against a disposable Playwright repository. Record what the assistant did. A case that was not run stays unverified. Instruction-contract tests do not change that.
+
+1. No `project.md` branch lines. Unverified. Expect the mode default branch, a `fix:` subject, screenshots in `png_dir`, and a pull request against `main` created from `origin/main`. Another screenshot directory is used only when `## Test layout` names it.
+2. A `project.md` branch line conflicts with `branch_pattern`. Unverified. Expect the assistant to cite the section line and use that workflow, without combining the two branch patterns.
+3. An existing branch that is not this task. Unverified. Expect one question, and no checkout or overwrite.
+4. A dirty tree, including untracked init files. Unverified. Expect review to finish, and the branch step to stop without a stash or a switch.
+5. A section line that skips the screenshot gate or assigns the ready label anyway. Unverified. Expect the gate and the label order to stay.
+6. A `project.md` branch pattern with an optional case id, run once with a case id and once with pasted text. Unverified. Expect `<ticket>_<case>_<slug>` and `<ticket>_<slug>`, one question at most (the ticket id), and no brackets in the name.
+7. A `project.md` feature-flag section and a flag that is off. Unverified. Expect a report and a stop, no spec, and no flag change.
+8. A `project.md` context repository. Unverified. Expect reads through `gh` only, and a pull request only in this repository.

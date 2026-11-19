@@ -40,4 +40,4 @@ flowchart TD
 
 Shared rules: [ready-rules.md](commands/shared/ready-rules.md), [pr-evidence.md](commands/shared/pr-evidence.md), [project-config.md](commands/shared/project-config.md) (how `.e2e-qa-pilot/project.md` is read), and [workflow.md](commands/shared/workflow.md) (case title, duplicate check, branch name, git steps, where files live).
 
-Install with `npx e2e-qa-pilot init` in your project, once the package is published to npm. What to ask, the input contract, and the tool results are in `mcp.md` in the e2e-qa-pilot package and repository.
+Install with `npx e2e-qa-pilot init` in your project. What to ask, the input contract, and the tool results are in `mcp.md` in the e2e-qa-pilot package and repository.

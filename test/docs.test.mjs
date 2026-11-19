@@ -202,11 +202,12 @@ test('docs: AutoFix nightly is labelled not implemented and has no commitments',
   ];
   for (const [name, text] of checked) {
     const lines = text.split('\n').filter((line) => /autofix/i.test(line));
-    if (name === 'README.md' || name === 'mcp.md') {
+    if (name === 'mcp.md') {
       assert.ok(lines.length > 0, `${name} does not mention AutoFix`);
     }
     for (const line of lines) assert.match(line, /not implemented/i, `${name}: ${line}`);
   }
+  assert.doesNotMatch(readme, /autofix|nightly/i, 'README.md must not mention the planned AutoFix nightly process');
   assert.ok(!fs.existsSync(path.join(kitRoot, 'processes', 'autofix-nightly', 'commands')));
 });
 
@@ -285,6 +286,20 @@ test('docs: command Markdown states both PR modes, the three labels, and separat
   );
 });
 
+test('docs: missing labels are created with the documented colors', () => {
+  const evidence = fs.readFileSync(
+    path.join(kitRoot, 'processes', 'create-e2e', 'commands', 'shared', 'pr-evidence.md'),
+    'utf8',
+  );
+  const settingsDoc = readRoot(path.join('docs', 'settings.md'));
+  for (const [label, color] of [['e2e:ready', '0E8A16'], ['e2e:minor-text-diff', 'FBCA04'], ['e2e:mismatch', 'D73A4A']]) {
+    assert.ok(readme.includes(label) && readme.includes(`#${color}`), `README.md lacks ${label} #${color}`);
+    assert.ok(settingsDoc.includes(label) && settingsDoc.includes(`#${color}`), `settings.md lacks ${label} #${color}`);
+    assert.ok(evidence.includes(color), `pr-evidence.md lacks ${color}`);
+  }
+  assert.match(evidence, /Never edit, recolor, or rename a label that already exists/);
+});
+
 test('docs: repository, homepage, and bugs metadata name the same GitHub repository', () => {
   const repo = String(pkg.repository?.url ?? '').match(/github\.com\/([^/]+\/[^/.]+)(?:\.git)?$/);
   assert.ok(repo, 'package.json repository.url should be a GitHub URL');
@@ -299,7 +314,7 @@ test('docs: branch names come from the case, and the PR report avoids repeating 
   const read = (name) => fs.readFileSync(path.join(commands, name), 'utf8');
   const template = readRoot(path.join('templates', 'settings.md'));
   assert.match(template, /^branch_pattern: e2e\/\{title_slug}$/m);
-  assert.match(readme, /`\{title_slug}`/);
+  assert.match(readRoot(path.join('docs', 'install.md')), /`\{title_slug}`/);
 
   const review = read('review-case/SKILL.md');
   assert.match(review, /Goal: `branch_pattern`/);

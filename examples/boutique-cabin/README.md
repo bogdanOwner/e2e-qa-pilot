@@ -11,6 +11,19 @@ Each of the four cases below ends differently. Together they show what you get, 
 | 3 | `Review cases/mismatch.md ...` | A draft pull request labeled `e2e:mismatch`. It names the failed step and shows the bug on screen. This run uses [`pr_mode: create_pr_for_review`](.e2e-qa-pilot/settings.md). Set `ask_before_pr` there if you do not want a draft. [Pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/5) |
 | 4 | `Review cases/ambiguous.md ...` | No spec and no pull request. The assistant asks what should be visible after each step. The reply is quoted below. |
 
+## How to read each pull request
+
+Every pull request from a run has the same parts. Review them in this order:
+
+1. **Summary line.** The label, the steps passed, the run count, and `assertion_edits` (how many times the agent edited an expected result to make the spec pass, which should be 0).
+2. **Case and test data.** The case title, the preconditions, and every value the test typed. Check that the values are the ones you want.
+3. **Steps table.** One row per step: the expected result from your case, what happened, the screenshot links, and a verdict.
+4. **Screenshots.** One or more per step. Each image should show that step's control or result, not a repeat of an earlier screen.
+5. **Generated files.** In the Files changed tab: the Playwright spec in `tests/`, the Gherkin in `specs/`, the page contract in `pages/`, and the page objects and flows.
+6. **Review checklist.** The items the agent leaves for you to tick.
+
+A green test run proves only that the assertions in that spec passed. The screenshots and the step table are how you judge whether the spec covers the case. A label is a review outcome, not an approval.
+
 ## Quick start
 
 1. Start the site (from a clone of this repository, in `examples/boutique-cabin`):
@@ -44,6 +57,13 @@ The guest searches 4 to 5 Aug 2026, reserves Chalet 4 at 497 EUR, fills the gues
 
 **Result**: `e2e:ready`, 3 of 3 steps passed, no assertion was edited. [See the pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3). This run used Grok 4.7, a small and inexpensive model. Results vary by model.
 
+**In the pull request**
+
+- Case input: `cases/ready.md`, three steps, each with an expected result.
+- Generated spec: `tests/book-chalet-4-at-cabana.spec.mjs`, with Gherkin in `specs/book-chalet-4-at-cabana.md`.
+- Screenshot evidence: 7 images across the 3 steps, ending on the confirmation and booking reference `CAB-1042`.
+- Reviewer checks: the screenshots show what the Steps table says, including the filled guest form and the checked terms box, and the test data (dates, name, email) is acceptable.
+
 <details>
 <summary>Case text: <code>cases/ready.md</code></summary>
 
@@ -72,6 +92,13 @@ A small wording difference does not stop the run. The assistant still tests the 
 
 **Result**: `e2e:minor-text-diff`, 2 of 3 steps passed. Step 3 quotes the case sentence next to the screen sentence. No assertion was edited. [See the pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/4).
 
+**In the pull request**
+
+- Case input: `cases/wording.md`, the same as Case 1 except for the sentence in step 3.
+- Generated spec: `tests/book-chalet-4-with-the-case-confirmation-sentence.spec.mjs`.
+- Screenshot evidence: 6 images across the 3 steps. Step 3 has the filled form and the confirmation, and the Steps table quotes the screen sentence.
+- Reviewer checks: the screenshots show what the Steps table says, the test data is acceptable, and the text difference is understood. Decide whether the copy or the case should change.
+
 <details>
 <summary>Case text: <code>cases/wording.md</code></summary>
 
@@ -99,6 +126,13 @@ The site has one deliberate defect. In the Guests picker, add a child and choose
 The run fails at step 1. Steps 2 and 3 never run, so no time is spent on them. This example uses [`pr_mode: create_pr_for_review`](.e2e-qa-pilot/settings.md), so the assistant still opens a draft pull request with the red `e2e:mismatch` label. Set `ask_before_pr` on that line if you do not want a draft in this case. The pull request shows the failed step, what was expected, what the screen showed, and a screenshot of the red label. A failed assertion is a finding for a person to judge, not an automatic verdict.
 
 **Result**: draft `e2e:mismatch`. Step 1 failed: the Guests picker stayed open and the red "Select age" label was still visible. Steps 2 and 3 did not run. [See the pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/5).
+
+**In the pull request**
+
+- Case input: `cases/mismatch.md`, three steps with expected results. Step 1 describes a Guests picker that closes after Done.
+- Generated spec: `tests/book-chalet-4-for-a-guest-with-a-child.spec.mjs`. The expected result was not rewritten to make it pass.
+- Screenshot evidence: 1 image of the open Guests picker with the red "Select age" label. Steps 2 and 3 did not run, so they have no screenshot.
+- Reviewer checks: the screenshot shows what the Steps table says, the test data is acceptable, and the step 1 mismatch is understood. Decide whether this is a product bug or a wrong case. The pull request calls it a finding, not a confirmed regression.
 
 <details>
 <summary>Case text: <code>cases/mismatch.md</code></summary>

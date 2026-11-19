@@ -1,10 +1,11 @@
 # Docs
 
-Reference for installing e2e-qa-pilot and for the rules the assistant is given.
+Start with Install. The other pages are reference.
 
-- [Install](install.md): prerequisites, `init`, the files it writes, and the one-line prompts.
-- [Project file](project.md): what is specific to your repository (ticket, branch, case tool, Figma, feature flags, other repositories), with a full example.
-- [Settings](settings.md): settings keys, pull request labels, and required inputs.
-- [Scope and trust](scope-and-trust.md): what the package does, what it does not do, and what the tests check.
+- [Install](install.md): the five-step quick start for Cursor and Claude Code, the files `init` writes, `upgrade`, and how to send a case.
+- [Project file](project.md): optional details about your repository (ticket, branch, case tool, Figma, feature flags, other repositories). The setup assistant fills it in for you.
+- [Settings](settings.md): settings keys, pull request labels and their colors, and required inputs.
 - [MCP](../mcp.md): the four tools, the input contract, and known limitations.
+- [Scope and trust](scope-and-trust.md): what the package does, what it does not do, and what the tests check.
 - [Create e2e](../processes/create-e2e/README.md): the workflow the tools ask the assistant to follow.
+- [AutoFix nightly](../processes/autofix-nightly/README.md): planned, not implemented.

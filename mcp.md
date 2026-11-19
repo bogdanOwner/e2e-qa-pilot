@@ -162,18 +162,7 @@ The MCP tools and the stubs do not always give the same instructions. A tool ret
 
 ## What is and is not verified
 
-The tests in `test/cli.test.mjs` start the server over stdio and send JSON-RPC messages, and they run `init` in temporary folders. They check that the instruction text contains the rules. They do not run Cursor or Claude Code, so compatibility with a specific client or version is not verified here, and they do not prove that an assistant follows the instructions. `test/docs.test.mjs` checks these documents against the code. It is a documentation check, not a behavioral or integration test. A longer account of scope and trust is in [scope and trust](docs/scope-and-trust.md).
-
-Before a release, run these eight cases once in Cursor or Claude Code against a disposable Playwright repository. Record what the assistant did. A case that was not run stays unverified. Instruction-contract tests do not change that.
-
-1. No `project.md` branch lines. Unverified. Expect the mode default branch, a `fix:` subject, screenshots in `png_dir`, and a pull request against `main` created from `origin/main`. Another screenshot directory is used only when `## Test layout` names it.
-2. A `project.md` branch line conflicts with `branch_pattern`. Unverified. Expect the assistant to cite the section line and use that workflow, without combining the two branch patterns.
-3. An existing branch that is not this task. Unverified. Expect one question, and no checkout or overwrite.
-4. A dirty tree, including untracked init files. Unverified. Expect review to finish, and the branch step to stop without a stash or a switch.
-5. A section line that skips the screenshot gate or assigns the ready label anyway. Unverified. Expect the gate and the label order to stay.
-6. A `project.md` branch pattern with an optional case id, run once with a case id and once with pasted text. Unverified. Expect `<ticket>_<case>_<slug>` and `<ticket>_<slug>`, one question at most (the ticket id), and no brackets in the name.
-7. A `project.md` feature-flag section and a flag that is off. Unverified. Expect a report and a stop, no spec, and no flag change.
-8. A `project.md` context repository. Unverified. Expect reads through `gh` only, and a pull request only in this repository.
+The tests start the server over stdio, run `init` in temporary folders, and check that the instruction text contains the rules. They do not run Cursor or Claude Code, so compatibility with a specific client or version is not verified here, and they do not prove that an assistant follows the instructions. See [What the tests check](docs/scope-and-trust.md#what-the-tests-check).
 
 ## Known limitations
 
