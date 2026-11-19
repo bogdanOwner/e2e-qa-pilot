@@ -1,20 +1,41 @@
 # Project file
 
-`.e2e-qa-pilot/project.md` holds what is specific to your repository: how tickets, branches, and commits look, which case tool and design tool you use, which feature-flag tool to check, which other repositories to read, and where tests live. [Settings](settings.md) keeps only the keys every project shares.
+`.e2e-qa-pilot/project.md` records what is specific to your repository: ticket format, branch naming, case tool, and so on. You do not write it yourself. The setup skill fills it in through MCP, and you can edit it later.
 
-`init` creates the file once and never overwrites it. The assistant reads it on every run, so the file is sent to the model each time. Do not put a token in it.
+## The easy way: let setup write it
 
-## Fill it in
+1. **Run `init`** in your project root, then restart the editor and open a new chat. See [Install](install.md).
 
-Ask your assistant in a new chat:
+   ```bash
+   npx e2e-qa-pilot init
+   ```
+
+2. **Ask for setup.** In the new chat, send this. It runs the `setup_project` tool through MCP:
+
+   ```text
+   Set up e2e-qa-pilot for this project.
+   ```
+
+3. **Answer what is missing.** The assistant first reads your git branches, Playwright config, the names of your MCP servers, and your `gh` login. It asks one batch of questions only for what it could not find, then shows you the finished file and writes it after you agree.
+4. **Review and commit** the file before a run that creates a branch.
+
+You can save a question or two by naming your tools in the same message:
 
 ```text
-Set up e2e-qa-pilot for this project.
+Set up e2e-qa-pilot for this project. We use Jira keys like PROJ-123 in branch names, cases are in Xray, and flags are in LaunchDarkly.
 ```
 
-That runs `setup_project`. The assistant reads your git branches, Playwright config, MCP server names, and `gh` login, then asks one batch of questions for what it could not detect, shows you the finished file, and writes it after you agree. You can also edit the file by hand. Commit it before a run that creates a branch.
+Almost everything in the file is optional. A project with no ticket tracker, no case tool, and no other repository can leave the file as `init` wrote it. `init` creates the file once and never overwrites it. The assistant reads it on every run, so do not put a token in it.
 
-Or copy the closest example and change the names. A project with no tracker, no case tool, and no other repository needs nothing here: leave the file as `init` wrote it.
+If `project.md` and [Settings](settings.md) answer the same question, `project.md` wins. [Settings](settings.md) keeps only the keys every project shares.
+
+## For a more complex setup: start from an example
+
+Use an example when your project has several moving parts (a ticket id and a case id in the branch name, a feature-flag tool, a frontend repository), or when you want to see what a finished file looks like before setup writes yours.
+
+1. Open the example closest to your stack and copy it into `.e2e-qa-pilot/project.md`.
+2. Change the names: tracker, branch format, MCP server names, environment, repositories. Delete the sections you do not use.
+3. Run setup again with `Set up e2e-qa-pilot for this project.` It keeps the sections you filled in, asks only about what is still open, and checks that each MCP server the file names is configured, that `gh` can read each context repository, and that the branch pattern makes a valid git branch name.
 
 | Your stack | Example |
 |------------|---------|
@@ -22,6 +43,8 @@ Or copy the closest example and change the names. A project with no tracker, no 
 | Plane number in the branch, Qase, Figma per case, GrowthBook, frontend repository | [plane-qase-growthbook.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/project-files/plane-qase-growthbook.md) |
 
 ## Sections
+
+This section and the ones below are reference. You do not need them to get started.
 
 Every section is optional. A heading with nothing under it is unset. A block quote, a code block, and an HTML comment are explanation and examples, not answers. The rules the assistant follows for each section are in [project-config.md](../processes/create-e2e/commands/shared/project-config.md).
 

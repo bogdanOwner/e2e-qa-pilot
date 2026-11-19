@@ -13,108 +13,85 @@
 
 [**Get started**](#get-started) · [**Examples**](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md) · [**MCP**](mcp.md) · [**Docs**](docs/README.md) · [**Contributing**](CONTRIBUTING.md)
 
-e2e-qa-pilot gives your coding agent the expected result up front, so it can build the test, verify it with screenshots, and open a PR you can review in minutes.
+## Why e2e-qa-pilot?
 
-## Why a pilot
+<p><img src="assets/why-pr.png" width="60" align="left" hspace="12" alt="A pull request card with screenshots, a checklist, and code"><strong>A PR with evidence, not just code.</strong><br>Every PR includes a Playwright test, step-by-step expected vs. actual results, and screenshots for review.<br clear="left"></p>
 
-- It asks once, up front, and only when the case is unclear. It does not invent an expected result.
-- It checks the final screen. The pull request shows every step and a screenshot.
-- A person reviews the pull request. Nothing is auto-merged.
+<p><img src="assets/why-result.png" width="60" align="left" hspace="12" alt="Expected and actual screenshots compared next to a test checklist"><strong>A green test isn't the finish line.</strong><br>The agent compares actual behavior with the test case's expected results. If expectations are unclear, it asks instead of guessing.<br clear="left"></p>
+
+<p><img src="assets/why-reuse.png" width="60" align="left" hspace="12" alt="One page description feeding three tests"><strong>Describe pages once. Reuse across cases.</strong><br>Page descriptions, page objects, and test helpers stay in your repository, ready to support future test cases.<br clear="left"></p>
+
+<p><img src="assets/why-evidence.png" width="60" align="left" hspace="12" alt="A reviewer checking screenshots and a checklist"><strong>Nothing is auto-merged. Humans decide.</strong><br>The agent prepares the PR and highlights differences. A person reviews the evidence and decides whether to merge.<br clear="left"></p>
 
 ## See it work
 
-One chat line on the Cabana example. The label says what happened. The link opens the pull request for that case.
+One chat line on the Cabana example. Each pull request shows the case, the generated spec, a step table, and a screenshot per step. The label tells you what to do next.
 
-| You send | You get | PR example |
-|----------|---------|------------|
-| A case where every step matches | `e2e:ready`. Behavior matches, with screenshots | [PR for cases/ready.md](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3) |
-| The same case, one sentence off | `e2e:minor-text-diff`. A wording difference does not stop the flow | [PR for cases/wording.md](https://github.com/bogdanOwner/e2e-qa-pilot/pull/4) |
-| A case that hits a real bug | Draft `e2e:mismatch`. The failed step and the screen | [PR for cases/mismatch.md](https://github.com/bogdanOwner/e2e-qa-pilot/pull/5) |
-| A case with no expected result | No spec and no pull request. The assistant asks what should be visible | No pull request |
+| You send | You get | You do |
+|----------|---------|--------|
+| A case where every step matches | ![e2e:ready](https://img.shields.io/badge/e2e%3Aready-0E8A16)<br>Behavior and screenshots match. [PR #3](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3) | Check the screenshots, then merge |
+| The same case, one sentence off | ![e2e:minor-text-diff](https://img.shields.io/badge/e2e%3Aminor--text--diff-FBCA04)<br>The flow works. The case sentence is shown next to the screen sentence. [PR #4](https://github.com/bogdanOwner/e2e-qa-pilot/pull/4) | Decide: fix the copy or the case |
+| A case that hits a real bug | ![e2e:mismatch](https://img.shields.io/badge/e2e%3Amismatch-D73A4A)<br>Draft. The failed step, what was expected, and the screen. [PR #5](https://github.com/bogdanOwner/e2e-qa-pilot/pull/5) | Judge the finding. It is not an automatic verdict |
+| A case with no expected result | No spec and no pull request. The assistant asks what should be visible | Answer the question |
 
-The prompts and the case text are in the [Cabana example](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md).
-
-## Choose your process
-
-These are independent entry points.
-
-| What you need | Process | Outcome |
-|---------------|---------|---------|
-| Build end-to-end coverage from a manual case or a short description | [Create e2e](processes/create-e2e/README.md) | A pull request labeled `e2e:ready`, `e2e:minor-text-diff`, or draft `e2e:mismatch`, with screenshots and a step table |
-| Explain a failing nightly run and open one fix for review | Nightly AutoFix, not implemented, coming soon. [Planned flow](processes/autofix-nightly/README.md) | Read the frontend changes since the last run, rerun the failed tests to check for flakiness, report why it failed, and open a fix pull request |
-
-## Labels at a glance
-
-| Label | What to do |
-|-------|------------|
-| `e2e:ready` | Review and merge. Function and screenshots match |
-| `e2e:minor-text-diff` | Decide on the wording. The flow was not stopped, and the exact sentence was not marked as a pass |
-| `e2e:mismatch` | Look at the bug. Draft pull request. This is a finding, not an automatic verdict |
+The label colors are the same on GitHub. If a label is missing in your repository, the assistant creates it with that color. The prompts and the case text are in the [Cabana example](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md).
 
 ## How it works
 
 ```mermaid
-flowchart TD
+flowchart LR
   caseIn[Manual case] --> reviewCase[review_case]
   reviewCase -->|unclear| askStop[Ask and stop]
-  reviewCase -->|ready| buildSpec[Playwright spec and screenshots]
-  buildSpec --> readyLabel["PR labeled e2e:ready"]
-  buildSpec --> minorLabel["PR labeled e2e:minor-text-diff"]
-  buildSpec --> mismatchLabel["Draft PR labeled e2e:mismatch"]
+  reviewCase -->|ready| buildSpec[Spec, run, screenshots]
+  buildSpec --> pr[PR with one label]
 ```
 
-Because the expected result is known up front, the agent keeps working until there is a pull request. It does not stop at the first red run.
-
-- **A page description comes first.** From the case, or from Figma when a link is present, the agent writes what each screen should show. That makes a quick fix easier when only a CSS or copy difference is left.
-- **It compares the real screenshot with that description.** That is how it tells a wording difference from a real bug, and labels the pull request to match.
-- **The loop is bounded.** A spec gets at most five runs, and a real behavior difference stops the run at once, so it does not loop forever.
-- **The case can live elsewhere.** Paste it, or pass an id and let your case-tool MCP (Qase, TestRail, Xray, and so on) supply the ticket text. A design tool such as Figma is optional and adds design detail.
-- **The page descriptions will also help a nightly fix process.** That process is not implemented, coming soon.
+- **The result is checked on screen, not only by a green test.** A passing run proves only the assertions in that spec. The agent also compares each screenshot with what the step should show, so a test that passes on the wrong screen is not labeled ready.
+- **A page description is written first and kept.** From the case, or from Figma, the agent writes what each screen should show: elements and visible copy. In a repository that keeps page contracts (as the Cabana example does under `pages/`), the next case on the same page builds on it instead of starting again. It also makes a copy or CSS difference quick to spot.
+- **It never invents an expected result,** and the loop is bounded: at most five runs per spec.
 
 The full diagram is in [Install](docs/install.md#how-a-run-ends). Tool contracts are in [mcp.md](mcp.md).
 
-## Configuration
-
-Two files, both created once by `init`. `.e2e-qa-pilot/settings.md` holds the keys every project shares. `.e2e-qa-pilot/project.md` holds what only your repository has: ticket id, branch and commit format, case tool, Figma, feature flags, and read-only context repositories ([Project file](docs/project.md)). These settings matter most.
-
-| Setting | Options | What it changes |
-|---------|---------|-----------------|
-| `pr_mode` | `create_pr_for_review` (default), `ask_before_pr` | Whether a bug opens a draft pull request on its own, or the agent stops and asks first. Nothing is auto-merged either way |
-| `figma` | `on`, `off` | `on` with a figma.com link in the case compares each screen with its frame. `off` uses the case steps as the oracle |
-| Case source | pasted text, or a case id | A case id needs a connected case-tool MCP and a `## Case tool` section in `project.md`. The update step was written against Qase. Other case tools should work through their own MCP, but are not tested here |
-| `test_command`, `png_dir` | your Playwright command, a folder | How the spec is run, and where screenshots go |
-| `pr_label_ready`, `pr_label_minor_text_diff`, `pr_label_mismatch` | label names | Rename the three labels |
-
-All keys, defaults, and the label rules are in [Settings](docs/settings.md). Do not store tokens in the file.
-
 ## Get started
 
-You need Node 22 or later, plus Cursor or Claude Code. The four tools are `review_case`, `add_from_steps`, `add_from_design`, and `setup_project`. They return instructions, and your assistant does the work. The default branch name comes from the case title (`{title_slug}`), or `e2e/{case_id}-{title_slug}` for a case id. `.e2e-qa-pilot/project.md` can replace that name, the commit subject, and the pull-request base. The fallback base is `main`.
+You need Node 22 or later, a git repository with Playwright already set up, and Cursor or Claude Code. The steps are the same for both editors.
 
-```bash
-npx e2e-qa-pilot init
-```
+1. **Initialize** in your project root:
 
-`init` writes `.e2e-qa-pilot/settings.md` (the keys every project shares), `.e2e-qa-pilot/project.md` (what is specific to your repository), a copy of the Create e2e commands under `.e2e-qa-pilot/processes/create-e2e/`, editor skill stubs, an always-on instruction (a Cursor rule, or a block in `CLAUDE.md`), and an MCP entry. Those files, and `.e2e-qa-pilot/manifest.json` (the version record that `upgrade` uses), start untracked. Review and commit them before a run that creates or switches a branch. A case review can run while they are still untracked. The branch step stops until they are committed. It does not stash or delete them.
+   ```bash
+   npx e2e-qa-pilot init
+   ```
 
-Restart the editor and open a new chat. Tell the assistant about your project once. It checks the repository and the connected tools, and asks one batch of questions for the rest:
+   It detects `.cursor/` or `.claude/` and sets up that editor, or both when it finds both or neither.
+2. **Restart the editor and open a new chat.** Cursor: reload the window. Claude Code: quit and start it again in this folder.
+3. **Set up the project.** In the new chat, send `Set up e2e-qa-pilot for this project.` The assistant reads your repository and asks only about what it could not find. See [Your project file](#your-project-file).
+4. **Review and commit** what `init` and setup wrote: `.e2e-qa-pilot/` (check the test command and screenshot folder in `settings.md`), the editor skills, the MCP entry, and the Cursor rule or the `CLAUDE.md` block. Commit before the first run that creates a branch.
+5. **Send a case.**
+   - **Pasted case:** no integration needed. Include a `Title:` line and an expected result for each step, then ask: `Review this case with e2e-qa-pilot and implement it if it is ready:` followed by the case.
+   - **Case ID:** needs your case tool (Qase, TestRail, Xray, and so on) connected as an MCP server, and a `## Case tool` section in `project.md`. Then send `Review case QA-123, then implement it with e2e-qa-pilot.`
+
+More detail: [Install](docs/install.md).
+
+## Your project file
+
+`.e2e-qa-pilot/project.md` says how your repository works: ticket ids, branch names, which case tool, Figma, or flag tool to use, and other repositories to read. You do not write it by hand. Setup looks at your git branches, Playwright config, MCP server names, and `gh` login, asks one batch of questions for the rest, and shows you the file before writing it. Every section is optional.
+
+A filled file can be this short:
 
 ```text
-Set up e2e-qa-pilot for this project.
+## Ticket
+Tracker: Jira. Required: yes.
+
+## Branch & commit
+Branch: `{ticket_id}_{title_slug}`
+
+## Case tool
+Tool: Xray, through the `xray` MCP server.
 ```
 
-Then send one line per case. A pasted case needs a `Title:` line. A case id needs your case tool connected.
+With ticket `PROJ-123` and the case "Login error", the branch is `PROJ-123_login-error`. Never put a token in this file. Credentials stay in your editor's MCP configuration.
 
-```text
-Review case QA-123, then implement it with e2e-qa-pilot.
-```
-
-- [Install and init](docs/install.md) for prerequisites, the steps for Cursor and for Claude Code, what `init` writes, and `upgrade`.
-- [Project file](docs/project.md) for the ticket tracker, branch format, case tool, design tool, feature flags, and a frontend repository, with two copy-paste examples (Jira, Plane).
-- [Settings](docs/settings.md) for the test command, labels, and `pr_mode`.
-- [MCP](mcp.md) for the tools, and [without MCP](mcp.md#without-mcp) if you only want the Markdown skills.
-- [Example](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md) to try the four cases.
-- [Scope and trust](docs/scope-and-trust.md) for what this package does and does not do.
+More: [Project file](docs/project.md), with two full examples. Test command, labels, and `pr_mode` are in [Settings](docs/settings.md). The four tools are `review_case`, `add_from_steps`, `add_from_design`, and `setup_project` ([MCP](mcp.md)). What this package does and does not do: [Scope and trust](docs/scope-and-trust.md).
 
 ## Community
 

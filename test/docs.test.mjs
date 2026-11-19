@@ -293,7 +293,7 @@ test('docs: missing labels are created with the documented colors', () => {
   );
   const settingsDoc = readRoot(path.join('docs', 'settings.md'));
   for (const [label, color] of [['e2e:ready', '0E8A16'], ['e2e:minor-text-diff', 'FBCA04'], ['e2e:mismatch', 'D73A4A']]) {
-    assert.ok(readme.includes(label) && readme.includes(`#${color}`), `README.md lacks ${label} #${color}`);
+    assert.ok(readme.includes(label) && readme.includes(color), `README.md lacks ${label} ${color}`);
     assert.ok(settingsDoc.includes(label) && settingsDoc.includes(`#${color}`), `settings.md lacks ${label} #${color}`);
     assert.ok(evidence.includes(color), `pr-evidence.md lacks ${color}`);
   }
