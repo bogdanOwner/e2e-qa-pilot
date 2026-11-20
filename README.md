@@ -8,20 +8,31 @@
     <img src="https://img.shields.io/badge/node-%3E%3D22-339933.svg" alt="Node 22 or later">
     <img src="https://img.shields.io/badge/agents-Cursor%20%7C%20Claude%20Code-black.svg" alt="Cursor and Claude Code">
   </p>
-  <img src="assets/workflow.jpg" width="800" alt="Manual test cases go through e2e-qa-pilot and come out as pull requests labeled e2e:ready, e2e:minor-text-diff, or e2e:mismatch">
+  <img src="assets/workflow.png" width="800" alt="Manual test cases go through e2e-qa-pilot and come out as pull requests labeled e2e:ready, e2e:minor-text-diff, or e2e:mismatch">
 </div>
 
 [**Get started**](#get-started) · [**Examples**](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md) · [**MCP**](mcp.md) · [**Docs**](docs/README.md) · [**Contributing**](CONTRIBUTING.md)
 
 ## Why e2e-qa-pilot?
 
-<p><img src="assets/why-pr.png" width="60" align="left" hspace="12" alt="A pull request card with screenshots, a checklist, and code"><strong>A PR with evidence, not just code.</strong><br>Every PR includes a Playwright test, step-by-step expected vs. actual results, and screenshots for review.<br clear="left"></p>
-
-<p><img src="assets/why-result.png" width="60" align="left" hspace="12" alt="Expected and actual screenshots compared next to a test checklist"><strong>A green test isn't the finish line.</strong><br>The agent compares actual behavior with the test case's expected results. If expectations are unclear, it asks instead of guessing.<br clear="left"></p>
-
-<p><img src="assets/why-reuse.png" width="60" align="left" hspace="12" alt="One page description feeding three tests"><strong>Describe pages once. Reuse across cases.</strong><br>Page descriptions, page objects, and test helpers stay in your repository, ready to support future test cases.<br clear="left"></p>
-
-<p><img src="assets/why-evidence.png" width="60" align="left" hspace="12" alt="A reviewer checking screenshots and a checklist"><strong>Nothing is auto-merged. Humans decide.</strong><br>The agent prepares the PR and highlights differences. A person reviews the evidence and decides whether to merge.<br clear="left"></p>
+<table>
+  <tr>
+    <td width="74" valign="middle"><img src="assets/why-pr.png" width="48" alt="A pull request window with a screenshot and a checklist"></td>
+    <td valign="middle"><strong>A PR with evidence, not just code.</strong><br>Every PR includes a Playwright test, step-by-step expected vs. actual results, and screenshots for review.</td>
+  </tr>
+  <tr>
+    <td width="74" valign="middle"><img src="assets/why-result.png" width="48" alt="A passed check next to an expected-versus-actual comparison under a magnifier"></td>
+    <td valign="middle"><strong>A green test isn't the finish line.</strong><br>The agent compares actual behavior with the test case's expected results. If expectations are unclear, it asks instead of guessing.</td>
+  </tr>
+  <tr>
+    <td width="74" valign="middle"><img src="assets/why-reuse.png" width="48" alt="One page description feeding three tests"></td>
+    <td valign="middle"><strong>Describe pages once. Reuse across cases.</strong><br>Page descriptions, page objects, and test helpers stay in your repository, ready to support future test cases.</td>
+  </tr>
+  <tr>
+    <td width="74" valign="middle"><img src="assets/why-evidence.png" width="48" alt="A pull request approved by a person"></td>
+    <td valign="middle"><strong>Nothing is auto-merged. Humans decide.</strong><br>The agent prepares the PR and highlights differences. A person reviews the evidence and decides whether to merge.</td>
+  </tr>
+</table>
 
 ## See it work
 
