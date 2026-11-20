@@ -4,7 +4,7 @@
 > The easiest way: ask your assistant "Set up e2e-qa-pilot for this project." It reads the repository and your MCP servers and fills this file.
 > Block quotes and code blocks are explanation and examples. They are not read. Write your own lines as plain text under the heading.
 > Never put a token or secret here. Credentials belong in your editor's MCP configuration.
-> More examples: `examples/project-files/` in the e2e-qa-pilot repository. Reference: `docs/project.md`.
+> More examples: `.e2e-qa-pilot/processes/create-e2e/commands/setup-project/examples/`. Reference: `docs/project.md`.
 
 ## Ticket
 
