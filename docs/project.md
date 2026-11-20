@@ -4,6 +4,8 @@
 
 ## The easy way: let setup write it
 
+**Recommended.** Start here, even for a large project. You can switch to an example later.
+
 1. **Run `init`** in your project root, then restart the editor and open a new chat. See [Install](install.md).
 
    ```bash

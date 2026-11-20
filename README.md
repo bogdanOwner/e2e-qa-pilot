@@ -3,6 +3,7 @@
   <h1>e2e-qa-pilot</h1>
   <p><em>Turn manual test cases into reviewed, automated Playwright PRs.</em></p>
   <p>
+    <a href="https://www.npmjs.com/package/e2e-qa-pilot"><img src="https://img.shields.io/npm/v/e2e-qa-pilot.svg" alt="Latest npm release"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
     <img src="https://img.shields.io/badge/tests-Playwright-45ba4b.svg" alt="Playwright">
     <img src="https://img.shields.io/badge/node-%3E%3D22-339933.svg" alt="Node 22 or later">
@@ -11,7 +12,7 @@
   <img src="assets/workflow.png" width="800" alt="Manual test cases go through e2e-qa-pilot and come out as pull requests labeled e2e:ready, e2e:minor-text-diff, or e2e:mismatch">
 </div>
 
-[**Try it**](#try-it-first) · [**Install**](#use-it-in-your-project) · [**Examples**](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md) · [**MCP**](mcp.md) · [**Docs**](docs/README.md) · [**Contributing**](CONTRIBUTING.md)
+[**Try it**](#try-it-first-a-demo-site-in-this-repository) · [**Install**](#use-it-in-your-project) · [**Examples**](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md) · [**MCP**](mcp.md) · [**Docs**](docs/README.md) · [**Contributing**](CONTRIBUTING.md)
 
 ## Why e2e-qa-pilot?
 
@@ -63,11 +64,11 @@ The full diagram is in [Install](docs/install.md#how-a-run-ends). Tool contracts
 
 ## Get started
 
-### Try it first
+### Try it first: a demo site in this repository
 
-See a real run before you integrate anything. No project of your own needed.
+See a real run in 5 minutes, before you touch your own project. This repository includes **Cabana**, a small static booking site with mock data. You run ready-made test cases against it on your machine and get real pull requests in your fork.
 
-1. **[Fork this repository](https://github.com/bogdanOwner/e2e-qa-pilot/fork)** and start the bundled Cabana demo site.
+1. **[Fork this repository](https://github.com/bogdanOwner/e2e-qa-pilot/fork)** and start the Cabana site.
 2. **[Send one chat line](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md#case-1-everything-matches)** to run a ready-made case, or write your own.
 3. **Get a pull request** in your fork with the Playwright spec, a step-by-step table, and a screenshot for each step. See a real one: [PR #3](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3).
 
@@ -75,35 +76,17 @@ See a real run before you integrate anything. No project of your own needed.
 
 ### Use it in your project
 
-Requires **Node.js 22+**, an existing Playwright project, and **Cursor or Claude Code**.
+Add it to your own Playwright project. You need Node.js 22 or later, Cursor or Claude Code, and the `gh` CLI signed in, so runs can open pull requests.
 
-**1. Initialize your project**
+1. **Install** with `npx e2e-qa-pilot init`.
+2. **Adapt it to your project.** Restart the editor, send `Set up e2e-qa-pilot for this project.`, and commit the setup files.
+3. **Run your first test case** and get a pull request to review.
 
-```bash
-npx e2e-qa-pilot init
-```
+Prefer to let your agent run these steps? The install guide has a ready-made prompt.
 
-**2. Restart your editor, open a new chat, and send:**
+👉 **[Install guide](docs/install.md#quick-start)**
 
-```text
-Set up e2e-qa-pilot for this project.
-```
-
-The agent checks your project, asks only for missing settings, and writes `.e2e-qa-pilot/project.md` (ticket ids, branch names, case tool). Never put a token there. Credentials stay in your editor's MCP configuration.
-
-**3. Review and commit the generated setup files.**
-
-Do this before the first run that creates a branch.
-
-**4. Send your test case:**
-
-```text
-Review case QA-123, then implement it with e2e-qa-pilot.
-```
-
-Or paste a case with a `Title:` and expected results for each step. Case IDs require a connected case-tool MCP; pasted cases do not.
-
-[Full installation guide](docs/install.md) · [Project configuration](docs/project.md) · [Settings](docs/settings.md) · [Scope and trust](docs/scope-and-trust.md)
+[Project configuration](docs/project.md) · [Settings](docs/settings.md) · [Scope and trust](docs/scope-and-trust.md)
 
 The MCP server exposes four tools: `review_case`, `add_from_steps`, `add_from_design`, and `setup_project`. Contracts are in [mcp.md](mcp.md).
 
