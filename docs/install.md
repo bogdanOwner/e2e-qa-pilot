@@ -69,8 +69,8 @@ Open your project in Cursor or Claude Code and paste this prompt:
 
 ```text
 Set up e2e-qa-pilot in this project:
-1. Run npx e2e-qa-pilot@latest init and show me its Check.
-   If a check shows ❌, stop and tell me how to fix it.
+1. Run npx e2e-qa-pilot@latest init and show me its check.
+   If a requirement is missing, stop and tell me why and how to fix it.
 2. Then follow the setup-project skill that init installed.
 ```
 

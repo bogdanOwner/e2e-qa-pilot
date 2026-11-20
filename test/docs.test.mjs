@@ -473,7 +473,7 @@ test('docs: the setup prompt runs init, and the setup skill holds the setup rule
   assert.ok(prompt, 'docs/install.md has no setup prompt that runs init');
   assert.match(prompt, /setup-project skill/, 'the setup prompt must name the setup-project skill');
   assert.match(install, /\[setup-project skill]\(https:\/\/github\.com\/bogdanOwner\/e2e-qa-pilot\/blob\/main\/processes\/create-e2e\/commands\/setup-project\/SKILL\.md\)/, 'the install guide must link the setup-project skill');
-  assert.match(prompt, /If a check shows ❌, stop/);
+  assert.match(prompt, /If a requirement is missing, stop/);
 
   // Rules learned from real runs. These read Markdown; they do not prove an agent complies.
   const skillDir = path.join(kitRoot, 'processes', 'create-e2e', 'commands', 'setup-project');
