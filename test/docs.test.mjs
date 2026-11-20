@@ -467,6 +467,16 @@ test('docs: nothing still mentions the old plane_id placeholder or the Project r
   }
 });
 
+test('docs: the setup prompt in the install doc links every example project file', () => {
+  const install = readRoot(path.join('docs', 'install.md'));
+  const prompt = fencedBlocks(install, 'text').find((block) => block.startsWith('Set up e2e-qa-pilot in this project'));
+  assert.ok(prompt, 'docs/install.md has no setup prompt');
+  const dir = path.join(kitRoot, 'examples', 'project-files');
+  for (const name of fs.readdirSync(dir).filter((file) => file.endsWith('.md') && file !== 'README.md')) {
+    assert.ok(prompt.includes(`/examples/project-files/${name}`), `the setup prompt does not link ${name}`);
+  }
+});
+
 test('docs: the example project files are valid, neutral to each other, and hold no secret', () => {
   const dir = path.join(kitRoot, 'examples', 'project-files');
   const template = readRoot(path.join('templates', 'project.md')).replace(/<!--[\s\S]*?-->/g, '');

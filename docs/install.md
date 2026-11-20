@@ -27,6 +27,7 @@ Choose one of two ways: follow the five steps yourself, or let your agent run th
 The same steps, run by your agent. Open your project in Cursor or Claude Code and paste the prompt below. The agent:
 
 - checks your project and uses the recommended defaults
+- for a [complex setup](project.md#for-a-more-complex-setup-start-from-an-example) (a ticket id and a case id in the branch name, feature flags, or a frontend repository), drafts `project.md` from the closest example project file
 - asks only what it cannot find, at most 3 short questions
 - waits for your OK before it changes anything
 
@@ -35,7 +36,18 @@ The same steps, run by your agent. Open your project in Cursor or Claude Code an
 
 ```text
 Set up e2e-qa-pilot in this project: https://github.com/bogdanOwner/e2e-qa-pilot
-Use the latest npm release (npx e2e-qa-pilot@latest init) and follow its docs/install.md.
+Use the latest npm release (npx e2e-qa-pilot@latest init).
+
+Read first:
+- Install steps: https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/docs/install.md
+- Project file: https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/docs/project.md
+- Example project files, for a complex setup only:
+  - Jira key in the branch, Xray, LaunchDarkly, no Figma:
+    https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/project-files/jira-xray-launchdarkly.md
+  - Plane number in the branch, Qase, Figma per case, GrowthBook, frontend repository:
+    https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/project-files/plane-qase-growthbook.md
+  These files only show how each section is used. Keep only what this project
+  really uses. Do not copy a tool, name, or value that it does not have.
 
 How to work with me:
 - Find answers yourself first: package.json, Playwright config, git remote,
@@ -47,21 +59,38 @@ How to work with me:
 - If something blocks the setup (no Playwright, Node older than 22, no git repo),
   stop and tell me in one line how to fix it.
 
-Step 1. Show a short check: ✅ or ❌ for each requirement, then what you will
-do next. Wait for my OK.
+Step 1. Check. Show ✅ or ❌ for each requirement. Then name what this project
+uses: ticket tracker, case tool, Figma, feature flags, frontend repository.
+Say whether it is a complex setup: a ticket id and a case id in the branch
+name, feature flags, or a frontend repository. If it is, name the closest
+example project file. Say what you will do next. Wait for my OK.
 
-Step 2. Run init and show me what it wrote. Tell me to restart the editor and,
-in a new chat, send: Set up e2e-qa-pilot for this project.
+Step 2. Install. Run init and show me what it wrote.
+Complex setup only: draft .e2e-qa-pilot/project.md from the closest example
+with this project's names. For a section the project does not use, keep the
+heading with nothing under it. Show me the draft and write it only after I
+say yes. For any other project, leave project.md to the setup in Step 3.
+
+Step 3. Hand over. Give me one line to send in a new chat after the restart.
+It starts with "Set up e2e-qa-pilot for this project." and names only the
+tools you found. Use this pattern, and drop each part the project does not have:
+Set up e2e-qa-pilot for this project. We use <tracker> keys like <KEY-123> in branch names, cases are in <case tool>, designs are in <Figma or none>, and flags are in <flag tool>.
 
 At the end, give me a short result, not a report:
 - What is set up, with ⭐ next to the recommended choices you made
-- What I need to do (review and commit the files)
-- One real test case from this project to try first, and the exact line to send
+- What I need to do, in order:
+  1. Restart the editor and open a new chat.
+  2. Send the setup line from Step 3.
+  3. Review and commit the files in .e2e-qa-pilot/ and the editor files init wrote.
+  4. Send the first test case below.
+- A first test case to paste, written from a real page or flow in this project,
+  with a Title: line, numbered steps, and an Expected: result for each step,
+  in this form: Review this case with e2e-qa-pilot and implement it if it is ready:
 ```
 
 </details>
 
-> ℹ️ **Note:** After `init`, restart the editor. The setup finishes in a new chat (step 3 above).
+> ℹ️ **Note:** After `init`, restart the editor. The setup finishes in a new chat, as in [step 3 of Option 1](#option-1-set-it-up-step-by-step-recommended).
 
 Credentials for the case tool, Figma, and the flag tool live in each editor's MCP configuration. They never go in `settings.md` or `project.md`. To pin the package version, see [Upgrade](#upgrade).
 
