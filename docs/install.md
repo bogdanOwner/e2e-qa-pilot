@@ -17,6 +17,7 @@ Add e2e-qa-pilot to **your own Playwright project**.
 - **Case-tool MCP** (Qase, TestRail, Xray): to send a case id
 - **Figma access**: to compare with designs
 - **Feature-flag MCP** (GrowthBook, LaunchDarkly): to check flags in the environment you name, for example `staging`
+- **Frontend repository** (read only, through `gh`): to find routes, test ids, labels, and flag keys, and to read the frontend pull request linked to a case
 - **Several environments** (dev, stg): the run tests the environment your `test_command` and Playwright config point at. Set it there
 
 ## Quick start
@@ -46,7 +47,7 @@ Two ways, same result:
 
    The assistant reads your repository, asks only what it cannot find, and shows you `.e2e-qa-pilot/project.md` before it writes it. See [Project file](project.md).
 
-4. **Commit the setup files.** Each run creates a branch for its test, and it does not start while the setup files are uncommitted. See [What `init` writes](#what-init-writes).
+4. **Commit the setup files.** Each run creates a branch for its test, and it does not start while the setup files are uncommitted. Commit them on their own branch, not on a feature branch. Do not commit `.cursor/mcp.json` or `.mcp.json` if they hold a credential or are gitignored. See [What `init` writes](#what-init-writes).
 
 5. **Run your first test case.** Paste a case, as in [Send a case](#send-a-case). A pasted case needs no case tool.
 
@@ -89,6 +90,7 @@ How to work with me:
 
 Step 1. Check. Show ✅ or ❌ for each requirement. Then name what this project
 uses: ticket tracker, case tool, Figma, feature flags, frontend repository.
+For each tool, say whether it is connected as an MCP server or only found in code.
 Say whether it is a complex setup: a ticket id and a case id in the branch
 name, feature flags, or a frontend repository. If it is, name the closest
 example project file. Say what you will do next. Wait for my OK.
@@ -96,24 +98,35 @@ example project file. Say what you will do next. Wait for my OK.
 Step 2. Install. Run init and show me what it wrote.
 Complex setup only: draft .e2e-qa-pilot/project.md from the closest example
 with this project's names. For a section the project does not use, keep the
-heading with nothing under it. Show me the draft and write it only after I
-say yes. For any other project, leave project.md to the setup in Step 3.
+heading with nothing under it. Fill ## Feature flags only when a flag MCP is
+connected. Never write a password, token, or key in project.md, including
+test-user passwords: name the env var or secret store the tests read instead.
+Show me the draft and write it only after I say yes.
+For any other project, leave project.md to the setup in Step 3.
 
 Step 3. Hand over. Give me one line to send in a new chat after the restart.
-It starts with "Set up e2e-qa-pilot for this project." and names only the
-tools you found. Use this pattern, and drop each part the project does not have:
+If you drafted project.md in Step 2, the line is only:
+Set up e2e-qa-pilot for this project.
+Otherwise it starts with that sentence and names only the tools connected as
+MCP servers. Use this pattern, and drop each part the project does not have:
 Set up e2e-qa-pilot for this project. We use <tracker> keys like <KEY-123> in branch names, cases are in <case tool>, designs are in <Figma or none>, and flags are in <flag tool>.
 
 At the end, give me a short result, not a report:
 - What is set up, with ⭐ next to the recommended choices you made
+- Tools found in code but not connected as an MCP server, and what connecting
+  each one would add
 - What I need to do, in order:
   1. Restart the editor and open a new chat.
   2. Send the setup line from Step 3.
-  3. Review and commit the files in .e2e-qa-pilot/ and the editor files init wrote.
+  3. Review and commit the files in .e2e-qa-pilot/ and the editor files init
+     wrote, on their own branch from the start branch, not on a feature branch.
+     Do not commit MCP config that holds a credential or is gitignored.
   4. Send the first test case below.
 - A first test case to paste, written from a real page or flow in this project,
-  with a Title: line, numbered steps, and an Expected: result for each step,
-  in this form: Review this case with e2e-qa-pilot and implement it if it is ready:
+  with a Title: line and 3 to 4 numbered steps. One action and one Expected:
+  result per step, with no "or" and no "if". Prefer a flow that needs no new
+  account or special test data. Start it with:
+  Review this case with e2e-qa-pilot and implement it if it is ready:
 ```
 
 </details>
@@ -163,7 +176,7 @@ You do not need this to get started.
 | `.cursor/rules/e2e-qa-pilot.mdc` | Cursor only. An always-applied rule that tells the assistant to read both project files first |
 | `CLAUDE.md` | Claude Code only. A block between `<!-- e2e-qa-pilot:begin -->` and `<!-- e2e-qa-pilot:end -->` with the same instruction. The rest of the file is never touched |
 | `.e2e-qa-pilot/manifest.json` | The package version, the editors set up, and a hash of each file the package wrote. `upgrade` reads it. It holds no secret |
-| `.cursor/mcp.json` and `.mcp.json` | One `e2e-qa-pilot` entry. Other servers in the file are kept |
+| `.cursor/mcp.json` and `.mcp.json` | One `e2e-qa-pilot` entry. Other servers in the file are kept. Do not commit the file if it holds a credential or is gitignored |
 
 Review the diff and commit it before a workflow that creates or switches a branch. While these files are untracked, the branch step stops and names them. It never stashes, resets, or deletes them. Reviewing a case does not need a clean tree.
 
@@ -189,8 +202,8 @@ The project files are shared. The editors differ only in where you add the MCP s
 - **Ticket tracker** (Jira, Plane, Linear), only if your branch or commit names a ticket. Set it in `## Ticket` and `## Branch & commit`, for example `Branch: {ticket_id}[_{case_id}]_{title_slug}`. The assistant asks once for the id when it is required. It never invents one and never creates a ticket.
 - **Case-tool MCP** (Qase, TestRail, Xray), only to send a case id. The update checklist was written against Qase and has not been verified against other case tools.
 - **Figma access**, only for design comparison. That path can depend on a milestone screenshot helper in your project. This package does not provide one.
-- **Feature-flag MCP** (GrowthBook, LaunchDarkly), only if the project checks flags while it reviews a case. It is read only.
-- **`gh` CLI**, also used to read another repository, such as your frontend.
+- **Feature-flag MCP** (GrowthBook, LaunchDarkly), only if the project checks flags while it reviews a case. It is read only. Without a flag MCP, leave `## Feature flags` empty. Flags are then not checked, so a case that fails because a flag is off still ends as `e2e:mismatch`.
+- **Frontend repository**, read through `gh` and named in `## Context repos`. The assistant reads routes, test ids, labels, and flag keys there, and the frontend pull request linked to a case. It never writes to it. It finds flag keys there, but reading a flag's state still needs a flag MCP.
 
 ### Upgrade
 

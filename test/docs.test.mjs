@@ -471,6 +471,13 @@ test('docs: the setup prompt in the install doc links every example project file
   const install = readRoot(path.join('docs', 'install.md'));
   const prompt = fencedBlocks(install, 'text').find((block) => block.startsWith('Set up e2e-qa-pilot in this project'));
   assert.ok(prompt, 'docs/install.md has no setup prompt');
+  // Rules learned from a real run. These read Markdown; they do not prove an agent complies.
+  const flat = prompt.replace(/\s+/g, ' ');
+  assert.match(flat, /Never write a password, token, or key in project\.md/);
+  assert.match(flat, /names only the tools connected as MCP servers/);
+  assert.match(flat, /Fill ## Feature flags only when a flag MCP is connected/);
+  assert.match(flat, /no "or" and no "if"/);
+  assert.match(flat, /not on a feature branch/);
   const dir = path.join(kitRoot, 'examples', 'project-files');
   for (const name of fs.readdirSync(dir).filter((file) => file.endsWith('.md') && file !== 'README.md')) {
     assert.ok(prompt.includes(`/examples/project-files/${name}`), `the setup prompt does not link ${name}`);
