@@ -35,7 +35,7 @@ Two ways, same result:
    npx e2e-qa-pilot init
    ```
 
-   It detects Cursor or Claude Code and sets up the editor you use. See [`init` options](#init-options).
+   It checks Node, git, Playwright, and `gh`, then detects Cursor or Claude Code and sets up the editor you use. See [`init` options](#init-options).
 
 2. **Restart the editor and open a new chat.** A chat that was already open does not have the e2e-qa-pilot tools.
 
@@ -45,7 +45,7 @@ Two ways, same result:
    Set up e2e-qa-pilot for this project.
    ```
 
-   The assistant reads your repository, asks only what it cannot find, and shows you `.e2e-qa-pilot/project.md` before it writes it. See [Project file](project.md).
+   The assistant reads your repository, asks only what it cannot find, and shows you `.e2e-qa-pilot/project.md` before it writes it. It ends with what to commit and a first case to try. See [Project file](project.md).
 
 4. **Commit the setup files.** Each run creates a branch for its test, and it does not start while the setup files are uncommitted. Commit them on their own branch, not on a feature branch. Do not commit `.cursor/mcp.json` or `.mcp.json` if they hold a credential or are gitignored. See [What `init` writes](#what-init-writes).
 
@@ -53,87 +53,19 @@ Two ways, same result:
 
 ### Option 2: Let your agent set it up
 
-The easiest way. Open your project in Cursor or Claude Code and paste the prompt below. The agent:
-
-- checks your project and uses the recommended defaults
-- for a [complex setup](project.md#for-a-more-complex-setup-start-from-an-example) (a ticket id and a case id in the branch name, feature flags, or a frontend repository), drafts `project.md` from the closest example project file
-- asks only what it cannot find, at most 3 short questions
-- waits for your OK before it changes anything
+The easiest way. Open your project in Cursor or Claude Code and paste this prompt:
 
 <details open>
 <summary><strong>Setup prompt</strong></summary>
 
 ```text
-Set up e2e-qa-pilot in this project: https://github.com/bogdanOwner/e2e-qa-pilot
-Use the latest npm release (npx e2e-qa-pilot@latest init).
-
-Read first:
-- Install steps: https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/docs/install.md
-- Project file: https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/docs/project.md
-- Example project files, for a complex setup only:
-  - Jira key in the branch, Xray, LaunchDarkly, no Figma:
-    https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/project-files/jira-xray-launchdarkly.md
-  - Plane number in the branch, Qase, Figma per case, GrowthBook, frontend repository:
-    https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/project-files/plane-qase-growthbook.md
-  These files only show how each section is used. Keep only what this project
-  really uses. Do not copy a tool, name, or value that it does not have.
-
-How to work with me:
-- Find answers yourself first: package.json, Playwright config, git remote,
-  `gh auth status`, MCP config, CI files.
-- When there is a choice, use the recommended option or default from the docs
-  and tell me which one you picked. Don't ask about anything that has a default.
-- Ask only what you cannot find or decide. Ask once, at most 3 short questions,
-  each with your suggested answer, so I can reply "yes".
-- If something blocks the setup (no Playwright, Node older than 22, no git repo),
-  stop and tell me in one line how to fix it.
-
-Step 1. Check. Show ✅ or ❌ for each requirement. Then name what this project
-uses: ticket tracker, case tool, Figma, feature flags, frontend repository.
-For each tool, say whether it is connected as an MCP server or only found in code.
-Say whether it is a complex setup: a ticket id and a case id in the branch
-name, feature flags, or a frontend repository. If it is, name the closest
-example project file. Say what you will do next. Wait for my OK.
-
-Step 2. Install. Run init and show me what it wrote.
-Complex setup only: draft .e2e-qa-pilot/project.md from the closest example
-with this project's names. For a section the project does not use, keep the
-heading with nothing under it. Fill ## Feature flags only when a flag MCP is
-connected. Never write a password, token, or key in project.md, including
-test-user passwords: name the env var or secret store the tests read instead.
-Show me the draft and write it only after I say yes.
-If .e2e-qa-pilot/settings.md has no test_command and you found one in
-package.json scripts, propose it in the same draft.
-For any other project, leave project.md to the setup in Step 3.
-
-Step 3. Hand over. Give me one line to send in a new chat after the restart.
-If you drafted project.md in Step 2, the line is only:
-Set up e2e-qa-pilot for this project.
-Otherwise it starts with that sentence and names only the tools connected as
-MCP servers. Use this pattern, and drop each part the project does not have:
-Set up e2e-qa-pilot for this project. We use <tracker> keys like <KEY-123> in branch names, cases are in <case tool>, designs are in <Figma or none>, and flags are in <flag tool>.
-
-At the end, give me a short result, not a report:
-- What is set up, with ⭐ next to the recommended choices you made
-- Tools found in code but not connected as an MCP server, and what connecting
-  each one would add
-- What I need to do, in order:
-  1. Restart the editor and open a new chat.
-  2. Send the setup line from Step 3.
-  3. Review and commit the files in .e2e-qa-pilot/ and the editor files init
-     wrote, on their own branch from the start branch, not on a feature branch.
-     Do not commit MCP config that holds a credential or is gitignored.
-  4. Send the first test case below.
-- A first test case to paste, written from a real page or flow in this project,
-  with a Title: line and 3 to 4 numbered steps. One action and one Expected:
-  result per step, with no "or" and no "if". Prefer a flow that needs no new
-  account or special test data. Start it with:
-  Review this case with e2e-qa-pilot and implement it if it is ready:
+Run npx e2e-qa-pilot@latest init in this project and show me the result.
+Then tell me what to do next.
 ```
 
 </details>
 
-> ℹ️ **Note:** After `init`, restart the editor. The setup finishes in a new chat, as in [step 3 of Option 1](#option-1-set-it-up-step-by-step).
+The agent runs `init`, which checks your project (Node, git, Playwright, `gh`) and installs the files. After the restart, the setup step in step 3 does the rest. It finds your tools, fills `project.md`, asks only what it cannot find, and ends with what to commit and a first case to try. The rules live in the setup skill, so they are the same in Cursor and Claude Code, and `upgrade` keeps them current.
 
 ## Send a case
 
