@@ -12,10 +12,12 @@ The settings file is included in every tool result, so do not store tokens in it
 | `figma`, `read_figma` | `on` or `off`, and how to read a frame |
 | `branch_pattern` | Branch name. `{title_slug}` is the case title in kebab-case and `{case_id}` is the case id, for a case id only. Default `e2e/{title_slug}`, or `e2e/{case_id}-{title_slug}` for a case id. A name with no placeholder is used as it is |
 | `test_command`, `png_dir` | How to run the spec, and where PNGs go |
-| `pr_mode` | `create_pr_for_review` (default) or `ask_before_pr`. A missing value means `create_pr_for_review` |
-| `pr_label_ready` | Label when behavior matches and required screenshot evidence is adequate. Default `e2e:ready` |
+| `pr_mode` | `create_pr_for_review` (default, **recommended**) or `ask_before_pr`. A missing value means `create_pr_for_review` |
+| `pr_label_ready` | Label when behavior matches and required screenshot evidence is adequate. Default `e2e:ready` (**recommended**: keep the three default labels) |
 | `pr_label_minor_text_diff` | Label when the only issue is a narrow wording difference. Default `e2e:minor-text-diff` |
 | `pr_label_mismatch` | Label for a functional or unresolved mismatch, or inadequate required screenshot evidence. Default `e2e:mismatch` |
+
+**Recommended:** leave every key that has a default as it is, and fill in only `test_command`, `png_dir`, and `figma` (`off` if you do not compare with designs). Add the case tool later, when you need it.
 
 No Figma? Answer `off` and leave `read_figma` blank. `read_figma` is required only when `figma` is `on`. With `figma: off`, in `settings.md` or in `## Design` of `project.md`, leave it blank. The assistant does not ask for it.
 

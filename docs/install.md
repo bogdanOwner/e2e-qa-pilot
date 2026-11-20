@@ -6,17 +6,62 @@ One flow for Cursor and Claude Code. Most projects need only the five steps belo
 
 You need Node 22 or later, a git repository with Playwright already set up, and Cursor or Claude Code. Playwright's browser install is yours to run. The commands never install browsers.
 
+Choose one of two ways: let your agent do the setup, or follow the five steps yourself. Both end in the same files.
+
+### Option 1: Let your agent set it up (recommended)
+
+Open your project in Cursor or Claude Code and paste the prompt below. The agent:
+
+- checks your project and uses the recommended defaults
+- asks only what it cannot find, at most 3 short questions
+- waits for your OK before it changes anything
+
+<details open>
+<summary><strong>Setup prompt</strong></summary>
+
+```text
+Set up e2e-qa-pilot in this project: https://github.com/bogdanOwner/e2e-qa-pilot
+Use the latest npm release (npx e2e-qa-pilot@latest init) and follow its docs/install.md.
+
+How to work with me:
+- Find answers yourself first: package.json, Playwright config, git remote,
+  `gh auth status`, MCP config, CI files.
+- When there is a choice, use the recommended option or default from the docs
+  and tell me which one you picked. Don't ask about anything that has a default.
+- Ask only what you cannot find or decide. Ask once, at most 3 short questions,
+  each with your suggested answer, so I can reply "yes".
+- If something blocks the setup (no Playwright, Node older than 22, no git repo),
+  stop and tell me in one line how to fix it.
+
+Step 1. Show a short check: ✅ or ❌ for each requirement, then what you will
+do next. Wait for my OK.
+
+Step 2. Run init and show me what it wrote. Tell me to restart the editor and,
+in a new chat, send: Set up e2e-qa-pilot for this project.
+
+At the end, give me a short result, not a report:
+- What is set up, with ⭐ next to the recommended choices you made
+- What I need to do (review and commit the files)
+- One real test case from this project to try first, and the exact line to send
+```
+
+</details>
+
+> ℹ️ **Note:** After `init`, restart the editor. The setup finishes in a new chat (step 3 below).
+
+### Option 2: Set it up step by step
+
 1. **Initialize.** In your project root:
 
    ```bash
    npx e2e-qa-pilot init
    ```
 
-   Or `npm install -g e2e-qa-pilot` and run `e2e-qa-pilot init`. `init` works on the folder you are in, or on a path you pass: `e2e-qa-pilot init [path]`. It looks for `.cursor/` and `.claude/`, sets up the one it finds, and sets up both when both folders are present or when neither is. To choose, pass `--integration cursor`, `--integration claude`, or `--integration all`. Cursor and Claude Code are the only two editors `init` knows how to set up.
+   **Recommended:** `npx`, as above. Or `npm install -g e2e-qa-pilot` and run `e2e-qa-pilot init`. `init` works on the folder you are in, or on a path you pass: `e2e-qa-pilot init [path]`. It looks for `.cursor/` and `.claude/`, sets up the one it finds, and sets up both when both folders are present or when neither is. **Recommended:** let `init` detect the editor. To choose, pass `--integration cursor`, `--integration claude`, or `--integration all`. Cursor and Claude Code are the only two editors `init` knows how to set up.
 2. **Restart the editor and open a new chat.** Cursor: reload the window. Claude Code: quit and start it again in this folder. A chat that was already open does not have the server.
 3. **Run setup.** In the new chat, send `Set up e2e-qa-pilot for this project.` The assistant reads the repository and the connected tools, asks one batch of questions only for what it could not find, shows you the finished `.e2e-qa-pilot/project.md`, and writes it after you agree. See [Project file](project.md).
 4. **Review and commit the generated files.** Check `.e2e-qa-pilot/settings.md` (test command, screenshot folder, `pr_mode`, labels) and `.e2e-qa-pilot/project.md`, then commit what `init` and setup wrote. The table below lists the files. Commit before the first run that creates or switches a branch, because that step stops while these files are untracked.
-5. **Send a case.** The always-on instruction that `init` wrote (the Cursor rule `.cursor/rules/e2e-qa-pilot.mdc`, or the marked block in `CLAUDE.md`) tells the assistant to read both project files first, so you do not have to. The first run asks once for any settings key it needs that is still empty. See [Send a case](#send-a-case).
+5. **Send a case.** **Recommended for the first run:** paste the case text. It needs no case-tool MCP. The always-on instruction that `init` wrote (the Cursor rule `.cursor/rules/e2e-qa-pilot.mdc`, or the marked block in `CLAUDE.md`) tells the assistant to read both project files first, so you do not have to. The first run asks once for any settings key it needs that is still empty. See [Send a case](#send-a-case).
 
 Credentials for the case tool, Figma, and the flag tool live in each editor's MCP configuration. They never go in `settings.md` or `project.md`. To pin the package version, see [Upgrade](#upgrade).
 

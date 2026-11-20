@@ -3,6 +3,7 @@
   <h1>e2e-qa-pilot</h1>
   <p><em>Turn manual test cases into reviewed, automated Playwright PRs.</em></p>
   <p>
+    <a href="https://www.npmjs.com/package/e2e-qa-pilot"><img src="https://img.shields.io/npm/v/e2e-qa-pilot.svg" alt="Latest npm release"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
     <img src="https://img.shields.io/badge/tests-Playwright-45ba4b.svg" alt="Playwright">
     <img src="https://img.shields.io/badge/node-%3E%3D22-339933.svg" alt="Node 22 or later">
@@ -74,6 +75,51 @@ See a real run before you integrate anything. No project of your own needed.
 👉 **[Try the example in 5 minutes](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md#quick-start)**
 
 ### Use it in your project
+
+There are two ways to start. Your agent can set it up for you, or you can follow the steps yourself.
+
+#### Option 1: Let your agent set it up (recommended)
+
+Open your project in Cursor or Claude Code and paste the prompt below. The agent:
+
+- checks your project and uses the recommended defaults
+- asks only what it cannot find, at most 3 short questions
+- waits for your OK before it changes anything
+
+<details>
+<summary><strong>Show the setup prompt</strong></summary>
+
+```text
+Set up e2e-qa-pilot in this project: https://github.com/bogdanOwner/e2e-qa-pilot
+Use the latest npm release (npx e2e-qa-pilot@latest init) and follow its docs/install.md.
+
+How to work with me:
+- Find answers yourself first: package.json, Playwright config, git remote,
+  `gh auth status`, MCP config, CI files.
+- When there is a choice, use the recommended option or default from the docs
+  and tell me which one you picked. Don't ask about anything that has a default.
+- Ask only what you cannot find or decide. Ask once, at most 3 short questions,
+  each with your suggested answer, so I can reply "yes".
+- If something blocks the setup (no Playwright, Node older than 22, no git repo),
+  stop and tell me in one line how to fix it.
+
+Step 1. Show a short check: ✅ or ❌ for each requirement, then what you will
+do next. Wait for my OK.
+
+Step 2. Run init and show me what it wrote. Tell me to restart the editor and,
+in a new chat, send: Set up e2e-qa-pilot for this project.
+
+At the end, give me a short result, not a report:
+- What is set up, with ⭐ next to the recommended choices you made
+- What I need to do (review and commit the files)
+- One real test case from this project to try first, and the exact line to send
+```
+
+</details>
+
+> ℹ️ **Note:** After `init`, restart the editor. The setup finishes in a new chat. See the [full installation guide](docs/install.md#quick-start).
+
+#### Option 2: Set it up step by step
 
 Requires **Node.js 22+**, an existing Playwright project, and **Cursor or Claude Code**.
 

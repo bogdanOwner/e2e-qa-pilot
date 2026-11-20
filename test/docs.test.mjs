@@ -156,7 +156,8 @@ test('docs: install commands use the package name from package.json', () => {
       // The local quick start names Playwright's browser installer. That command
       // is not an install of this package.
       if (match[1] === 'playwright') continue;
-      assert.equal(match[1], pkg.name, `${path.relative(kitRoot, file)}: "${match[0]}"`);
+      // A version or dist-tag suffix (e2e-qa-pilot@latest, e2e-qa-pilot@0.4.5) still names this package.
+      assert.equal(match[1].replace(/@[\w.-]+$/, ''), pkg.name, `${path.relative(kitRoot, file)}: "${match[0]}"`);
     }
   }
 });
