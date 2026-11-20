@@ -471,6 +471,8 @@ test('docs: the setup prompt runs init, and the setup skill holds the setup rule
   const install = readRoot(path.join('docs', 'install.md'));
   const prompt = fencedBlocks(install, 'text').find((block) => /npx e2e-qa-pilot@latest init/.test(block));
   assert.ok(prompt, 'docs/install.md has no setup prompt that runs init');
+  assert.match(prompt, /\.e2e-qa-pilot\/processes\/create-e2e\/commands\/setup-project\/SKILL\.md/, 'the setup prompt must name the setup-project skill file');
+  assert.match(prompt, /If a check shows ❌, stop/);
 
   // Rules learned from real runs. These read Markdown; they do not prove an agent complies.
   const skillDir = path.join(kitRoot, 'processes', 'create-e2e', 'commands', 'setup-project');
@@ -480,6 +482,8 @@ test('docs: the setup prompt runs init, and the setup skill holds the setup rule
   assert.match(skill, /found in code only/);
   assert.match(skill, /no "or" and no "if"/);
   assert.match(skill, /not on a feature branch/);
+  assert.match(skill, /at most 3, each with the value you recommend/);
+  assert.match(skill, /Restart the editor and open a new chat, so the e2e-qa-pilot tools load/);
   for (const name of fs.readdirSync(path.join(skillDir, 'examples')).filter((file) => file.endsWith('.md'))) {
     assert.ok(skill.includes(`(examples/${name})`), `setup-project/SKILL.md does not link ${name}`);
   }

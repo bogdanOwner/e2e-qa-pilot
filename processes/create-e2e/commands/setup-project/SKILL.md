@@ -35,7 +35,7 @@ The examples show how each section is written. They are not answers. Keep only w
 
 ## 2. Ask once
 
-Send one message with every question that is still open, each with the value you recommend. Skip a section the project does not use. Questions you may need:
+Send one message with every question that is still open, at most 3, each with the value you recommend, so the person can reply "yes". If more are open, ask the 3 that matter most and leave the rest for later. Skip a section the project does not use. Questions you may need:
 
 - Ticket: tracker (Jira, Linear, Plane, GitHub Issues, or none), required or not, the id format, and whether `{ticket_id}` is the full key or only the number.
 - Branch & commit: start branch, pull-request base, the branch pattern (use an optional group for an id that is not always there), the commit subject.
@@ -77,7 +77,8 @@ End with a short result, not a report:
 - What to do next, in order:
   1. Review `.e2e-qa-pilot/` and the editor files `init` wrote.
   2. Commit them on their own branch from the start branch, not on a feature branch. A run that creates a branch does not start while they are uncommitted. Do not commit `.cursor/mcp.json` or `.mcp.json` if it holds a credential or is gitignored.
-  3. Send the first case below.
+  3. Restart the editor and open a new chat, so the e2e-qa-pilot tools load. Cursor: reload the window. Claude Code: quit and start it again in this folder.
+  4. Send the first case below.
 - A first case to paste, written from a real page or flow in this project. Use 3 to 4 numbered steps with one action and one `Expected:` result each, and no "or" and no "if". Prefer a flow that needs no new account or special test data. Start it with `Review this case with e2e-qa-pilot and implement it if it is ready:` and a `Title:` line.
 
 ## Tool contract

@@ -421,7 +421,9 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log, run = sp
   }
 
   log(`e2e-qa-pilot init in ${project} (${editors.join(' + ')})`);
-  log(`\nCheck:\n${checkRequirements(project, { run }).map((line) => `  ${line}`).join('\n')}\n`);
+  const checks = checkRequirements(project, { run });
+  const blocked = checks.some((line) => line.startsWith('❌'));
+  log(`\nCheck:\n${checks.map((line) => `  ${line}`).join('\n')}${blocked ? '\n  Fix each ❌ before you set up the project. The files below are still written.' : ''}\n`);
 
   const prior = readManifest(project);
   const items = managedItems(project, editors);
