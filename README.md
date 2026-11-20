@@ -8,7 +8,7 @@
     <img src="https://img.shields.io/badge/node-%3E%3D22-339933.svg" alt="Node 22 or later">
     <img src="https://img.shields.io/badge/agents-Cursor%20%7C%20Claude%20Code-black.svg" alt="Cursor and Claude Code">
   </p>
-  <img src="assets/workflow.jpg" width="800" alt="Manual test cases go through e2e-qa-pilot and come out as pull requests labeled e2e:ready, e2e:minor-text-diff, or e2e:mismatch">
+  <img src="assets/workflow.png" width="800" alt="Manual test cases go through e2e-qa-pilot and come out as pull requests labeled e2e:ready, e2e:minor-text-diff, or e2e:mismatch">
 </div>
 
 [**Get started**](#get-started) · [**Examples**](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md) · [**MCP**](mcp.md) · [**Docs**](docs/README.md) · [**Contributing**](CONTRIBUTING.md)
