@@ -110,7 +110,7 @@ Review case QA-123, then implement it with e2e-qa-pilot.
 
 ## Worked example
 
-This repository includes an example you can use to see e2e-qa-pilot run. The pull requests from that run are linked there, and the same page explains how to run it locally.
+To see a run before you install anything in your project, fork this repository and run a case against the bundled Cabana demo site. The example page has the steps and links the pull requests from earlier runs.
 
 [examples/boutique-cabin/README.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md)
 

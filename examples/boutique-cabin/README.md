@@ -26,9 +26,20 @@ A green test run proves only that the assertions in that spec passed. The screen
 
 ## Quick start
 
-1. Start the site (from a clone of this repository, in `examples/boutique-cabin`):
+You do not need your own project. Everything runs inside a fork of this repository.
+
+1. [Fork this repository](https://github.com/bogdanOwner/e2e-qa-pilot/fork) and clone your fork. Use a fork, not a plain clone: the assistant pushes a branch and opens the pull request there. Point `gh` at your fork so pull requests do not go to the upstream repository:
 
    ```bash
+   git clone https://github.com/<you>/e2e-qa-pilot.git
+   cd e2e-qa-pilot
+   gh repo set-default <you>/e2e-qa-pilot
+   ```
+
+2. Start the site, in `examples/boutique-cabin`:
+
+   ```bash
+   cd examples/boutique-cabin
    npm install
    npx playwright install chromium
    npm start
@@ -36,16 +47,18 @@ A green test run proves only that the assertions in that spec passed. The screen
 
    The site runs at `http://127.0.0.1:4173`.
 
-2. Connect your editor. Use one of these, then reload the window (Cursor) or restart the app (Claude Code), and **open a new chat**. A chat that was open before the reload does not have the server, so the line looks like it does nothing.
+3. Connect your editor. Run one of these, then open the editor **in `examples/boutique-cabin`** (not the repository root), reload the window (Cursor) or restart the app (Claude Code), and **open a new chat**. The files these commands write are ignored by git, so you do not commit anything. A chat that was open before the reload does not have the server, so the line looks like it does nothing.
 
    ```bash
    npm run init:cursor    # writes .cursor/skills/ and .cursor/mcp.json
    npm run init:claude    # writes .claude/skills/ and .mcp.json
    ```
 
-3. Send one line from a case below.
+4. Send one line from a case below.
 
 You only send the line. The assistant reviews the case and implements it when it is ready. The case text is in `cases/`, so you do not paste it.
+
+**Write your own case.** Copy `cases/ready.md` to a new file in `cases/`, change the title, steps, and expected results, and send the same line with the new file name. Every step needs an expected result, or the assistant asks for one.
 
 ## Case 1: everything matches
 

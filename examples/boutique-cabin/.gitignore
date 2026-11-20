@@ -6,3 +6,6 @@ artifacts/
 .claude/
 .mcp.json
 .e2e-qa-pilot/processes/
+.e2e-qa-pilot/manifest.json
+.e2e-qa-pilot/project.md
+CLAUDE.md

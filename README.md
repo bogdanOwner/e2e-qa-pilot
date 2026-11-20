@@ -11,7 +11,7 @@
   <img src="assets/workflow.png" width="800" alt="Manual test cases go through e2e-qa-pilot and come out as pull requests labeled e2e:ready, e2e:minor-text-diff, or e2e:mismatch">
 </div>
 
-[**Get started**](#get-started) · [**Examples**](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md) · [**MCP**](mcp.md) · [**Docs**](docs/README.md) · [**Contributing**](CONTRIBUTING.md)
+[**Try it**](#try-it-first) · [**Install**](#use-it-in-your-project) · [**Examples**](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md) · [**MCP**](mcp.md) · [**Docs**](docs/README.md) · [**Contributing**](CONTRIBUTING.md)
 
 ## Why e2e-qa-pilot?
 
@@ -62,6 +62,18 @@ flowchart TD
 The full diagram is in [Install](docs/install.md#how-a-run-ends). Tool contracts are in [mcp.md](mcp.md).
 
 ## Get started
+
+### Try it first
+
+See a real run before you integrate anything. No project of your own needed.
+
+1. **[Fork this repository](https://github.com/bogdanOwner/e2e-qa-pilot/fork)** and start the bundled Cabana demo site.
+2. **[Send one chat line](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md#case-1-everything-matches)** to run a ready-made case, or write your own.
+3. **Get a pull request** in your fork with the Playwright spec, a step-by-step table, and a screenshot for each step. See a real one: [PR #3](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3).
+
+👉 **[Try the example in 5 minutes](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md#quick-start)**
+
+### Use it in your project
 
 Requires **Node.js 22+**, an existing Playwright project, and **Cursor or Claude Code**.
 
