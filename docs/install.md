@@ -64,17 +64,12 @@ Step 2 uses the [setup-project skill](https://github.com/bogdanOwner/e2e-qa-pilo
 
 Open your project in Cursor or Claude Code and paste this prompt:
 
-<details open>
-<summary><strong>Setup prompt</strong></summary>
-
 ```text
 Set up e2e-qa-pilot in this project:
 1. Run npx e2e-qa-pilot@latest init and show me its check.
    If a requirement is missing, stop and tell me why and how to fix it.
 2. Then follow the setup-project skill that init installed.
 ```
-
-</details>
 
 The skill ends with a short result: what is set up, what to commit and where, and a first case to try. It works the same in Cursor and Claude Code, and `npx e2e-qa-pilot upgrade` keeps it current. See [Scope and trust](scope-and-trust.md) for what the package does and does not do.
 
