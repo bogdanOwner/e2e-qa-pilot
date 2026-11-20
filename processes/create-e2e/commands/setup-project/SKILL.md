@@ -21,7 +21,7 @@ Detect what you can. Do not ask about anything you find.
 - The file: read `.e2e-qa-pilot/project.md`. A filled section stays unless the person asks to change it. If the file is missing, the tool result includes the template. Write the file from that template. Without the tool result, copy `templates/project.md` from the e2e-qa-pilot package, or use the `## Heading` lines listed in [Sections](../shared/project-config.md#sections).
 - Git: `git remote -v`, `git symbolic-ref refs/remotes/origin/HEAD`, `git branch -r`, and the last 20 branch names from `git for-each-ref --sort=-committerdate --count=20 refs/remotes/origin`. Look for a ticket id in branch names (`DEV_1234_...`, `PROJ-123-...`) and name the shape you see. Read `git log -20 --format=%s` for the commit subject shape.
 - Playwright: find the config file and read `testDir`, the folder of existing specs, and whether specs import a fixture or page objects. Read `package.json` scripts for the test command.
-- Editor tools: list only the server names in `.cursor/mcp.json` and `.mcp.json`, for example `jq '.mcpServers | keys' .mcp.json`. Do not open or print the whole file, because `env` and `headers` often hold tokens. Match each server name against the tools you know, for example a case tool (Qase, TestRail, Xray, Zephyr), a design tool (Figma), and a feature-flag tool (GrowthBook, LaunchDarkly, Unleash, Statsig). A server that matches none is not guessed: ask what it is for.
+- Editor tools: list only the server names in `.cursor/mcp.json` and `.mcp.json`, for example `jq '.mcpServers | keys' .mcp.json`. Do not open or print the whole file, because `env` and `headers` often hold tokens. Match each server name against the tools you know, for example a case tool (Qase, TestRail, Xray, Zephyr), a design tool (Figma), and a feature-flag tool (GrowthBook, LaunchDarkly, Unleash, Statsig). A server that matches none is not guessed: ask what it is for. An MCP server can also come from an editor plugin or from user settings and not appear in either file, for example the Cursor Figma plugin. Count a server you can call in this session as connected, and name it as the session shows it.
 - GitHub: `gh auth status`, then `gh repo view --json nameWithOwner,defaultBranchRef`. If the person named another repository, `gh repo view <owner/repo>` to confirm it can be read.
 
 ## 2. Ask once
@@ -50,7 +50,7 @@ Then show the finished file to the person and ask for a yes. Do not commit it. T
 
 Before you finish, confirm each of these and say which you could not check:
 
-- Every MCP server the file names appears in the editor's MCP configuration.
+- Every MCP server the file names appears in the editor's MCP configuration, or is available in this session from an editor plugin or user settings.
 - `gh` can read every context repository.
 - The branch pattern gives a name that passes `git check-ref-format --branch` for an example id and title, with and without a case id.
 - No section holds a secret.

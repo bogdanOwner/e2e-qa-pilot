@@ -102,6 +102,8 @@ heading with nothing under it. Fill ## Feature flags only when a flag MCP is
 connected. Never write a password, token, or key in project.md, including
 test-user passwords: name the env var or secret store the tests read instead.
 Show me the draft and write it only after I say yes.
+If .e2e-qa-pilot/settings.md has no test_command and you found one in
+package.json scripts, propose it in the same draft.
 For any other project, leave project.md to the setup in Step 3.
 
 Step 3. Hand over. Give me one line to send in a new chat after the restart.
