@@ -60,6 +60,8 @@ The easiest way: one prompt, one chat. Before you paste it, here is everything i
 | 1 | `npx e2e-qa-pilot@latest init` | Checks Node, git, Playwright, and `gh`. Writes only the files in [What `init` writes](#what-init-writes). Never overwrites a file you have and makes no network call. In your MCP config it adds one `e2e-qa-pilot` entry and keeps every other entry as it is | [src/init.mjs](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/src/init.mjs) |
 | 2 | The **setup-project** skill, which `init` copies into your project | Reads your repository and the names of your MCP servers, asks only what it cannot find, and shows you `project.md` before it writes it. Never writes a secret and never commits | [setup-project/SKILL.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/processes/create-e2e/commands/setup-project/SKILL.md) |
 
+Step 2 uses the [setup-project skill](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/processes/create-e2e/commands/setup-project/SKILL.md). `init` copies it into your project, so the agent follows the same file you can read here.
+
 Open your project in Cursor or Claude Code and paste this prompt:
 
 <details open>
@@ -69,8 +71,7 @@ Open your project in Cursor or Claude Code and paste this prompt:
 Set up e2e-qa-pilot in this project:
 1. Run npx e2e-qa-pilot@latest init and show me its Check.
    If a check shows ❌, stop and tell me how to fix it.
-2. Follow the setup-project skill that init installed:
-   .e2e-qa-pilot/processes/create-e2e/commands/setup-project/SKILL.md
+2. Then follow the setup-project skill that init installed.
 ```
 
 </details>

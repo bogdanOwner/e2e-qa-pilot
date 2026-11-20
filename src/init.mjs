@@ -465,10 +465,12 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log, run = sp
       'Quit Claude Code and start it again in this folder, then open a new chat. The session already open will not see the new MCP server.',
   };
   log(`
-Next:
-  1. ${editors.map((name) => restart[name]).join('\n     ')}
-  2. In the new chat, send: "Set up e2e-qa-pilot for this project."
-     It checks your tools, fills .e2e-qa-pilot/project.md, and tells you what to commit and which case to try first.`);
+Next: set up the project with the setup-project skill.
+It checks your tools, fills .e2e-qa-pilot/project.md, and tells you what to commit and which case to try first.
+  - In this chat: ask your assistant to follow .e2e-qa-pilot/processes/create-e2e/commands/setup-project/SKILL.md
+  - Or in a new chat:
+    1. ${editors.map((name) => restart[name]).join('\n       ')}
+    2. In the new chat, send: "Set up e2e-qa-pilot for this project."`);
 }
 
 export const UPGRADE_USAGE = `Usage: e2e-qa-pilot upgrade [path] [--force]

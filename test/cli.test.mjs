@@ -882,6 +882,7 @@ test('init reports the requirement check without blocking the install', () => {
   assert.match(text, /❌ No Playwright config or @playwright\/test found/);
   assert.match(text, /⚠️ gh is not signed in\. It is needed only to open pull requests/);
   assert.match(text, /Fix each ❌ before you set up the project/);
+  assert.match(text, /follow \.e2e-qa-pilot\/processes\/create-e2e\/commands\/setup-project\/SKILL\.md/);
   assert.match(text, /In the new chat, send: "Set up e2e-qa-pilot for this project\."/);
   assert.ok(fs.existsSync(path.join(dir, '.claude', 'skills', 'setup-project', 'SKILL.md')));
 });

@@ -471,7 +471,8 @@ test('docs: the setup prompt runs init, and the setup skill holds the setup rule
   const install = readRoot(path.join('docs', 'install.md'));
   const prompt = fencedBlocks(install, 'text').find((block) => /npx e2e-qa-pilot@latest init/.test(block));
   assert.ok(prompt, 'docs/install.md has no setup prompt that runs init');
-  assert.match(prompt, /\.e2e-qa-pilot\/processes\/create-e2e\/commands\/setup-project\/SKILL\.md/, 'the setup prompt must name the setup-project skill file');
+  assert.match(prompt, /setup-project skill/, 'the setup prompt must name the setup-project skill');
+  assert.match(install, /\[setup-project skill]\(https:\/\/github\.com\/bogdanOwner\/e2e-qa-pilot\/blob\/main\/processes\/create-e2e\/commands\/setup-project\/SKILL\.md\)/, 'the install guide must link the setup-project skill');
   assert.match(prompt, /If a check shows ❌, stop/);
 
   // Rules learned from real runs. These read Markdown; they do not prove an agent complies.
