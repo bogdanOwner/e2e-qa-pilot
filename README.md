@@ -17,20 +17,20 @@
 
 <table>
   <tr>
-    <td width="56" valign="top"><img src="assets/why-pr.png" width="48" alt="A pull request window with a screenshot and a checklist"></td>
-    <td valign="top"><strong>A PR with evidence, not just code.</strong><br>Every PR includes a Playwright test, step-by-step expected vs. actual results, and screenshots for review.</td>
+    <td width="74" valign="middle"><img src="assets/why-pr.png" width="48" alt="A pull request window with a screenshot and a checklist"></td>
+    <td valign="middle"><strong>A PR with evidence, not just code.</strong><br>Every PR includes a Playwright test, step-by-step expected vs. actual results, and screenshots for review.</td>
   </tr>
   <tr>
-    <td width="56" valign="top"><img src="assets/why-result.png" width="48" alt="A passed check next to an expected-versus-actual comparison under a magnifier"></td>
-    <td valign="top"><strong>A green test isn't the finish line.</strong><br>The agent compares actual behavior with the test case's expected results. If expectations are unclear, it asks instead of guessing.</td>
+    <td width="74" valign="middle"><img src="assets/why-result.png" width="48" alt="A passed check next to an expected-versus-actual comparison under a magnifier"></td>
+    <td valign="middle"><strong>A green test isn't the finish line.</strong><br>The agent compares actual behavior with the test case's expected results. If expectations are unclear, it asks instead of guessing.</td>
   </tr>
   <tr>
-    <td width="56" valign="top"><img src="assets/why-reuse.png" width="48" alt="One page description feeding three tests"></td>
-    <td valign="top"><strong>Describe pages once. Reuse across cases.</strong><br>Page descriptions, page objects, and test helpers stay in your repository, ready to support future test cases.</td>
+    <td width="74" valign="middle"><img src="assets/why-reuse.png" width="48" alt="One page description feeding three tests"></td>
+    <td valign="middle"><strong>Describe pages once. Reuse across cases.</strong><br>Page descriptions, page objects, and test helpers stay in your repository, ready to support future test cases.</td>
   </tr>
   <tr>
-    <td width="56" valign="top"><img src="assets/why-evidence.png" width="48" alt="A pull request approved by a person"></td>
-    <td valign="top"><strong>Nothing is auto-merged. Humans decide.</strong><br>The agent prepares the PR and highlights differences. A person reviews the evidence and decides whether to merge.</td>
+    <td width="74" valign="middle"><img src="assets/why-evidence.png" width="48" alt="A pull request approved by a person"></td>
+    <td valign="middle"><strong>Nothing is auto-merged. Humans decide.</strong><br>The agent prepares the PR and highlights differences. A person reviews the evidence and decides whether to merge.</td>
   </tr>
 </table>
 
