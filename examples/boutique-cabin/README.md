@@ -1,32 +1,34 @@
 # Cabana: try e2e-qa-pilot in 5 minutes
 
-Worked example for [e2e-qa-pilot](../../README.md). Cabana is a small booking site with mock data. You send one line in chat. The assistant checks that your test case is clear, drives a real browser, writes a Playwright spec, and opens a pull request with the result and screenshots.
+Worked example for [e2e-qa-pilot](../../README.md).
+
+**Cabana** is a small demo booking site that lives in this folder. It is a prebuilt Astro site with mock data, and `npm start` serves it on your machine at `http://127.0.0.1:4173`. Nothing is booked and nothing is sent anywhere. You run test cases against it to see what e2e-qa-pilot does.
+
+You send one line in chat. The assistant checks that your test case is clear, drives a real browser, writes a Playwright spec, and opens a pull request with the result and screenshots.
 
 Each of the four cases below ends differently. Together they show what you get, and what you do not pay for.
 
-| # | You send | You get |
-|---|----------|---------|
-| 1 | `Review cases/ready.md ...` | A pull request labeled `e2e:ready`. Every step matches. [Pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3) |
-| 2 | `Review cases/wording.md ...` | A pull request labeled `e2e:minor-text-diff`. The behavior works and one sentence differs. [Pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/4) |
-| 3 | `Review cases/mismatch.md ...` | A draft pull request labeled `e2e:mismatch`. It names the failed step and shows the bug on screen. This run uses [`pr_mode: create_pr_for_review`](.e2e-qa-pilot/settings.md). Set `ask_before_pr` there if you do not want a draft. [Pull request](https://github.com/bogdanOwner/e2e-qa-pilot/pull/5) |
-| 4 | `Review cases/ambiguous.md ...` | No spec and no pull request. The assistant asks what should be visible after each step. The reply is quoted below. |
-
-## How to read each pull request
-
-Every pull request from a run has the same parts. Review them in this order:
-
-1. **Summary line.** The label, the steps passed, the run count, and `assertion_edits` (how many times the agent edited an expected result to make the spec pass, which should be 0).
-2. **Case and test data.** The case title, the preconditions, and every value the test typed. Check that the values are the ones you want.
-3. **Steps table.** One row per step: the expected result from your case, what happened, the screenshot links, and a verdict.
-4. **Screenshots.** One or more per step. Each image should show that step's control or result, not a repeat of an earlier screen.
-5. **Generated files.** In the Files changed tab: the Playwright spec in `tests/`, the Gherkin in `specs/`, the page contract in `pages/`, and the page objects and flows.
-6. **Review checklist.** The items the agent leaves for you to tick.
-
-A green test run proves only that the assertions in that spec passed. The screenshots and the step table are how you judge whether the spec covers the case. A label is a review outcome, not an approval.
+| You send | You get | You do |
+|----------|---------|--------|
+| [Case 1](#case-1-everything-matches): every step matches | ![e2e:ready](https://img.shields.io/badge/e2e%3Aready-0E8A16)<br>Behavior and screenshots match. [PR #3](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3) | Check the screenshots, then merge |
+| [Case 2](#case-2-one-sentence-differs): one sentence is off | ![e2e:minor-text-diff](https://img.shields.io/badge/e2e%3Aminor--text--diff-FBCA04)<br>The flow works. The case sentence is shown next to the screen sentence. [PR #4](https://github.com/bogdanOwner/e2e-qa-pilot/pull/4) | Decide: fix the copy or the case |
+| [Case 3](#case-3-a-real-bug-in-the-middle-of-the-flow): the site has a bug | ![e2e:mismatch](https://img.shields.io/badge/e2e%3Amismatch-D73A4A)<br>Draft. The failed step, what was expected, and the screen. [PR #5](https://github.com/bogdanOwner/e2e-qa-pilot/pull/5) | Judge the finding. It is not an automatic verdict |
+| [Case 4](#case-4-no-expected-result-so-no-spend): no expected results | No spec and no pull request. The assistant asks what should be visible | Answer the question |
 
 ## Quick start
 
-You do not need your own project. Everything runs inside a fork of this repository.
+You do not need your own project. Everything runs inside a fork of this repository, against the Cabana site on your machine.
+
+### Before you start
+
+- **A GitHub account, signed in through the [`gh` CLI](https://cli.github.com/)** (`gh auth login`). Each run ends in a pull request on your fork, and the assistant uses `gh` to open it and add the label. Without it, you still get the spec and screenshots locally, but no pull request.
+- Node.js 22 or later
+- git
+- Cursor or Claude Code
+
+### Option 1: Set it up step by step (recommended)
+
+Four steps, about 5 minutes. You see every command.
 
 1. [Fork this repository](https://github.com/bogdanOwner/e2e-qa-pilot/fork) and clone your fork. Use a fork, not a plain clone: the assistant pushes a branch and opens the pull request there. Point `gh` at your fork so pull requests do not go to the upstream repository:
 
@@ -36,7 +38,7 @@ You do not need your own project. Everything runs inside a fork of this reposito
    gh repo set-default <you>/e2e-qa-pilot
    ```
 
-2. Start the site, in `examples/boutique-cabin`:
+2. Install and start the Cabana site, in `examples/boutique-cabin`. Keep this terminal open: the site must be running while a case runs.
 
    ```bash
    cd examples/boutique-cabin
@@ -47,16 +49,54 @@ You do not need your own project. Everything runs inside a fork of this reposito
 
    The site runs at `http://127.0.0.1:4173`.
 
-3. Connect your editor. Run one of these, then open the editor **in `examples/boutique-cabin`** (not the repository root), reload the window (Cursor) or restart the app (Claude Code), and **open a new chat**. The files these commands write are ignored by git, so you do not commit anything. A chat that was open before the reload does not have the server, so the line looks like it does nothing.
+3. Connect your editor. In a second terminal in `examples/boutique-cabin`, run one of these:
 
    ```bash
    npm run init:cursor    # writes .cursor/skills/ and .cursor/mcp.json
    npm run init:claude    # writes .claude/skills/ and .mcp.json
    ```
 
-4. Send one line from a case below.
+   Then open the editor **in `examples/boutique-cabin`** (not the repository root), reload the window (Cursor) or restart the app (Claude Code), and **open a new chat**. A chat that was open before the reload does not have the e2e-qa-pilot tools, so the line looks like it does nothing. The files these commands write are ignored by git, so you do not commit anything.
 
-You only send the line. The assistant reviews the case and implements it when it is ready. The case text is in `cases/`, so you do not paste it.
+4. [Send a case](#send-a-case).
+
+### Option 2: Let your agent do the setup
+
+The same steps, run by your agent. Open Cursor or Claude Code in an empty folder and paste the prompt. The agent:
+
+- forks and clones the repository, and points `gh` at your fork
+- installs the Cabana site and connects your editor
+- does not start the site: you run `npm start` yourself, as in step 2
+
+<details>
+<summary><strong>Show the setup prompt</strong></summary>
+
+```text
+Set up the Cabana demo of e2e-qa-pilot for me. Follow the Quick start in
+https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md
+
+Do the steps yourself. Ask me only if you are blocked.
+- Fork and clone: gh repo fork bogdanOwner/e2e-qa-pilot --clone
+  Then run gh repo set-default <my-github-user>/e2e-qa-pilot, so pull requests
+  go to my fork and not to the upstream repository.
+- In examples/boutique-cabin: npm install, then npx playwright install chromium.
+- Connect the editor you are running in: npm run init:claude or npm run init:cursor.
+- Do not start the site. I will run it in my own terminal.
+- If something fails (gh not signed in, Node older than 22), stop and tell me
+  in one line how to fix it.
+
+At the end, tell me in 4 short lines:
+- run npm start in a terminal in examples/boutique-cabin and keep it open
+- open my editor in examples/boutique-cabin, restart it, and open a new chat
+- the line to send for Case 1
+- that I can try Cases 2 to 4 the same way
+```
+
+</details>
+
+### Send a case
+
+You only send one line. The assistant reviews the case and implements it when it is ready. The case text is in `cases/`, so you do not paste it.
 
 **Write your own case.** Copy `cases/ready.md` to a new file in `cases/`, change the title, steps, and expected results, and send the same line with the new file name. Every step needs an expected result, or the assistant asks for one.
 
@@ -197,6 +237,21 @@ Preconditions: the guest is on the Cabana page.
 ```
 
 </details>
+
+## How to read a pull request
+
+Every pull request has the same parts. Check them top to bottom:
+
+| Part | What to check |
+|------|---------------|
+| **Summary line** | The label, steps passed, and `assertion_edits`. It should be 0: the agent did not change an expected result to make the test pass |
+| **Case and test data** | The values the test typed are ones you accept |
+| **Steps table** | For each step: expected, actual, verdict |
+| **Screenshots** | Each one shows its own step, not a repeat of an earlier screen |
+| **Files changed** | The spec in `tests/`, the Gherkin in `specs/`, the page contract in `pages/` |
+| **Review checklist** | Tick the items the agent left for you |
+
+A green run proves only that the spec's assertions passed. The steps table and the screenshots show whether the spec covers the case. A label is a review outcome, not an approval.
 
 ## How the outcome is chosen
 
