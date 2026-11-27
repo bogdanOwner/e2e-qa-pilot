@@ -133,6 +133,7 @@ Branch names come from the case title: `e2e/{title_slug}`, or `e2e/{case_id}-{ti
 - `npx e2e-qa-pilot init [path]` sets up the folder you are in, or the path you pass. You can also run `npm install -g e2e-qa-pilot` and then `e2e-qa-pilot init`.
 - It looks for `.cursor/` and `.claude/`, sets up the one it finds, and sets up both when both are present or when neither is. To choose, pass `--integration cursor`, `--integration claude`, or `--integration all`.
 - It is safe to run again. It adds what is missing and leaves existing files alone.
+- `--no-next` skips the setup-project hint at the end. The Cabana example uses it, because its cases run without a filled project file.
 
 ### Set up for your editor
 

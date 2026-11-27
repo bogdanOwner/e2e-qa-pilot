@@ -26,9 +26,36 @@ You do not need your own project. Everything runs inside a fork of this reposito
 - git
 - Cursor or Claude Code
 
-### Option 1: Set it up step by step (recommended)
+Two ways, same result:
 
-Four steps, about 5 minutes. You see every command.
+- **Option 1: Let your agent set it up.** One prompt, one chat. The easiest way.
+- **Option 2: Set it up step by step.** You run each command yourself and see what happens at every step.
+
+Both end at [After setup](#after-setup).
+
+### Option 1: Let your agent set it up
+
+Open Cursor or Claude Code in an empty folder and paste this prompt:
+
+```text
+Set up the Cabana demo of e2e-qa-pilot:
+1. Run gh repo fork bogdanOwner/e2e-qa-pilot --clone, then inside
+   the e2e-qa-pilot folder run gh repo set-default <my GitHub user>/e2e-qa-pilot.
+   If gh is missing or not signed in, stop and tell me how to fix it.
+2. In e2e-qa-pilot/examples/boutique-cabin, run npm run setup:claude
+   (npm run setup:cursor in Cursor) and show me its check.
+3. Do not start the site. Tell me the steps in "After setup" of that folder's README.md.
+```
+
+Here is everything it runs. All of it is plain code you can read before you paste the prompt.
+
+| Step | What runs | What it does | Read it |
+|------|-----------|--------------|---------|
+| 1 | `gh repo fork --clone`, `gh repo set-default` | Forks the repository to your account, clones the fork, and points `gh` at it, so pull requests go to your fork and not to the upstream repository | [gh repo fork](https://cli.github.com/manual/gh_repo_fork) |
+| 2 | `npm run setup:claude` or `npm run setup:cursor` | `npm install`, `npx playwright install chromium`, then `init` for your editor. `init` prints a check of Node, git, Playwright, and `gh`, and writes the skills and MCP entry. These files are ignored by git | [package.json](package.json), [src/init.mjs](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/src/init.mjs) |
+| 3 | Nothing | The agent does not start the site. You start it yourself in [After setup](#after-setup) | |
+
+### Option 2: Set it up step by step
 
 1. [Fork this repository](https://github.com/bogdanOwner/e2e-qa-pilot/fork) and clone your fork. Use a fork, not a plain clone: the assistant pushes a branch and opens the pull request there. Point `gh` at your fork so pull requests do not go to the upstream repository:
 
@@ -38,61 +65,29 @@ Four steps, about 5 minutes. You see every command.
    gh repo set-default <you>/e2e-qa-pilot
    ```
 
-2. Install and start the Cabana site, in `examples/boutique-cabin`. Keep this terminal open: the site must be running while a case runs.
+2. Install the Cabana site and connect your editor, in `examples/boutique-cabin`. Run one of these:
 
    ```bash
    cd examples/boutique-cabin
-   npm install
-   npx playwright install chromium
-   npm start
+   npm run setup:claude    # writes .claude/skills/ and .mcp.json
+   npm run setup:cursor    # writes .cursor/skills/ and .cursor/mcp.json
    ```
 
-   The site runs at `http://127.0.0.1:4173`.
+   Each one runs `npm install`, `npx playwright install chromium`, and `npm run init:claude` or `npm run init:cursor`. You can run those three yourself instead. The files it writes are ignored by git, so you do not commit anything.
 
-3. Connect your editor. In a second terminal in `examples/boutique-cabin`, run one of these:
+3. Continue with [After setup](#after-setup).
 
-   ```bash
-   npm run init:cursor    # writes .cursor/skills/ and .cursor/mcp.json
-   npm run init:claude    # writes .claude/skills/ and .mcp.json
+### After setup
+
+1. **Start the site.** In a terminal in `examples/boutique-cabin`, run `npm start` and keep it open. The site runs at `http://127.0.0.1:4173` and must be running while a case runs.
+2. **Open the editor in `examples/boutique-cabin`** (not the repository root), reload the window (Cursor) or restart the app (Claude Code), and **open a new chat**. A chat that was open before the reload does not have the e2e-qa-pilot tools, so the line looks like it does nothing.
+3. **Send Case 1:**
+
+   ```text
+   Review cases/ready.md with e2e-qa-pilot and implement it if it is ready.
    ```
 
-   Then open the editor **in `examples/boutique-cabin`** (not the repository root), reload the window (Cursor) or restart the app (Claude Code), and **open a new chat**. A chat that was open before the reload does not have the e2e-qa-pilot tools, so the line looks like it does nothing. The files these commands write are ignored by git, so you do not commit anything.
-
-4. [Send a case](#send-a-case).
-
-### Option 2: Let your agent do the setup
-
-The same steps, run by your agent. Open Cursor or Claude Code in an empty folder and paste the prompt. The agent:
-
-- forks and clones the repository, and points `gh` at your fork
-- installs the Cabana site and connects your editor
-- does not start the site: you run `npm start` yourself, as in step 2
-
-<details>
-<summary><strong>Show the setup prompt</strong></summary>
-
-```text
-Set up the Cabana demo of e2e-qa-pilot for me. Follow the Quick start in
-https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md
-
-Do the steps yourself. Ask me only if you are blocked.
-- Fork and clone: gh repo fork bogdanOwner/e2e-qa-pilot --clone
-  Then run gh repo set-default <my-github-user>/e2e-qa-pilot, so pull requests
-  go to my fork and not to the upstream repository.
-- In examples/boutique-cabin: npm install, then npx playwright install chromium.
-- Connect the editor you are running in: npm run init:claude or npm run init:cursor.
-- Do not start the site. I will run it in my own terminal.
-- If something fails (gh not signed in, Node older than 22), stop and tell me
-  in one line how to fix it.
-
-At the end, tell me in 4 short lines:
-- run npm start in a terminal in examples/boutique-cabin and keep it open
-- open my editor in examples/boutique-cabin, restart it, and open a new chat
-- the line to send for Case 1
-- that I can try Cases 2 to 4 the same way
-```
-
-</details>
+   Try [Cases 2 to 4](#case-2-one-sentence-differs) the same way.
 
 ### Send a case
 

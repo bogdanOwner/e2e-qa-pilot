@@ -46,6 +46,15 @@ test('init --integration claude installs only Claude files', () => {
   assert.ok(!fs.existsSync(path.join(dir, '.cursor')));
 });
 
+test('init --no-next skips the setup-project hint', () => {
+  const withHint = [];
+  runInit(['--integration', 'claude'], { cwd: tempProject(), run: passing, log: (line) => withHint.push(line) });
+  assert.match(withHint.join('\n'), /setup-project skill/);
+  const without = [];
+  runInit(['--integration', 'claude', '--no-next'], { cwd: tempProject(), run: passing, log: (line) => without.push(line) });
+  assert.doesNotMatch(without.join('\n'), /setup-project skill/);
+});
+
 test('init detects an editor folder that already exists', () => {
   const dir = tempProject();
   fs.mkdirSync(path.join(dir, '.cursor'));
@@ -896,6 +905,35 @@ test('checkRequirements passes for a Playwright project on Node 22 with git and 
   fs.rmSync(path.join(dir, 'package.json'));
   fs.writeFileSync(path.join(dir, 'playwright.config.ts'), 'export default {};\n');
   assert.equal(checkRequirements(dir, { run: passing, nodeVersion: '22.1.0' })[2], '✅ Playwright found');
+});
+
+test('checkRequirements finds Playwright in .mts configs and in subfolders, but not in node_modules', () => {
+  const found = (dir) => checkRequirements(dir, { run: passing, nodeVersion: '22.1.0' })[2] === '✅ Playwright found';
+  const mts = tempProject();
+  fs.writeFileSync(path.join(mts, 'playwright.config.mts'), 'export default {};\n');
+  assert.ok(found(mts));
+
+  const monorepo = tempProject();
+  fs.mkdirSync(path.join(monorepo, 'apps', 'web'), { recursive: true });
+  fs.writeFileSync(path.join(monorepo, 'apps', 'web', 'playwright.config.ts'), 'export default {};\n');
+  assert.ok(found(monorepo));
+
+  const workspace = tempProject();
+  fs.mkdirSync(path.join(workspace, 'e2e'));
+  fs.writeFileSync(path.join(workspace, 'e2e', 'package.json'), JSON.stringify({ devDependencies: { '@playwright/test': '^1.49.0' } }));
+  assert.ok(found(workspace));
+
+  const vendored = tempProject();
+  fs.mkdirSync(path.join(vendored, 'node_modules', 'pkg'), { recursive: true });
+  fs.writeFileSync(path.join(vendored, 'node_modules', 'pkg', 'playwright.config.ts'), 'export default {};\n');
+  assert.ok(!found(vendored));
+});
+
+test('checkRequirements checks gh with a local command, not one that calls GitHub', () => {
+  const calls = [];
+  checkRequirements(tempProject(), { nodeVersion: '22.1.0', run: (cmd, args) => { calls.push([cmd, ...args].join(' ')); return { status: 0 }; } });
+  assert.ok(calls.includes('gh auth token'));
+  assert.ok(!calls.some((call) => call.startsWith('gh auth status')));
 });
 
 test('init copies the example project files next to the setup skill, and setup_project returns them', () => {

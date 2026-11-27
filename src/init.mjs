@@ -43,6 +43,12 @@ const FLAGS = {
       parsed.force = true;
     },
   },
+  '--no-next': {
+    value: false,
+    apply(parsed) {
+      parsed.noNext = true;
+    },
+  },
   '--integration': {
     value: true,
     apply(parsed, value) {
@@ -51,7 +57,7 @@ const FLAGS = {
   },
 };
 
-export const INIT_USAGE = `Usage: e2e-qa-pilot init [path] [--integration cursor|claude|all] [--force]
+export const INIT_USAGE = `Usage: e2e-qa-pilot init [path] [--integration cursor|claude|all] [--force] [--no-next]
 
   path           Project folder. Default: the current folder.
   --integration  Which editor to set up. Default: the editor whose folder
@@ -59,10 +65,12 @@ export const INIT_USAGE = `Usage: e2e-qa-pilot init [path] [--integration cursor
                  folders exist or neither does.
   --force        Refresh files that still have the exact ${MARKER_LINE} line.
                  Settings, the project file, and an existing MCP entry stay as
-                 they are. In CLAUDE.md, only the e2e-qa-pilot block is replaced.`;
+                 they are. In CLAUDE.md, only the e2e-qa-pilot block is replaced.
+  --no-next      Skip the setup-project hint at the end. For a folder that
+                 does not need setup-project, such as the Cabana example.`;
 
 function parseArgs(argv) {
-  const parsed = { projectArg: '', force: false };
+  const parsed = { projectArg: '', force: false, noNext: false };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     const equalsAt = arg.indexOf('=');
@@ -90,6 +98,7 @@ function parseArgs(argv) {
     projectArg: parsed.projectArg,
     integration: parsed.integration ?? '',
     force: parsed.force,
+    noNext: parsed.noNext,
   };
 }
 
@@ -372,6 +381,38 @@ function saveManifest(project, editors, files, prior, packageVersion, templates)
   });
 }
 
+const PLAYWRIGHT_CONFIGS = ['ts', 'js', 'mjs', 'cjs', 'mts', 'cts'].map((ext) => `playwright.config.${ext}`);
+
+function hasPlaywrightDependency(dir) {
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'));
+    return Boolean({ ...pkg.dependencies, ...pkg.devDependencies }['@playwright/test']);
+  } catch {
+    return false;
+  }
+}
+
+// Looks in the project folder and up to two folders below it, so a monorepo
+// (apps/web/playwright.config.ts) or an e2e/ subfolder is found too.
+function findPlaywright(dir, depth = 2) {
+  if (PLAYWRIGHT_CONFIGS.some((name) => fs.existsSync(path.join(dir, name)))) return true;
+  if (hasPlaywrightDependency(dir)) return true;
+  if (depth === 0) return false;
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return false;
+  }
+  return entries.some(
+    (entry) =>
+      entry.isDirectory() &&
+      !entry.name.startsWith('.') &&
+      entry.name !== 'node_modules' &&
+      findPlaywright(path.join(dir, entry.name), depth - 1),
+  );
+}
+
 // Reports what the project has. It never blocks init: setup can still be fixed after the files are written.
 // run is spawnSync by default. Tests pass a fake one.
 export function checkRequirements(project, { run = spawnSync, nodeVersion = process.versions.node } = {}) {
@@ -383,16 +424,7 @@ export function checkRequirements(project, { run = spawnSync, nodeVersion = proc
     }
   };
   const major = Number(String(nodeVersion).split('.')[0]);
-  const configs = ['ts', 'js', 'mjs', 'cjs'].map((ext) => `playwright.config.${ext}`);
-  let playwright = configs.some((name) => fs.existsSync(path.join(project, name)));
-  if (!playwright) {
-    try {
-      const pkg = JSON.parse(fs.readFileSync(path.join(project, 'package.json'), 'utf8'));
-      playwright = Boolean({ ...pkg.dependencies, ...pkg.devDependencies }['@playwright/test']);
-    } catch {
-      playwright = false;
-    }
-  }
+  const playwright = findPlaywright(project);
   return [
     major >= 22 ? `✅ Node ${nodeVersion}` : `❌ Node ${nodeVersion}. e2e-qa-pilot needs Node 22 or later.`,
     ok('git', ['rev-parse', '--is-inside-work-tree'])
@@ -401,14 +433,15 @@ export function checkRequirements(project, { run = spawnSync, nodeVersion = proc
     playwright
       ? '✅ Playwright found'
       : '❌ No Playwright config or @playwright/test found. Set up Playwright first: https://playwright.dev/docs/intro',
-    ok('gh', ['auth', 'status'])
+    // gh auth token reads the stored token without calling GitHub, so init stays offline.
+    ok('gh', ['auth', 'token'])
       ? '✅ gh signed in'
       : '⚠️ gh is not signed in. It is needed only to open pull requests. Run "gh auth login".',
   ];
 }
 
 export function runInit(argv, { cwd = process.cwd(), log = console.log, run = spawnSync } = {}) {
-  const { projectArg, integration: requested, force } = parseArgs(argv);
+  const { projectArg, integration: requested, force, noNext } = parseArgs(argv);
   const project = path.resolve(cwd, projectArg || '.');
 
   if (!fs.existsSync(project) || !fs.statSync(project).isDirectory()) {
@@ -457,6 +490,8 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log, run = sp
   if (!allCurrent && prior && prior.package_version !== version) {
     log(`Some files are from e2e-qa-pilot ${prior.package_version || 'an unknown version'}. Run "npx e2e-qa-pilot upgrade" to update them.`);
   }
+
+  if (noNext) return;
 
   const restart = {
     cursor:
