@@ -78,11 +78,18 @@ See a real run in 5 minutes, before you touch your own project. This repository 
 
 Add it to your own Playwright project. You need Node.js 22 or later, Cursor or Claude Code, and the `gh` CLI signed in, so runs can open pull requests.
 
-1. **Install** with `npx e2e-qa-pilot init`.
-2. **Adapt it to your project.** Restart the editor, send `Set up e2e-qa-pilot for this project.`, and commit the setup files.
-3. **Run your first test case** and get a pull request to review.
+Open your project in Cursor or Claude Code and paste this prompt:
 
-Prefer to let your agent run these steps? The install guide has a ready-made prompt.
+```text
+Set up e2e-qa-pilot in this project:
+1. Run npx e2e-qa-pilot@latest init and show me its check.
+   If a requirement is missing, stop and tell me why and how to fix it.
+2. Then follow the setup-project skill that init installed.
+```
+
+The agent checks your requirements, shows you `.e2e-qa-pilot/project.md` before it writes it, and ends with what to commit and a first test case to run. It never commits and never writes a secret.
+
+> **Want to run and check every step yourself?** The install guide has the same setup [step by step](docs/install.md#option-2-set-it-up-step-by-step), with links to the code each step runs.
 
 👉 **[Install guide](docs/install.md#quick-start)**
 

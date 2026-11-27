@@ -18,6 +18,8 @@
    Set up e2e-qa-pilot for this project.
    ```
 
+   Or send `/setup-project`, which runs the same skill.
+
 3. **Answer what is missing.** The assistant first reads your git branches, Playwright config, the names of your MCP servers, and your `gh` login. It asks one batch of questions only for what it could not find, then shows you the finished file and writes it after you agree.
 4. **Review and commit** the file before a run that creates a branch.
 

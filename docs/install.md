@@ -24,43 +24,10 @@ Add e2e-qa-pilot to **your own Playwright project**.
 
 Two ways, same result:
 
-- **Option 1** if you want to run and control every step yourself.
-- **Option 2** if you want your agent to do it. It is the easiest way.
+- **Option 1: Let your agent set it up.** One prompt, one chat. The easiest way.
+- **Option 2: Set it up step by step.** You run each step yourself and see what happens at every step.
 
-### Option 1: Set it up step by step
-
-1. **Install.** In your project root, run:
-
-   ```bash
-   npx e2e-qa-pilot init
-   ```
-
-   It checks Node, git, Playwright, and `gh`, then detects Cursor or Claude Code and sets up the editor you use. See [`init` options](#init-options).
-
-2. **Restart the editor and open a new chat.** A chat that was already open does not have the e2e-qa-pilot tools.
-
-3. **Adapt it to your project.** In the new chat, send:
-
-   ```text
-   Set up e2e-qa-pilot for this project.
-   ```
-
-   The assistant reads your repository, asks only what it cannot find, and shows you `.e2e-qa-pilot/project.md` before it writes it. It ends with what to commit and a first case to try. See [Project file](project.md).
-
-4. **Commit the setup files.** Each run creates a branch for its test, and it does not start while the setup files are uncommitted. Commit them on their own branch, not on a feature branch. Do not commit `.cursor/mcp.json` or `.mcp.json` if they hold a credential or are gitignored. See [What `init` writes](#what-init-writes).
-
-5. **Run your first test case.** Paste a case, as in [Send a case](#send-a-case). A pasted case needs no case tool.
-
-### Option 2: Let your agent set it up
-
-The easiest way: one prompt, one chat. Before you paste it, here is everything it runs. All of it is plain code and Markdown you can read first.
-
-| Step | What runs | What it does | Read it |
-|------|-----------|--------------|---------|
-| 1 | `npx e2e-qa-pilot@latest init` | Checks Node, git, Playwright, and `gh`. Writes only the files in [What `init` writes](#what-init-writes). Never overwrites a file you have and makes no network call. In your MCP config it adds one `e2e-qa-pilot` entry and keeps every other entry as it is | [src/init.mjs](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/src/init.mjs) |
-| 2 | The **setup-project** skill, which `init` copies into your project | Reads your repository and the names of your MCP servers, asks only what it cannot find, and shows you `project.md` before it writes it. Never writes a secret and never commits | [setup-project/SKILL.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/processes/create-e2e/commands/setup-project/SKILL.md) |
-
-Step 2 uses the [setup-project skill](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/processes/create-e2e/commands/setup-project/SKILL.md). `init` copies it into your project, so the agent follows the same file you can read here.
+### Option 1: Let your agent set it up
 
 Open your project in Cursor or Claude Code and paste this prompt:
 
@@ -71,7 +38,46 @@ Set up e2e-qa-pilot in this project:
 2. Then follow the setup-project skill that init installed.
 ```
 
+The agent runs both steps in the same chat, so you do not restart the editor in between. Here is everything it runs. All of it is plain code and Markdown you can read before you paste the prompt.
+
+| Step | What runs | What it does | Read it |
+|------|-----------|--------------|---------|
+| 1 | `npx e2e-qa-pilot@latest init` | Checks Node, git, Playwright, and `gh`. Writes only the files in [What `init` writes](#what-init-writes). Never overwrites a file you have and makes no network call. In your MCP config it adds one `e2e-qa-pilot` entry and keeps every other entry as it is | [src/init.mjs](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/src/init.mjs) |
+| 2 | The **setup-project** skill, which `init` copies into your project | Reads your repository and the names of your MCP servers, asks only what it cannot find, and shows you `project.md` before it writes it. Never writes a secret and never commits | [setup-project/SKILL.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/processes/create-e2e/commands/setup-project/SKILL.md) |
+
 The skill ends with a short result: what is set up, what to commit and where, and a first case to try. It works the same in Cursor and Claude Code, and `npx e2e-qa-pilot upgrade` keeps it current. See [Scope and trust](scope-and-trust.md) for what the package does and does not do.
+
+### Option 2: Set it up step by step
+
+1. **Install.** In your project root, run:
+
+   ```bash
+   npx e2e-qa-pilot@latest init
+   ```
+
+   It checks Node, git, Playwright, and `gh`, then sets up Cursor, Claude Code, or both. It writes only the files in [What `init` writes](#what-init-writes), never overwrites a file you have, and makes no network call. See [`init` options](#init-options).
+
+2. **Restart the editor and open a new chat.** A chat that was already open does not have the e2e-qa-pilot tools.
+
+3. **Fill in the project file.** In the new chat, send:
+
+   ```text
+   /setup-project
+   ```
+
+   This runs the [setup-project skill](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/processes/create-e2e/commands/setup-project/SKILL.md), which `init` copied into your project. It works the same in Cursor and Claude Code:
+
+   1. **Looks.** It reads your git remotes and branch names, your Playwright config, your `package.json` scripts, and only the *names* of your MCP servers, never their tokens.
+   2. **Asks.** It asks at most 3 questions about what it could not find, each with a recommended answer.
+   3. **Writes.** It shows you `.e2e-qa-pilot/project.md` and waits for your yes. It writes nothing outside `.e2e-qa-pilot/`, never writes a secret, and never commits.
+   4. **Checks.** It confirms that each MCP server it names is configured, that `gh` can read each context repository, and that the branch pattern gives a valid branch name.
+   5. **Ends.** It tells you what to commit and gives you a first case to paste.
+
+   See [Project file](project.md) for what each section means.
+
+4. **Commit the setup files.** Each run creates a branch for its test and does not start while the setup files are uncommitted. Commit them on their own branch, not on a feature branch. Do not commit `.cursor/mcp.json` or `.mcp.json` if they hold a credential or are gitignored. See [What `init` writes](#what-init-writes).
+
+5. **Run your first test case.** Paste the case from step 3, or your own, as in [Send a case](#send-a-case). A pasted case needs no case tool.
 
 ## Send a case
 
