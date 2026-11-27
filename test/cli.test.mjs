@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { runInit, runUpgrade } from '../src/init.mjs';
+import { runInit, runUpgrade, checkRequirements } from '../src/init.mjs';
 import { hashText, readManifest, writeManifest, MANIFEST_FILE } from '../src/manifest.mjs';
 import { handleMessage } from '../src/mcp.mjs';
 import { MARKER_LINE } from '../src/kit.mjs';
@@ -16,7 +16,10 @@ function tempProject() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'e2e-qa-pilot-'));
 }
 
-const quiet = { log: () => {} };
+// A fake process runner, so init does not call the real git and gh in every test.
+const passing = () => ({ status: 0 });
+const failing = () => ({ status: 1 });
+const quiet = { log: () => {}, run: passing };
 
 test('init defaults to the current folder and installs both editors', () => {
   const dir = tempProject();
@@ -41,6 +44,15 @@ test('init --integration claude installs only Claude files', () => {
   runInit(['--integration', 'claude'], { cwd: dir, ...quiet });
   assert.ok(fs.existsSync(path.join(dir, '.claude', 'skills', 'review-case', 'SKILL.md')));
   assert.ok(!fs.existsSync(path.join(dir, '.cursor')));
+});
+
+test('init --no-next skips the setup-project hint', () => {
+  const withHint = [];
+  runInit(['--integration', 'claude'], { cwd: tempProject(), run: passing, log: (line) => withHint.push(line) });
+  assert.match(withHint.join('\n'), /setup-project skill/);
+  const without = [];
+  runInit(['--integration', 'claude', '--no-next'], { cwd: tempProject(), run: passing, log: (line) => without.push(line) });
+  assert.doesNotMatch(without.join('\n'), /setup-project skill/);
 });
 
 test('init detects an editor folder that already exists', () => {
@@ -864,8 +876,76 @@ test('init does not hide old files: it keeps the old version in the manifest unt
   manifest.files[REVIEW_SKILL] = hashText('OLD PACKAGE SKILL\n');
   writeManifest(dir, manifest);
   const lines = [];
-  runInit(['--integration', 'cursor'], { cwd: dir, log: (line) => lines.push(line) });
+  runInit(['--integration', 'cursor'], { cwd: dir, log: (line) => lines.push(line), run: passing });
   assert.equal(readManifest(dir).package_version, '0.0.1');
   assert.match(lines.join('\n'), /Run "npx e2e-qa-pilot upgrade"/);
   assert.equal(fs.readFileSync(skill, 'utf8'), 'OLD PACKAGE SKILL\n');
+});
+
+test('init reports the requirement check without blocking the install', () => {
+  const dir = tempProject();
+  const lines = [];
+  runInit(['--integration', 'claude'], { cwd: dir, log: (line) => lines.push(line), run: failing });
+  const text = lines.join('\n');
+  assert.match(text, /❌ Not a git repository/);
+  assert.match(text, /❌ No Playwright config or @playwright\/test found/);
+  assert.match(text, /⚠️ gh is not signed in\. It is needed only to open pull requests/);
+  assert.match(text, /Fix each ❌ before you set up the project/);
+  assert.match(text, /follow \.e2e-qa-pilot\/processes\/create-e2e\/commands\/setup-project\/SKILL\.md/);
+  assert.match(text, /In the new chat, send: "Set up e2e-qa-pilot for this project\."/);
+  assert.ok(fs.existsSync(path.join(dir, '.claude', 'skills', 'setup-project', 'SKILL.md')));
+});
+
+test('checkRequirements passes for a Playwright project on Node 22 with git and gh', () => {
+  const dir = tempProject();
+  fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify({ devDependencies: { '@playwright/test': '^1.49.0' } }));
+  const lines = checkRequirements(dir, { run: passing, nodeVersion: '22.1.0' });
+  assert.deepEqual(lines, ['✅ Node 22.1.0', '✅ git repository', '✅ Playwright found', '✅ gh signed in']);
+  assert.match(checkRequirements(dir, { run: passing, nodeVersion: '20.11.0' })[0], /^❌ Node 20\.11\.0/);
+  fs.rmSync(path.join(dir, 'package.json'));
+  fs.writeFileSync(path.join(dir, 'playwright.config.ts'), 'export default {};\n');
+  assert.equal(checkRequirements(dir, { run: passing, nodeVersion: '22.1.0' })[2], '✅ Playwright found');
+});
+
+test('checkRequirements finds Playwright in .mts configs and in subfolders, but not in node_modules', () => {
+  const found = (dir) => checkRequirements(dir, { run: passing, nodeVersion: '22.1.0' })[2] === '✅ Playwright found';
+  const mts = tempProject();
+  fs.writeFileSync(path.join(mts, 'playwright.config.mts'), 'export default {};\n');
+  assert.ok(found(mts));
+
+  const monorepo = tempProject();
+  fs.mkdirSync(path.join(monorepo, 'apps', 'web'), { recursive: true });
+  fs.writeFileSync(path.join(monorepo, 'apps', 'web', 'playwright.config.ts'), 'export default {};\n');
+  assert.ok(found(monorepo));
+
+  const workspace = tempProject();
+  fs.mkdirSync(path.join(workspace, 'e2e'));
+  fs.writeFileSync(path.join(workspace, 'e2e', 'package.json'), JSON.stringify({ devDependencies: { '@playwright/test': '^1.49.0' } }));
+  assert.ok(found(workspace));
+
+  const vendored = tempProject();
+  fs.mkdirSync(path.join(vendored, 'node_modules', 'pkg'), { recursive: true });
+  fs.writeFileSync(path.join(vendored, 'node_modules', 'pkg', 'playwright.config.ts'), 'export default {};\n');
+  assert.ok(!found(vendored));
+});
+
+test('checkRequirements checks gh with a local command, not one that calls GitHub', () => {
+  const calls = [];
+  checkRequirements(tempProject(), { nodeVersion: '22.1.0', run: (cmd, args) => { calls.push([cmd, ...args].join(' ')); return { status: 0 }; } });
+  assert.ok(calls.includes('gh auth token'));
+  assert.ok(!calls.some((call) => call.startsWith('gh auth status')));
+});
+
+test('init copies the example project files next to the setup skill, and setup_project returns them', () => {
+  const dir = tempProject();
+  runInit(['--integration', 'cursor'], { cwd: dir, ...quiet });
+  const examples = path.join(dir, '.e2e-qa-pilot', 'processes', 'create-e2e', 'commands', 'setup-project', 'examples');
+  assert.deepEqual(fs.readdirSync(examples).sort(), ['jira-xray-launchdarkly.md', 'plane-qase-growthbook.md']);
+  const reply = handleMessage(
+    { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'setup_project', arguments: {} } },
+    dir,
+  );
+  const text = reply.result.content[0].text;
+  assert.match(text, /## Example project file: jira-xray-launchdarkly\.md/);
+  assert.match(text, /## Example project file: plane-qase-growthbook\.md/);
 });

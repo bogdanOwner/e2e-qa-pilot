@@ -131,6 +131,13 @@ export function buildToolText(toolName, source, projectDir) {
     ['Instructions', read(path.join(commandsDir, tool.command, 'SKILL.md'))],
     ['Shared: project-config.md', shared('project-config.md')],
   ];
+  if (setup) {
+    // The examples ship next to the setup skill, so the MCP path gets them without a network call.
+    const examples = path.join(commandsDir, tool.command, 'examples');
+    for (const name of fs.readdirSync(examples).filter((file) => file.endsWith('.md')).sort()) {
+      sections.push([`Example project file: ${name}`, read(path.join(examples, name))]);
+    }
+  }
   if (!setup) {
     sections.push(
       ['Shared: workflow.md', shared('workflow.md')],

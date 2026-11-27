@@ -64,31 +64,40 @@ The full diagram is in [Install](docs/install.md#how-a-run-ends). Tool contracts
 
 ## Get started
 
+**You need:**
+
+- Node.js 22 or later
+- Cursor or Claude Code
+- Your agent connected to GitHub, so it can open pull requests. Install the [`gh` CLI](https://cli.github.com/) and run `gh auth login`
+
 ### Try it first: a demo site in this repository
 
-See a real run in 5 minutes, before you touch your own project. This repository includes **Cabana**, a small static booking site with mock data. You run ready-made test cases against it on your machine and get real pull requests in your fork.
+Try it without adding anything to your own project.
 
-1. **[Fork this repository](https://github.com/bogdanOwner/e2e-qa-pilot/fork)** and start the Cabana site.
-2. **[Send one chat line](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md#case-1-everything-matches)** to run a ready-made case, or write your own.
-3. **Get a pull request** in your fork with the Playwright spec, a step-by-step table, and a screenshot for each step. See a real one: [PR #3](https://github.com/bogdanOwner/e2e-qa-pilot/pull/3).
+- **Cabana** is a small booking site with mock data, included in this repository.
+- You run ready-made test cases against it on your machine.
+- You get real pull requests in your fork, like the three in [See it work](#see-it-work).
 
 👉 **[Try the example in 5 minutes](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/boutique-cabin/README.md#quick-start)**
 
 ### Use it in your project
 
-Add it to your own Playwright project. You need Node.js 22 or later, Cursor or Claude Code, and the `gh` CLI signed in, so runs can open pull requests.
+Open your Playwright project in Cursor or Claude Code and paste this prompt:
 
-1. **Install** with `npx e2e-qa-pilot init`.
-2. **Adapt it to your project.** Restart the editor, send `Set up e2e-qa-pilot for this project.`, and commit the setup files.
-3. **Run your first test case** and get a pull request to review.
+```text
+Set up e2e-qa-pilot in this project:
+1. Run npx e2e-qa-pilot@latest init and show me its check.
+   If a requirement is missing, stop and tell me why and how to fix it.
+2. Then follow the setup-project skill that init installed.
+```
 
-Prefer to let your agent run these steps? The install guide has a ready-made prompt.
+- The agent asks only what it cannot find in your repository.
+- It generates a config file, `.e2e-qa-pilot/project.md`, and shows it to you for review before saving it.
+- It never commits and never writes a secret.
 
-👉 **[Install guide](docs/install.md#quick-start)**
+👉 **[Install guide](docs/install.md#quick-start)**: step-by-step setup and configuration
 
-[Project configuration](docs/project.md) · [Settings](docs/settings.md) · [Scope and trust](docs/scope-and-trust.md)
-
-The MCP server exposes four tools: `review_case`, `add_from_steps`, `add_from_design`, and `setup_project`. Contracts are in [mcp.md](mcp.md).
+The MCP server has four tools: `review_case`, `add_from_steps`, `add_from_design`, and `setup_project`. See [mcp.md](mcp.md).
 
 ## Community
 

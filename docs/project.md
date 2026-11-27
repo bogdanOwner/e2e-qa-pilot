@@ -18,6 +18,8 @@
    Set up e2e-qa-pilot for this project.
    ```
 
+   Or send `/setup-project`, which runs the same skill.
+
 3. **Answer what is missing.** The assistant first reads your git branches, Playwright config, the names of your MCP servers, and your `gh` login. It asks one batch of questions only for what it could not find, then shows you the finished file and writes it after you agree.
 4. **Review and commit** the file before a run that creates a branch.
 
@@ -41,8 +43,8 @@ Use an example when your project has several moving parts (a ticket id and a cas
 
 | Your stack | Example |
 |------------|---------|
-| Jira key in the branch, Xray, LaunchDarkly, no Figma | [jira-xray-launchdarkly.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/project-files/jira-xray-launchdarkly.md) |
-| Plane number in the branch, Qase, Figma per case, GrowthBook, frontend repository | [plane-qase-growthbook.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/examples/project-files/plane-qase-growthbook.md) |
+| Jira key in the branch, Xray, LaunchDarkly, no Figma | [jira-xray-launchdarkly.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/processes/create-e2e/commands/setup-project/examples/jira-xray-launchdarkly.md) |
+| Plane number in the branch, Qase, Figma per case, GrowthBook, frontend repository | [plane-qase-growthbook.md](https://github.com/bogdanOwner/e2e-qa-pilot/blob/main/processes/create-e2e/commands/setup-project/examples/plane-qase-growthbook.md) |
 
 ## Sections
 

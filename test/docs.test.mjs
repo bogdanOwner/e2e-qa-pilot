@@ -467,25 +467,31 @@ test('docs: nothing still mentions the old plane_id placeholder or the Project r
   }
 });
 
-test('docs: the setup prompt in the install doc links every example project file', () => {
+test('docs: the setup prompt runs init, and the setup skill holds the setup rules', () => {
   const install = readRoot(path.join('docs', 'install.md'));
-  const prompt = fencedBlocks(install, 'text').find((block) => block.startsWith('Set up e2e-qa-pilot in this project'));
-  assert.ok(prompt, 'docs/install.md has no setup prompt');
-  // Rules learned from a real run. These read Markdown; they do not prove an agent complies.
-  const flat = prompt.replace(/\s+/g, ' ');
-  assert.match(flat, /Never write a password, token, or key in project\.md/);
-  assert.match(flat, /names only the tools connected as MCP servers/);
-  assert.match(flat, /Fill ## Feature flags only when a flag MCP is connected/);
-  assert.match(flat, /no "or" and no "if"/);
-  assert.match(flat, /not on a feature branch/);
-  const dir = path.join(kitRoot, 'examples', 'project-files');
-  for (const name of fs.readdirSync(dir).filter((file) => file.endsWith('.md') && file !== 'README.md')) {
-    assert.ok(prompt.includes(`/examples/project-files/${name}`), `the setup prompt does not link ${name}`);
+  const prompt = fencedBlocks(install, 'text').find((block) => /npx e2e-qa-pilot@latest init/.test(block));
+  assert.ok(prompt, 'docs/install.md has no setup prompt that runs init');
+  assert.match(prompt, /setup-project skill/, 'the setup prompt must name the setup-project skill');
+  assert.match(install, /\[setup-project skill]\(https:\/\/github\.com\/bogdanOwner\/e2e-qa-pilot\/blob\/main\/processes\/create-e2e\/commands\/setup-project\/SKILL\.md\)/, 'the install guide must link the setup-project skill');
+  assert.match(prompt, /If a requirement is missing, stop/);
+
+  // Rules learned from real runs. These read Markdown; they do not prove an agent complies.
+  const skillDir = path.join(kitRoot, 'processes', 'create-e2e', 'commands', 'setup-project');
+  const skill = fs.readFileSync(path.join(skillDir, 'SKILL.md'), 'utf8').replace(/\s+/g, ' ');
+  assert.match(skill, /Never write a password, a token, or a key, including a test-user password/);
+  assert.match(skill, /Fill `## Feature flags` only when a flag MCP server is connected/);
+  assert.match(skill, /found in code only/);
+  assert.match(skill, /no "or" and no "if"/);
+  assert.match(skill, /not on a feature branch/);
+  assert.match(skill, /at most 3, each with the value you recommend/);
+  assert.match(skill, /Restart the editor and open a new chat, so the e2e-qa-pilot tools load/);
+  for (const name of fs.readdirSync(path.join(skillDir, 'examples')).filter((file) => file.endsWith('.md'))) {
+    assert.ok(skill.includes(`(examples/${name})`), `setup-project/SKILL.md does not link ${name}`);
   }
 });
 
 test('docs: the example project files are valid, neutral to each other, and hold no secret', () => {
-  const dir = path.join(kitRoot, 'examples', 'project-files');
+  const dir = path.join(kitRoot, 'processes', 'create-e2e', 'commands', 'setup-project', 'examples');
   const template = readRoot(path.join('templates', 'project.md')).replace(/<!--[\s\S]*?-->/g, '');
   const known = [...template.matchAll(/^## (.+)$/gm)].map((match) => match[1]);
   const fill = (text, values) =>

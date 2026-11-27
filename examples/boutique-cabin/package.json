@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "init:cursor": "node ../../bin/cli.mjs init --integration cursor",
-    "init:claude": "node ../../bin/cli.mjs init --integration claude",
+    "init:cursor": "node ../../bin/cli.mjs init --integration cursor --no-next",
+    "init:claude": "node ../../bin/cli.mjs init --integration claude --no-next",
+    "setup:cursor": "npm install && npx playwright install chromium && npm run init:cursor && echo Next: follow After setup in README.md",
+    "setup:claude": "npm install && npx playwright install chromium && npm run init:claude && echo Next: follow After setup in README.md",
     "start": "node server.mjs",
     "test": "playwright test",
     "test:live": "node run-playwright.mjs -c playwright.live.config.mjs",

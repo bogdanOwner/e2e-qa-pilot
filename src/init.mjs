@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import {
   kitRoot,
   MARKER,
@@ -42,6 +43,12 @@ const FLAGS = {
       parsed.force = true;
     },
   },
+  '--no-next': {
+    value: false,
+    apply(parsed) {
+      parsed.noNext = true;
+    },
+  },
   '--integration': {
     value: true,
     apply(parsed, value) {
@@ -50,7 +57,7 @@ const FLAGS = {
   },
 };
 
-export const INIT_USAGE = `Usage: e2e-qa-pilot init [path] [--integration cursor|claude|all] [--force]
+export const INIT_USAGE = `Usage: e2e-qa-pilot init [path] [--integration cursor|claude|all] [--force] [--no-next]
 
   path           Project folder. Default: the current folder.
   --integration  Which editor to set up. Default: the editor whose folder
@@ -58,10 +65,12 @@ export const INIT_USAGE = `Usage: e2e-qa-pilot init [path] [--integration cursor
                  folders exist or neither does.
   --force        Refresh files that still have the exact ${MARKER_LINE} line.
                  Settings, the project file, and an existing MCP entry stay as
-                 they are. In CLAUDE.md, only the e2e-qa-pilot block is replaced.`;
+                 they are. In CLAUDE.md, only the e2e-qa-pilot block is replaced.
+  --no-next      Skip the setup-project hint at the end. For a folder that
+                 does not need setup-project, such as the Cabana example.`;
 
 function parseArgs(argv) {
-  const parsed = { projectArg: '', force: false };
+  const parsed = { projectArg: '', force: false, noNext: false };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     const equalsAt = arg.indexOf('=');
@@ -89,6 +98,7 @@ function parseArgs(argv) {
     projectArg: parsed.projectArg,
     integration: parsed.integration ?? '',
     force: parsed.force,
+    noNext: parsed.noNext,
   };
 }
 
@@ -371,8 +381,67 @@ function saveManifest(project, editors, files, prior, packageVersion, templates)
   });
 }
 
-export function runInit(argv, { cwd = process.cwd(), log = console.log } = {}) {
-  const { projectArg, integration: requested, force } = parseArgs(argv);
+const PLAYWRIGHT_CONFIGS = ['ts', 'js', 'mjs', 'cjs', 'mts', 'cts'].map((ext) => `playwright.config.${ext}`);
+
+function hasPlaywrightDependency(dir) {
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'));
+    return Boolean({ ...pkg.dependencies, ...pkg.devDependencies }['@playwright/test']);
+  } catch {
+    return false;
+  }
+}
+
+// Looks in the project folder and up to two folders below it, so a monorepo
+// (apps/web/playwright.config.ts) or an e2e/ subfolder is found too.
+function findPlaywright(dir, depth = 2) {
+  if (PLAYWRIGHT_CONFIGS.some((name) => fs.existsSync(path.join(dir, name)))) return true;
+  if (hasPlaywrightDependency(dir)) return true;
+  if (depth === 0) return false;
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return false;
+  }
+  return entries.some(
+    (entry) =>
+      entry.isDirectory() &&
+      !entry.name.startsWith('.') &&
+      entry.name !== 'node_modules' &&
+      findPlaywright(path.join(dir, entry.name), depth - 1),
+  );
+}
+
+// Reports what the project has. It never blocks init: setup can still be fixed after the files are written.
+// run is spawnSync by default. Tests pass a fake one.
+export function checkRequirements(project, { run = spawnSync, nodeVersion = process.versions.node } = {}) {
+  const ok = (cmd, args) => {
+    try {
+      return run(cmd, args, { cwd: project, encoding: 'utf8', timeout: 10000 }).status === 0;
+    } catch {
+      return false;
+    }
+  };
+  const major = Number(String(nodeVersion).split('.')[0]);
+  const playwright = findPlaywright(project);
+  return [
+    major >= 22 ? `✅ Node ${nodeVersion}` : `❌ Node ${nodeVersion}. e2e-qa-pilot needs Node 22 or later.`,
+    ok('git', ['rev-parse', '--is-inside-work-tree'])
+      ? '✅ git repository'
+      : '❌ Not a git repository. Runs create a branch, so run "git init" or use a cloned repository.',
+    playwright
+      ? '✅ Playwright found'
+      : '❌ No Playwright config or @playwright/test found. Set up Playwright first: https://playwright.dev/docs/intro',
+    // gh auth token reads the stored token without calling GitHub, so init stays offline.
+    ok('gh', ['auth', 'token'])
+      ? '✅ gh signed in'
+      : '⚠️ gh is not signed in. It is needed only to open pull requests. Run "gh auth login".',
+  ];
+}
+
+export function runInit(argv, { cwd = process.cwd(), log = console.log, run = spawnSync } = {}) {
+  const { projectArg, integration: requested, force, noNext } = parseArgs(argv);
   const project = path.resolve(cwd, projectArg || '.');
 
   if (!fs.existsSync(project) || !fs.statSync(project).isDirectory()) {
@@ -385,6 +454,9 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log } = {}) {
   }
 
   log(`e2e-qa-pilot init in ${project} (${editors.join(' + ')})`);
+  const checks = checkRequirements(project, { run });
+  const blocked = checks.some((line) => line.startsWith('❌'));
+  log(`\nCheck:\n${checks.map((line) => `  ${line}`).join('\n')}${blocked ? '\n  Fix each ❌ before you set up the project. The files below are still written.' : ''}\n`);
 
   const prior = readManifest(project);
   const items = managedItems(project, editors);
@@ -419,6 +491,8 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log } = {}) {
     log(`Some files are from e2e-qa-pilot ${prior.package_version || 'an unknown version'}. Run "npx e2e-qa-pilot upgrade" to update them.`);
   }
 
+  if (noNext) return;
+
   const restart = {
     cursor:
       'Reload the Cursor window, then open a new chat. The chat already open will not see the new MCP server.',
@@ -426,13 +500,12 @@ export function runInit(argv, { cwd = process.cwd(), log = console.log } = {}) {
       'Quit Claude Code and start it again in this folder, then open a new chat. The session already open will not see the new MCP server.',
   };
   log(`
-Next:
-  1. ${editors.map((name) => restart[name]).join('\n     ')}
-  2. Connect the MCP servers this project uses (case tool, Figma, feature flags) in your editor's MCP settings, and run "gh auth login" if a frontend repository is read with gh. None is required for pasted case text.
-  3. Ask in chat: "Set up e2e-qa-pilot for this project." That runs setup-project, which fills .e2e-qa-pilot/project.md. Or edit that file by hand. See docs/project.md.
-  4. Review and commit the files init wrote before a run that creates or switches a branch. A case review can run before that commit. See docs/install.md.
-  5. Ask in chat: "Review case <id>." or paste the full case and ask to review it.
-     The first run asks once for the keys in .e2e-qa-pilot/settings.md that this input needs.`);
+Next: set up the project with the setup-project skill.
+It checks your tools, fills .e2e-qa-pilot/project.md, and tells you what to commit and which case to try first.
+  - In this chat: ask your assistant to follow .e2e-qa-pilot/processes/create-e2e/commands/setup-project/SKILL.md
+  - Or in a new chat:
+    1. ${editors.map((name) => restart[name]).join('\n       ')}
+    2. In the new chat, send: "Set up e2e-qa-pilot for this project."`);
 }
 
 export const UPGRADE_USAGE = `Usage: e2e-qa-pilot upgrade [path] [--force]
